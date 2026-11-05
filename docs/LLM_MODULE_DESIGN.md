@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Trạng thái** | Đề xuất, chưa triển khai |
-| **Ngày** | 2026-11-04 |
+| **Ngày** | 2026-11-04, cập nhật 2026-11-05 |
 | **Phạm vi** | Backend `/api/v1/chat`, một phần nhỏ ở frontend, bộ đánh giá |
 | **Tài liệu liên quan** | [AGENT_DESIGN.md](AGENT_DESIGN.md), [SAFETY_POLICY.md](SAFETY_POLICY.md), [EVALUATION_REPORT.md](EVALUATION_REPORT.md) |
 
@@ -17,7 +17,7 @@ Ba nguyên tắc không đổi:
 2. **Con số do code viết.** Kết quả xét nghiệm, BMI, lịch sử và score mô hình không đi qua LLM.
 3. **Lỗi thì rơi về đường cũ.** LLM lỗi hoặc không qua kiểm tra thì hệ thống trả câu trả lời tất định.
 
-> **Điều kiện tiên quyết:** `data/kb/index.json` từng có 0 chunk đã duyệt; từ 2026-11-04 có 665 chunk từ 16 nguồn do chủ dự án duyệt, chưa được thẩm định lâm sàng. Khi chưa có evidence, cả composer hiện tại lẫn module mới đều không chạy. Vì vậy, duyệt KB (mục 10, giai đoạn 0) phải làm trước; nếu không, thiết kế này không cải thiện được câu trả lời nào.
+> **Điều kiện tiên quyết đã đạt:** `data/kb/index.json` có 665 chunk từ 16 nguồn do chủ dự án duyệt, chưa được thẩm định lâm sàng. Vector search (pgvector, BGE-M3, BM25/RRF, reranker) đã bật và chạy được trên GPU. Khi một lượt hỏi không còn evidence, cả composer hiện tại lẫn module mới đều không chạy.
 
 ## 2. Hiện trạng và vấn đề
 
@@ -25,16 +25,17 @@ Luồng hiện tại: Safety Gate → router theo từ khóa → tối đa 5 too
 
 | # | Vấn đề | Vị trí | Hậu quả |
 |---|---|---|---|
-| 1 | KB không có chunk nào được duyệt | `data/kb/index.json` | Không có evidence, chỉ trả "Không đủ thông tin" |
+| 1 | Đã xử lý: KB có 665 chunk đã duyệt. Đường tất định vẫn còn từ chối ở một số câu, vì evidence về thuốc bị lọc (xem vấn đề 11) | [graph.py:298](../backend/app/agent/graph.py) | Câu hỏi về thuốc hoặc điều trị có thể nhận "Không đủ thông tin" |
 | 2 | Composer **không nhận câu hỏi**, chỉ được yêu cầu tóm tắt excerpt | [composer.py:41-45](../backend/app/agent/composer.py) | Câu trả lời có thể đúng nguồn nhưng lệch câu hỏi |
-| 3 | Composer chỉ chạy khi `search_kb` là tool duy nhất | [graph.py:354](../backend/app/agent/graph.py) | Câu hỏi kết hợp xét nghiệm + KB không được giải thích |
-| 4 | Đường tất định nối tối đa 5 đoạn trích, mỗi đoạn 700 ký tự | [graph.py:361-362](../backend/app/agent/graph.py) | Dài, rời rạc, khó đọc |
-| 5 | Citation là danh sách cả evidence, không gắn với từng ý | [graph.py:381-385](../backend/app/agent/graph.py) | Không biết ý nào đến từ nguồn nào |
-| 6 | Validator chỉ kiểm tra citation và liều thuốc, không kiểm tra câu trả lời có bám nguồn không | [graph.py:400-417](../backend/app/agent/graph.py) | Nội dung suy diễn của LLM vẫn lọt qua |
+| 3 | Composer chỉ chạy khi `search_kb` là tool duy nhất | [graph.py:414](../backend/app/agent/graph.py) | Câu hỏi kết hợp xét nghiệm + KB không được giải thích |
+| 4 | Đường tất định nối tối đa 5 đoạn trích, mỗi đoạn 700 ký tự | [graph.py:422](../backend/app/agent/graph.py) | Dài, rời rạc, khó đọc |
+| 5 | Citation là danh sách cả evidence, không gắn với từng ý | [graph.py:449-451](../backend/app/agent/graph.py) | Không biết ý nào đến từ nguồn nào |
+| 6 | Validator chỉ kiểm tra citation và liều thuốc, không kiểm tra câu trả lời có bám nguồn không | [graph.py:468-485](../backend/app/agent/graph.py) | Nội dung suy diễn của LLM vẫn lọt qua |
 | 7 | `max_tokens=500`, gọi `httpx` trực tiếp, nuốt mọi lỗi, không xem `stop_reason` | [composer.py:36-69](../backend/app/agent/composer.py) | Câu trả lời bị cắt vẫn được coi là `OK` |
-| 8 | `DIACARE_LLM_TIMEOUT_SECONDS` không có trong `.env.example` và không được truyền qua Compose | [docker-compose.yml:44-46](../docker-compose.yml) | Không chỉnh được timeout khi chạy Compose |
-| 9 | Footnote ghi "không gọi LLM bên ngoài" kể cả khi đã bật LLM | [ChatPage.jsx:55](../frontend/src/pages/ChatPage.jsx) | Thông báo sai với người dùng |
+| 8 | `DIACARE_LLM_TIMEOUT_SECONDS` không có trong `.env.example` và không được truyền qua Compose | [docker-compose.yml:39-41](../docker-compose.yml) | Không chỉnh được timeout khi chạy Compose |
+| 9 | Footnote ghi "không gọi LLM bên ngoài" kể cả khi đã bật LLM | [ChatPage.jsx:57](../frontend/src/pages/ChatPage.jsx) | Thông báo sai với người dùng |
 | 10 | `session_id` được tạo mới cho mỗi tin nhắn, không có lịch sử hội thoại | [App.jsx](../frontend/src/App.jsx) | Câu hỏi nối tiếp không hiểu được ngữ cảnh |
+| 11 | Excerpt đã lược câu về thuốc và liều có thể rời rạc hoặc thiếu ý, và danh sách trong hướng dẫn có thể mất mục | [graph.py:298](../backend/app/agent/graph.py) | Câu trả lời chưa đầy đủ; LLM chỉ được dựa vào phần còn lại |
 
 ## 3. Mục tiêu và phi mục tiêu
 
@@ -86,6 +87,7 @@ HbA1c phản ánh mức đường huyết trung bình trong một khoảng thờ
 
 [Ghi chú - do code viết]
 Lưu ý: đoạn trích thuộc phần đã được sửa đổi bởi Quyết định 1353/QĐ-BYT; ...
+Lưu ý: các câu nhắc đến thuốc hoặc liều dùng đã được lược bỏ khỏi đoạn trích.
 ```
 
 ### 4.1. Khi nào gọi LLM
@@ -93,9 +95,9 @@ Lưu ý: đoạn trích thuộc phần đã được sửa đổi bởi Quyết 
 | Tình huống | Gọi LLM? | Ghi chú |
 |---|---|---|
 | Safety level `EMERGENCY`, `UNKNOWN`, `CLINICAL_REVIEW`, `UNIT_AMBIGUOUS` | Không | Graph đã rẽ nhánh trước `fusion` |
-| `medication_request(message)` đúng | Không | `_compose_node` đã trả từ chối |
+| `medication_request(message)` đúng, kể cả câu hỏi về kháng sinh hoặc glucagon | Không | `_compose_node` đã trả từ chối |
 | Status `NEED_CLARIFICATION` | Không | Câu hỏi lại do code viết |
-| Không có evidence đã duyệt | Không | Trả thông báo không đủ thông tin |
+| Không có evidence đã duyệt, hoặc `_evidence_without_doses` lọc hết evidence | Không | Trả thông báo không đủ thông tin |
 | Chỉ có BMI, lịch sử hoặc score, không có evidence | Không | Fact lines đã đủ |
 | Chỉ `search_kb` có evidence | **Có** | Trường hợp chính |
 | `classify_lab` hoặc `predict_risk` kèm evidence | **Có** | LLM chỉ giải thích, code viết phần kết quả |
@@ -122,7 +124,7 @@ backend/app/llm/
 | `backend/app/api/routes.py` | Import `health` từ module mới |
 | `scripts/evaluate_safety.py:43` | Sửa đường dẫn `patch` sang hàm mới; giữ nguyên kiểm tra số lần gọi LLM bằng 0 khi cấp cứu |
 | `tests/test_agent_fusion.py` | Viết lại test composer theo SDK |
-| `backend/requirements.txt`, `backend/requirements.lock` | Thêm và ghim `anthropic` |
+| `backend/requirements.txt`, `backend/requirements.lock` | Không đổi: `anthropic==2.4.0` đã được ghim |
 | `docker-compose.yml`, `.env.example` | Thêm biến cấu hình (mục 6.5) |
 | `frontend/src/pages/ChatPage.jsx` | Sửa footnote theo `answer_mode` thực tế |
 
@@ -136,10 +138,10 @@ workflow.add_edge("fusion", "llm_composer")
 workflow.add_edge("llm_composer", "output_validator")
 ```
 
-- `_compose_node` trả thêm `fact_parts`, `note_parts`, `deterministic_answer`. Giá trị `answer` vẫn là câu trả lời tất định, nên nếu `_llm_composer_node` không chạy thì kết quả giống hiện tại.
+- `_compose_node` vẫn lọc evidence bằng `_evidence_without_doses` trước khi làm việc khác, và ghi `REDACTION_NOTICE` vào `note_parts` khi có excerpt bị lược. Node này trả thêm `fact_parts`, `note_parts`, `deterministic_answer`. Giá trị `answer` vẫn là câu trả lời tất định, nên nếu `_llm_composer_node` không chạy thì kết quả giống hiện tại.
 - `_llm_composer_node` kiểm tra điều kiện ở mục 4.1, gọi `compose_answer()`, và chỉ ghi đè `answer` cùng `citations` khi validator đạt.
-- `_validate_output_node` chạy sau cùng và **không đổi**, nên `contains_medication_dose` và `validate_citations` vẫn áp dụng cho câu trả lời của LLM.
-- Khi `classify_lab` có mặt, `citations` hiện chỉ lấy citation của rule ([graph.py:381](../backend/app/agent/graph.py)). Cần hợp nhất với citation LLM đã dùng và loại trùng theo `chunk_id`.
+- `_validate_output_node` chạy sau cùng và **không đổi**, nên `contains_medication_dose` và `validate_citations` vẫn áp dụng cho câu trả lời của LLM. Lớp chặn này cũng bắt dạng "N đơn vị".
+- Khi `classify_lab` có mặt, `citations` hiện chỉ lấy citation của rule ([graph.py:449](../backend/app/agent/graph.py)). Cần hợp nhất với citation LLM đã dùng và loại trùng theo `chunk_id`.
 
 ## 5. Dữ liệu gửi cho LLM
 
@@ -153,7 +155,7 @@ workflow.add_edge("llm_composer", "output_validator")
 | `masked_question` **(mặc định, đã chọn)** | Thêm câu hỏi đã che số đo và định danh | Bám câu hỏi | Văn bản tự do vẫn có thể lộ thông tin sức khỏe |
 | `masked_question_and_findings` | Thêm nhãn kết luận của rule, ví dụ "HbA1c trong khoảng tăng nguy cơ tham khảo" | Giải thích được kết quả xét nghiệm | Gửi thêm suy luận từ chỉ số |
 
-**Không gửi ở mọi mức:** hồ sơ mô phỏng, mã `DEMO-xx`, giá trị xét nghiệm, BMI, score ML, SHAP, lịch sử đo, API key.
+**Không gửi ở mọi mức:** hồ sơ mô phỏng, mã `DEMO-xx`, giá trị xét nghiệm, BMI, score ML, SHAP, lịch sử đo, API key, cùng các câu và excerpt mà `_evidence_without_doses` đã loại.
 
 `privacy.py` xử lý theo thứ tự:
 
@@ -221,7 +223,8 @@ response = client.beta.messages.create(
 
 Lưu ý khi triển khai:
 
-- `approved_evidence` là danh sách đã lọc, nên `document_index` phải ánh xạ theo danh sách này, không theo `evidence` gốc.
+- `approved_evidence` lấy từ kết quả của `_evidence_without_doses`, tức excerpt có thể đã bị lược câu (`excerpt_redacted`). `document_index` phải ánh xạ theo danh sách này, không theo `evidence` gốc của `search_kb`.
+- Không gửi `search_kb` thô cho LLM: kết quả thô vẫn chứa bảng liều và phác đồ.
 - Citations không dùng chung được với structured outputs (`output_config.format`), vì vậy tín hiệu "không đủ bằng chứng" là một dòng cố định.
 - `max_tokens` đặt khoảng 16000 vì thinking cũng tính vào giới hạn này; độ dài câu trả lời do prompt điều khiển. Mức 500 hiện tại dễ gây cắt câu.
 - Không gửi `temperature`, `top_p`, `top_k`: các model hiện tại từ chối những tham số này.
@@ -237,7 +240,7 @@ Chạy theo thứ tự, gặp lỗi đầu tiên thì dừng, trả về câu t�
 |---|---|---|
 | 1 | `stop_reason == "end_turn"` | `STOP_REFUSAL`, `STOP_MAX_TOKENS`, `STOP_OTHER` |
 | 2 | Văn bản đúng bằng `KHONG_DU_BANG_CHUNG` → trả thông báo không đủ thông tin hiện có, status `DEGRADED` | `MODEL_INSUFFICIENT_EVIDENCE` |
-| 3 | Có ít nhất một citation; `document_index` hợp lệ; `cited_text` nằm trong excerpt sau khi chuẩn hóa khoảng trắng | `CITATION_INVALID` |
+| 3 | Có ít nhất một citation; `document_index` hợp lệ; `cited_text` nằm trong excerpt đã gửi (bản đã lược nếu có) sau khi chuẩn hóa khoảng trắng | `CITATION_INVALID` |
 | 4 | Phần văn bản không có citation không vượt 30% số ký tự (ngưỡng ban đầu, chỉnh sau khi đo) | `LOW_CITATION_COVERAGE` |
 | 5 | Mọi con số trong câu trả lời đều có trong excerpt, chấp nhận cả `6,5` và `6.5` | `UNSUPPORTED_NUMBER` |
 | 6 | Không có URL ngoài `source_url` của evidence | `UNSUPPORTED_URL` |
@@ -284,7 +287,7 @@ Tất cả biến phải có trong `.env.example` và được truyền qua `doc
 | Rủi ro | Biện pháp | Cách kiểm chứng |
 |---|---|---|
 | LLM làm chậm hoặc chặn cấp cứu | Graph rẽ nhánh trước `fusion`, không có đường tới LLM | `evaluate_safety.py`: số lần gọi LLM bằng 0 |
-| LLM đưa liều thuốc | Prompt, cùng `contains_medication_dose` chạy sau cùng | Bộ ca hiện có, cộng ca giả lập LLM trả liều |
+| LLM đưa liều thuốc hoặc phác đồ | `_evidence_without_doses` lọc trước khi gửi; prompt; `contains_medication_dose` chạy sau cùng | Bộ ca hiện có, cộng ca giả lập LLM trả liều |
 | LLM thay đổi kết luận xét nghiệm | Code viết kết quả; LLM không nhận giá trị và không được lặp lại | Test: fact lines giữ nguyên từng ký tự |
 | Chèn lệnh qua tài liệu hoặc câu hỏi | KB chỉ gồm nguồn đã duyệt; prompt coi tài liệu là dữ liệu; validator kiểm tra đầu ra; LLM không có tool | Bộ ca chèn lệnh |
 | Trích dẫn giả | Dùng Citations API, đối chiếu `cited_text` | Validator số 3 |
@@ -294,7 +297,9 @@ Tất cả biến phải có trong `.env.example` và được truyền qua `doc
 
 ## 8. Đánh giá
 
-**Điều kiện:** cần KB đã duyệt. Khi chưa có, báo cáo ghi `NOT_MEASURED`, theo đúng quy ước của `EVALUATION_REPORT.md`; không dùng fixture làm số liệu chất lượng.
+**Mốc so sánh:** đường tất định ở chế độ vector có Recall@5 1,00, MRR 0,87, độ chính xác trích dẫn 0,27, độ chính xác từ chối 1,00. Các số này có trước ba thay đổi cuối của bộ lọc và ngưỡng rerank được chọn trên chính bộ câu hỏi đó, nên cần đo lại trước khi so sánh (xem `EVALUATION_REPORT.md`). Không dùng fixture làm số liệu chất lượng; phần chưa đo thì ghi `NOT_MEASURED`.
+
+**Khi chạy đánh giá:** mở `retrieval_modes` trong báo cáo để chắc chắn toàn bộ lượt chạy dùng vector. GPU 4 GB không đủ chắc chắn cho hai tiến trình nạp model cùng lúc; khi hết bộ nhớ, truy xuất âm thầm rơi về local và số đo không còn hợp lệ.
 
 Thêm `scripts/evaluate_llm.py` để chạy `evaluation/rag/gold_questions.json` và bộ ca mới `evaluation/llm/`, so sánh **câu trả lời tất định với LLM** trên cùng câu hỏi. Script gọi API thật tốn tiền, nên phải in ước tính chi phí và cần cờ `--confirm-spend`.
 
@@ -316,7 +321,8 @@ Các ngưỡng trên là đề xuất ban đầu, bộ ca tuyển chọn không 
 - Mỗi hàng ở mục 4.1 gọi hoặc không gọi LLM đúng như bảng.
 - Từng validator và từng lỗi ở mục 6.4 đều rơi về câu tất định.
 - Payload ở từng mức dữ liệu không chứa giá trị xét nghiệm, mã hồ sơ, hoặc evidence chưa duyệt.
-- `document_index` ánh xạ đúng khi evidence có phần tử chưa duyệt xen giữa.
+- `document_index` ánh xạ đúng khi evidence có phần tử chưa duyệt hoặc bị lọc xen giữa.
+- Payload dùng excerpt đã lược, không chứa câu về thuốc và liều đã bị loại.
 - LLM tắt thì đầu ra giống hệt hành vi hiện tại, nên toàn bộ test cũ vẫn phải đạt.
 
 ## 9. Thay đổi giao diện
@@ -329,18 +335,18 @@ Các ngưỡng trên là đề xuất ban đầu, bộ ca tuyển chọn không 
 
 | Giai đoạn | Nội dung | Tiêu chí hoàn thành |
 |---|---|---|
-| **0. Tiền đề** | Người có trách nhiệm duyệt nhóm nguồn P0 trong `kb_manifest/source_review.md`, ingest lại | `approved` > 0; đánh giá RAG có số đo Recall@5 |
+| **0. Tiền đề (đã xong)** | Chủ dự án duyệt 16 nguồn trong `kb_manifest/source_review.md`, ingest lại, bật vector search | 665 chunk `approved`; đánh giá RAG có số đo Recall@5 |
 | **1. Khung module** | Tạo `app/llm/`, chuyển sang SDK, sửa cấu hình, tách `_compose_node`; vẫn ở mức `evidence_only` | Toàn bộ test cũ đạt; LLM tắt thì hành vi không đổi |
 | **2. Bám câu hỏi** | `privacy.py`, prompt mới, Citations API, validator, nhãn `[Cn]`, cập nhật tài liệu chính sách | Test mock mục 8 đạt; `evaluate_safety.py` vẫn đạt |
 | **3. Câu hỏi kết hợp** | Mở cho `classify_lab`/`predict_risk` kèm evidence, hợp nhất citation. Ở mức `masked_question`, LLM chỉ giải thích khái niệm và không nhận nhãn kết luận của rule | Fact lines không đổi; thêm ca kết hợp |
 | **4. Đánh giá** | `evaluate_llm.py`, đánh giá thủ công, chọn model, cập nhật `EVALUATION_REPORT.md` | Đạt ngưỡng mục 8, hoặc ghi rõ phần chưa đạt |
 | **5. Tùy chọn: hội thoại và truy xuất** | Chỉ làm nếu đánh giá cho thấy cần: frontend gửi vài lượt gần nhất; LLM viết lại câu hỏi nối tiếp thành truy vấn độc lập | Recall@5 tăng trên ca nối tiếp; Safety Gate vẫn chạy trên tin nhắn gốc |
 
-Giai đoạn 1 đến 3 có thể phát triển bằng mock và fixture trước khi KB được duyệt, nhưng chất lượng thật chỉ đo được sau giai đoạn 0.
+Giai đoạn 1 đến 3 có thể phát triển bằng mock và fixture. Chất lượng thật đo trên KB hiện có, vẫn là demo chưa được thẩm định lâm sàng.
 
 ## 11. Các quyết định cần chốt
 
 1. **Mức dữ liệu gửi LLM: đã chốt `masked_question` (2026-11-04).** Cam kết "không gửi tin nhắn người dùng" trong tài liệu hiện có sẽ được sửa ở giai đoạn 2. Cho đến khi đó, code vẫn chạy theo cam kết cũ.
 2. **Model mặc định.** Đề xuất `claude-opus-5-5` với effort `medium` để bắt đầu vì chất lượng là mục tiêu chính. Dự án đang đặt `claude-sonnet-5-5` trong `.env.example`, `docker-compose.yml` và `tests/test_agent_fusion.py`; đổi thì phải sửa cả ba nơi. Giai đoạn 4 so sánh Opus 5.5 với Sonnet 5.5 rồi chốt theo số đo.
-3. **Người duyệt KB.** Cần một người chịu trách nhiệm ký checklist P0. Đây là việc con người, không tự động hóa được, và chặn toàn bộ kế hoạch.
+3. **Người duyệt KB: đã chốt.** Chủ dự án là người duyệt và đã ký 16 nguồn. Các ô checklist không bắt buộc, theo quyết định ngày 2026-11-05. Chủ dự án không phải nhân viên y tế, nên KB vẫn chưa được thẩm định lâm sàng.
 4. **Người đánh giá thủ công.** Cần ít nhất hai người cho chỉ số bám nguồn ở giai đoạn 4.
