@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Trạng thái** | Đề xuất, chưa triển khai |
+| **Trạng thái** | Giai đoạn 1–3 đã triển khai; giai đoạn 4 chưa đo bằng API thật; giai đoạn 5 tùy chọn chưa làm |
 | **Ngày** | 2026-11-04, cập nhật 2026-11-05 |
 | **Phạm vi** | Backend `/api/v1/chat`, một phần nhỏ ở frontend, bộ đánh giá |
 | **Tài liệu liên quan** | [AGENT_DESIGN.md](AGENT_DESIGN.md), [SAFETY_POLICY.md](SAFETY_POLICY.md), [EVALUATION_REPORT.md](EVALUATION_REPORT.md) |
@@ -346,7 +346,7 @@ Giai đoạn 1 đến 3 có thể phát triển bằng mock và fixture. Chất 
 
 ## 11. Các quyết định cần chốt
 
-1. **Mức dữ liệu gửi LLM: đã chốt `masked_question` (2026-11-04).** Cam kết "không gửi tin nhắn người dùng" trong tài liệu hiện có sẽ được sửa ở giai đoạn 2. Cho đến khi đó, code vẫn chạy theo cam kết cũ.
-2. **Model mặc định.** Đề xuất `claude-opus-5-5` với effort `medium` để bắt đầu vì chất lượng là mục tiêu chính. Dự án đang đặt `claude-sonnet-5-5` trong `.env.example`, `docker-compose.yml` và `tests/test_agent_fusion.py`; đổi thì phải sửa cả ba nơi. Giai đoạn 4 so sánh Opus 5.5 với Sonnet 5.5 rồi chốt theo số đo.
+1. **Mức dữ liệu gửi LLM: đã chốt `masked_question` (2026-11-04).** Tài liệu đã bỏ cam kết cũ "không gửi tin nhắn người dùng"; khi bật LLM, code gửi câu hỏi sau khi che số đo và định danh phổ biến.
+2. **Model mặc định.** Chọn `claude-opus-5-5` với effort `medium` để bắt đầu vì chất lượng là mục tiêu chính. Cấu hình mặc định đã đổi sang Opus 5.5; giai đoạn 4 sẽ so sánh Opus 5.5 với Sonnet 5.5 rồi chốt theo số đo.
 3. **Người duyệt KB: đã chốt.** Chủ dự án là người duyệt và đã ký 16 nguồn. Các ô checklist không bắt buộc, theo quyết định ngày 2026-11-05. Chủ dự án không phải nhân viên y tế, nên KB vẫn chưa được thẩm định lâm sàng.
 4. **Người đánh giá thủ công.** Cần ít nhất hai người cho chỉ số bám nguồn ở giai đoạn 4.

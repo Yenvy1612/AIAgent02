@@ -496,7 +496,7 @@ def _llm_composer_node(state: AgentState) -> dict[str, Any]:
             reason = "NEED_CLARIFICATION"
         elif medication_request(state.get("message", "")):
             reason = "MEDICATION_REQUEST"
-        elif set(results) != {"search_kb"} or not evidence:
+        elif "search_kb" not in results or not evidence:
             reason = "NO_APPROVED_EVIDENCE"
         else:
             try:
