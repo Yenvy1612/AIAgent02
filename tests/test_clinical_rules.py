@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
@@ -56,7 +57,8 @@ def test_random_glucose_alone_does_not_make_a_diagnostic_conclusion():
 
 
 def test_agent_exposes_reference_only_rules_when_kb_is_empty():
-    result = run_agent("HbA1c 6.2%", None, None)
+    with patch("app.agent.graph.search_kb", return_value={"status": "EMPTY", "evidence": []}):
+        result = run_agent("HbA1c 6.2%", None, None)
     assert result["status"] == "OK"
     assert result["citations"] == []
     assert any(item["source_code"] == "KB-06" for item in result["reference_only"])

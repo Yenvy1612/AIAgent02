@@ -226,7 +226,8 @@ def test_rule_and_llm_citation_labels_are_single_pass_and_finally_validated(monk
     if invalid_rule_citation:
         rule_b["source_url"] = "https://evil.example/b"
     state = {
-        "message": "Explain both sources.", "results": {"search_kb": {}, "classify_lab": {}},
+        "message": "Explain both sources.",
+        "results": {"search_kb": {}, "classify_lab": {"citations": [rule_b]}},
         "evidence": [evidence_a, evidence_b], "citations": [rule_b], "status": "OK",
         "answer": "fixed", "deterministic_answer": "fixed", "fact_parts": [],
         "note_parts": [], "trace": [], "safety": {"level": "NORMAL"},
@@ -278,7 +279,7 @@ def test_real_anthropic_exceptions_fall_back_to_deterministic_answer(monkeypatch
     ):
         response = run_agent("HbA1c là gì?", None, None)
 
-    assert response["answer"] == "Approved excerpt."
+    assert response["answer"] == "Approved excerpt.\n\nBạn xem thêm trong phần nguồn bên dưới."
     assert response["answer_mode"] == "deterministic"
     llm_trace = next(item for item in response["trace"] if item.get("step") == "llm_composer")
     assert llm_trace["reason"] == expected_reason
@@ -373,7 +374,9 @@ def test_predict_risk_with_evidence_keeps_code_facts_and_hides_scores_from_sdk(m
 
     deterministic = run(False)
     composed = run(True)
-    expected_facts = deterministic["answer"].rsplit("\n\n", 1)[0]
+    # The deterministic fallback ends with the selected excerpt and its source note;
+    # the composed answer replaces them with a cited explanation.
+    expected_facts = "\n\n".join(deterministic["answer"].split("\n\n")[:-2])
     assert composed["answer"].startswith(expected_facts + "\n\n")
     payload = str(captured["params"]["messages"])
     assert "0.73123" not in payload
