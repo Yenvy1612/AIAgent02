@@ -384,6 +384,7 @@ def test_mock_llm_medication_dose_is_blocked_by_final_output_guard(monkeypatch):
 
     compose.assert_called_once()
     assert response["status"] == "CLINICAL_REVIEW"
+    assert response["answer_mode"] == "deterministic"
     assert response["safety"].get("output_guard") == "medication_advice_blocked"
     assert response["answer"] == (
         "Mình không thể tư vấn tăng, giảm, ngừng hoặc thay liều insulin/thuốc. "

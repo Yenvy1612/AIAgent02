@@ -8,7 +8,7 @@ from app.safety.keyword_rules import normalize_vi
 
 _NUMBER = re.compile(r"(?<![\w])\d+(?:[.,]\d+)?(?![\w])")
 _URL = re.compile(r"https?://[^\s<>\]\[{}\"']+|\bwww\.[^\s<>\]\[{}\"']+", re.IGNORECASE)
-_INLINE_CITATION = re.compile(r"\s*\[C\d+\]", re.IGNORECASE)
+_INLINE_CITATION = re.compile(r"\[C\d+\]", re.IGNORECASE)
 _DIRECT_DIAGNOSIS = re.compile(
     r"\bban\s+(?:bi|mac)\s+(?:benh\s+)?(?:dai\s+thao\s+duong|tieu\s+duong)\b"
     r"|\byou\s+(?:have|are diagnosed with)\s+(?:diabetes|type\s*2\s+diabetes)\b"
@@ -43,10 +43,11 @@ def validate_response(response: Any, evidence: list[dict[str, Any]]) -> dict[str
         block for block in (_value(response, "content", []) or [])
         if _value(block, "type") == "text" and _value(block, "text")
     ]
-    raw_text = "".join(str(_value(block, "text", "")) for block in text_blocks).strip()
-    if raw_text == "KHONG_DU_BANG_CHUNG":
+    raw_text = "".join(str(_value(block, "text", "")) for block in text_blocks)
+    control_text = raw_text.strip()
+    if control_text == "KHONG_DU_BANG_CHUNG":
         return {"ok": False, "reason": "MODEL_INSUFFICIENT_EVIDENCE", "answer": "", "citations": [], "stop_reason": stop_reason}
-    if not raw_text:
+    if not control_text:
         return {"ok": False, "reason": "CITATION_INVALID", "answer": "", "citations": [], "stop_reason": stop_reason}
 
     approved = [
@@ -59,13 +60,11 @@ def validate_response(response: Any, evidence: list[dict[str, Any]]) -> dict[str
     clean_blocks: list[tuple[str, list[str]]] = []
     uncited_chars = 0
     total_chars = 0
-    raw_for_checks: list[str] = []
 
     for block in text_blocks:
-        text = _INLINE_CITATION.sub("", str(_value(block, "text", ""))).strip()
+        text = _INLINE_CITATION.sub("", str(_value(block, "text", "")))
         if not text:
             continue
-        raw_for_checks.append(text)
         total_chars += len(text)
         references = _value(block, "citations", []) or []
         if not references:
@@ -102,7 +101,7 @@ def validate_response(response: Any, evidence: list[dict[str, Any]]) -> dict[str
     if total_chars and uncited_chars / total_chars > 0.30:
         return {"ok": False, "reason": "LOW_CITATION_COVERAGE", "answer": "", "citations": [], "stop_reason": stop_reason}
 
-    answer_text = "\n".join(text for text, _ in clean_blocks)
+    answer_text = "".join(text for text, _ in clean_blocks)
     source_text = "\n".join(visible_excerpts)
     if not _numbers(answer_text).issubset(_numbers(source_text)):
         return {"ok": False, "reason": "UNSUPPORTED_NUMBER", "answer": "", "citations": [], "stop_reason": stop_reason}
@@ -111,17 +110,17 @@ def validate_response(response: Any, evidence: list[dict[str, Any]]) -> dict[str
         str(item.get("source_url", "")).rstrip(".,);]")
         for item in approved if item.get("source_url")
     }
-    if any(match.group(0).rstrip(".,);]") not in allowed_urls for text in raw_for_checks for match in _URL.finditer(text)):
+    if any(match.group(0).rstrip(".,);]") not in allowed_urls for match in _URL.finditer(answer_text)):
         return {"ok": False, "reason": "UNSUPPORTED_URL", "answer": "", "citations": [], "stop_reason": stop_reason}
 
     if _DIRECT_DIAGNOSIS.search(normalize_vi(answer_text)):
         return {"ok": False, "reason": "DIAGNOSTIC_CLAIM", "answer": "", "citations": [], "stop_reason": stop_reason}
 
-    rendered = [text + (" " + " ".join(f"[{label}]" for label in labels) if labels else "") for text, labels in clean_blocks]
+    rendered = [text + "".join(f"[{label}]" for label in labels) for text, labels in clean_blocks]
     return {
         "ok": True,
         "reason": "OK",
-        "answer": "\n".join(rendered).strip(),
+        "answer": "".join(rendered),
         "citations": used,
         "stop_reason": stop_reason,
     }

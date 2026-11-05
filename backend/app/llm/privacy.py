@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import re
 
+from app.safety.keyword_rules import normalize_vi
+
 _HBA1C = re.compile(r"(\b(?:hba1c|a1c)\b[^0-9]{0,12})\d{1,2}(?:[.,]\d+)?\s*(?:mmol\s*/?\s*mol|%)?", re.IGNORECASE)
 _GLUCOSE = re.compile(
     r"(\b(?:glucose|đường\s+huyết|đường\s+máu)\b\D{0,24})"
@@ -22,6 +24,31 @@ _EMAIL = re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE)
 _DEMO_ID = re.compile(r"\bDEMO\s*[-–—]\s*\d{2}\b", re.IGNORECASE)
 _LONG_ID = re.compile(r"(?<!\d)(?:\d[\s.-]?){8,14}\d(?!\d)")
 _PHONE = re.compile(r"(?<!\w)(?:\+?84|0)(?:[\s().-]*\d){8,10}(?!\w)")
+_MEASUREMENT_CONTEXT = re.compile(
+    r"\b(?:hba1c|a1c|glucose|duong\s+huyet|duong\s+mau|duong\s+trong\s+mau|chi\s+so|do\s+duoc)\b"
+    r"|\b(?:mg\s*/?\s*dl|mmol\s*/?\s*l)\b|%",
+    re.IGNORECASE,
+)
+_NUMBER_VALUE = re.compile(r"(?<!\w)\d+(?:[.,]\d+)?(?!\w)")
+
+
+def _mask_contextual_measurements(value: str) -> tuple[str, bool]:
+    """Conservatively mask numeric values when normalized text has a measurement cue."""
+    if not _MEASUREMENT_CONTEXT.search(normalize_vi(value)):
+        return value, False
+
+    changed = False
+
+    def replace(match: re.Match[str]) -> str:
+        nonlocal changed
+        prefix = normalize_vi(value[:match.start()])
+        # Keep type/típ 2 and the digit in the analyte names A1C/HbA1c.
+        if re.search(r"\b(?:type|typ|tip|hba1c|a1c)\s*$", prefix):
+            return match.group(0)
+        changed = True
+        return "[giá trị đã ẩn]"
+
+    return _NUMBER_VALUE.sub(replace, value), changed
 
 
 def mask_question(message: str, *, max_chars: int = 2000) -> dict[str, object]:
@@ -44,6 +71,9 @@ def mask_question(message: str, *, max_chars: int = 2000) -> dict[str, object]:
     for pattern in (_EMAIL, _DEMO_ID, _PHONE, _LONG_ID):
         value, count = pattern.subn("[định danh đã ẩn]", value)
         redacted = redacted or count > 0
+
+    value, count = _mask_contextual_measurements(value)
+    redacted = redacted or count
 
     truncated = len(value) > max_chars
     return {"question": value[:max_chars], "masked": redacted, "truncated": truncated}

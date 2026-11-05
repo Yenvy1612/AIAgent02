@@ -507,42 +507,75 @@ def _llm_composer_node(state: AgentState) -> dict[str, Any]:
             if composition.get("ok"):
                 fact_parts = state.get("fact_parts", [])
                 note_parts = state.get("note_parts", [])
-                citations = list(state.get("citations", [])) if "classify_lab" in results else []
-                seen = {item.get("chunk_id") for item in citations}
-                for citation in composition.get("citations", []):
-                    if citation.get("chunk_id") not in seen:
-                        citations.append(citation)
+                rule_citations = state.get("citations", []) if "classify_lab" in results else []
+                citations = []
+                seen: set[str] = set()
+                for citation in rule_citations:
+                    valid_rule_citation = validate_citations(evidence, [citation])
+                    if valid_rule_citation and citation.get("chunk_id") not in seen:
+                        citations.append(valid_rule_citation[0])
                         seen.add(citation.get("chunk_id"))
+
+                model_label_chunks: dict[int, str] = {}
+                for index, citation in enumerate(composition.get("citations", []), start=1):
+                    chunk_id = citation.get("chunk_id")
+                    valid_model_citation = validate_citations(evidence, [citation])
+                    if not valid_model_citation:
+                        continue
+                    if chunk_id not in seen:
+                        citations.append(valid_model_citation[0])
+                        seen.add(chunk_id)
+                    model_label_chunks[index] = str(chunk_id)
+
+                citations = validate_citations(evidence, citations)
                 citation_labels = {
                     citation.get("chunk_id"): f"C{index}"
                     for index, citation in enumerate(citations, start=1)
                 }
+                label_mapping = {
+                    model_label: citation_labels[chunk_id]
+                    for model_label, chunk_id in model_label_chunks.items()
+                    if chunk_id in citation_labels
+                }
                 explanation = composition["answer"]
-                for index, citation in reversed(list(enumerate(composition.get("citations", []), start=1))):
-                    label = citation_labels.get(citation.get("chunk_id"))
-                    if label:
-                        explanation = explanation.replace(f"[C{index}]", f"[{label}]")
-                citations = [
-                    {**citation, "display_label": citation_labels.get(citation.get("chunk_id"))}
-                    for citation in citations
-                ]
-                answer_parts = [*fact_parts, explanation, *note_parts]
-                status = "OK"
-                llm_trace = {
-                    "step": "llm_composer", "status": "OK", "mode": "llm_cited",
-                    "data_level": composition.get("data_level", config.data_level), "reason": "OK",
-                    "model": composition.get("model"), "latency_ms": composition.get("latency_ms"),
-                    "input_tokens": composition.get("input_tokens"), "output_tokens": composition.get("output_tokens"),
-                    "stop_reason": composition.get("stop_reason"),
-                    "question_masked": composition.get("question_masked"),
-                    "question_truncated": composition.get("question_truncated"),
-                }
-                return {
-                    "answer": "\n\n".join(part for part in answer_parts if part),
-                    "citations": citations, "answer_mode": "llm_cited",
-                    "llm": llm_trace,
-                    "trace": state.get("trace", []) + [llm_trace],
-                }
+                unresolved_labels: set[int] = set()
+
+                def remap_label(match: re.Match[str]) -> str:
+                    label_index = int(match.group(1))
+                    label = label_mapping.get(label_index)
+                    if label is None:
+                        unresolved_labels.add(label_index)
+                        return match.group(0)
+                    return f"[{label}]"
+
+                explanation = re.sub(r"\[C(\d+)\]", remap_label, explanation)
+                if unresolved_labels:
+                    reason = "CITATION_INVALID"
+                    citations = list(state.get("citations", [])) if "classify_lab" in results else []
+                    answer = state.get("deterministic_answer", state.get("answer", ""))
+                else:
+                    citations = [
+                        {**citation, "display_label": citation_labels.get(citation.get("chunk_id"))}
+                        for citation in citations
+                    ]
+                    answer_parts = [*fact_parts, explanation, *note_parts]
+                    status = "OK"
+                    llm_trace = {
+                        "step": "llm_composer", "status": "OK", "mode": "llm_cited",
+                        "data_level": composition.get("data_level", config.data_level), "reason": "OK",
+                        "model": composition.get("model"), "latency_ms": composition.get("latency_ms"),
+                        "input_tokens": composition.get("input_tokens"), "output_tokens": composition.get("output_tokens"),
+                        "stop_reason": composition.get("stop_reason"),
+                        "question_masked": composition.get("question_masked"),
+                        "question_truncated": composition.get("question_truncated"),
+                        "api_call_attempted": bool(composition.get("request_attempted", False)),
+                    }
+                    return {
+                        "answer": "\n\n".join(part for part in answer_parts if part),
+                        "citations": citations, "answer_mode": "llm_cited",
+                        "llm": llm_trace,
+                        "trace": state.get("trace", []) + [llm_trace],
+                    }
             if reason == "MODEL_INSUFFICIENT_EVIDENCE":
                 insufficient = "Không đủ thông tin đáng tin cậy đã được duyệt trong Knowledge Base để trả lời câu hỏi này."
                 answer_parts = [*state.get("fact_parts", []), insufficient, *state.get("note_parts", [])]
@@ -564,6 +597,7 @@ def _llm_composer_node(state: AgentState) -> dict[str, Any]:
         "stop_reason": composition.get("stop_reason"),
         "question_masked": composition.get("question_masked"),
         "question_truncated": composition.get("question_truncated"),
+        "api_call_attempted": bool(composition.get("request_attempted", False)),
     }
     return {
         "answer": answer, "status": status, "answer_mode": "deterministic", "citations": citations,
@@ -584,7 +618,7 @@ def _validate_output_node(state: AgentState) -> dict[str, Any]:
         safety = dict(state.get("safety", {}))
         safety.update({"level": "CLINICAL_REVIEW", "output_guard": "medication_advice_blocked"})
         return {
-            "answer": MEDICATION_REFUSAL_MESSAGE, "status": "CLINICAL_REVIEW", "safety": safety,
+            "answer": MEDICATION_REFUSAL_MESSAGE, "status": "CLINICAL_REVIEW", "answer_mode": "deterministic", "safety": safety,
             "tool_calls": [], "evidence": [], "citations": [], "web_sources": [],
             "trace": state.get("trace", []) + [{"step": "medication_advice_guard", "status": "BLOCKED"}],
         }

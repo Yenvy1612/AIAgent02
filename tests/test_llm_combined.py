@@ -92,5 +92,5 @@ def test_model_citation_labels_follow_merged_rule_citations(monkeypatch):
         "citations": [llm_citation], "data_level": "masked_question",
     }):
         output = _llm_composer_node(state)
-    assert "Concept explanation [C2]" in output["answer"]
-    assert [citation["display_label"] for citation in output["citations"]] == ["C1", "C2"]
+    assert "Concept explanation [C1]" in output["answer"]
+    assert [citation["display_label"] for citation in output["citations"]] == ["C1"]

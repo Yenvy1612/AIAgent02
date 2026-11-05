@@ -37,9 +37,13 @@ def compose_answer(
         "input_tokens": result.get("input_tokens"),
         "output_tokens": result.get("output_tokens"),
         "stop_reason": result.get("stop_reason"),
+        "request_attempted": bool(result.get("request_attempted", False)),
     }
     if result.get("response") is None:
         return {"ok": False, "reason": result["reason"], "answer": "", "citations": [], **metadata}
 
-    validated = validate_response(result["response"], request["evidence"])
+    try:
+        validated = validate_response(result["response"], request["evidence"])
+    except Exception:
+        return {"ok": False, "reason": "INTERNAL_ERROR", "answer": "", "citations": [], **metadata}
     return {**validated, **metadata}
