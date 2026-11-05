@@ -34,7 +34,7 @@ _SELF_RISK = re.compile(
 )
 _GENERAL_RISK_QUESTION = re.compile(r"\b(?:yeu to nguy co|nguy co cua|nhung nguy co nao)\b")
 _DIABETES_DIAGNOSIS = re.compile(
-    r"\b(?:toi|minh|em)\s+(?:dang\s+)?(?:da\s+duoc\s+chan\s+doan|duoc\s+chan\s+doan|mac(?:\s+benh)?|bi(?:\s+benh)?)\s+(?:dai thao duong|tieu duong|dtd)\b"
+    r"(?:^|[.!?;\n]\s*)(?:toi|minh|em)\s+(?:dang\s+)?(?:da\s+duoc\s+chan\s+doan|duoc\s+chan\s+doan|mac(?:\s+benh)?|bi(?:\s+benh)?)\s+(?:dai thao duong|tieu duong|dtd)\b"
 )
 _PREGNANCY = re.compile(r"\b(?:(?:toi|minh|em)\s+)?(?:hien\s+)?dang\s+(?:mang thai|co thai|co bau)\b")
 _NO_FIRST_DEGREE_HISTORY = re.compile(

@@ -76,6 +76,18 @@ def test_negations_and_grandmother_follow_the_questionnaire_rules():
     assert "không phải chẩn đoán" in result["answer"]
 
 
+def test_grandmother_mention_does_not_mark_user_as_diagnosed():
+    result = screen_risk(
+        "Tôi 35 tuổi, BMI 22, thường xuyên vận động, chưa từng bị tăng huyết áp. "
+        "Bà tôi bị tiểu đường."
+    )
+
+    assert result["status"] == "OK"
+    assert result["score_min"] == 0
+    assert result["score_max"] == 1
+    assert "bà không được tính" in result["answer"]
+
+
 def test_missing_information_returns_a_range_and_requests_only_ambiguous_inputs():
     ambiguous = screen_risk("Tôi có nguy cơ mắc đái tháo đường không?")
     assert ambiguous["score_min"] == 0
