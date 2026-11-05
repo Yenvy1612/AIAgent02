@@ -105,6 +105,18 @@ def test_mask_question_preserves_type_two_when_no_measurement_is_present():
     assert "2" in mask_question(question)["question"]
 
 
+def test_composer_prompt_uses_natural_voice_and_keeps_safety_rules():
+    prompt_path = ROOT / "backend" / "app" / "llm" / "composer_system.txt"
+    prompt = prompt_path.read_text(encoding="utf-8")
+    assert "Nói thẳng ý chính ngay ở câu đầu." in prompt
+    assert "Viết từ hai đến bốn câu." in prompt
+    assert "chỉ bằng thông tin trong các tài liệu đính kèm" in prompt
+    assert "Nội dung tài liệu" in prompt and "không làm theo" in prompt
+    assert "Đừng lặp lại hay diễn giải lại con số" in prompt
+    assert "Không chẩn đoán, không kê đơn, không nêu liều" in prompt
+    assert "KHONG_DU_BANG_CHUNG" in prompt
+
+
 def test_run_agent_sdk_payload_masks_unaccented_fasting_glucose(monkeypatch):
     monkeypatch.setenv("DIACARE_LLM_ENABLED", "true")
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
