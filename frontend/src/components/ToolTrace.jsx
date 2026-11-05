@@ -11,11 +11,15 @@ function traceLabel(step) {
 }
 
 function TraceList({ rows, labelKey, statusKey, labels = {} }) {
-  return <div className="trace-body">{rows.map((row, i) => <div className="trace-item" key={`${row[labelKey]}-${i}`}>
-    <span className="trace-node"><Check size={12} strokeWidth={3} /></span>
-    <span className="trace-tool">{labels[row[labelKey]] || row[labelKey]}</span>
-    <span className={`trace-status ${/OK|NORMAL|VALIDATED|SENT/.test(row[statusKey]) ? 'success' : 'muted'}`}>{row[statusKey]}</span>
-  </div>)}</div>;
+  return <ul className="trace-body">{rows.map((row, i) => {
+    const status = String(row[statusKey] || '');
+    const tone = /ERROR|FAIL|REFUSED|EMERGENCY/.test(status) ? 'error' : /OK|NORMAL|VALIDATED|SENT|READY/.test(status) ? 'success' : /UNKNOWN|PENDING|CLARIFICATION/.test(status) ? 'warning' : 'muted';
+    return <li className="trace-item" key={`${row[labelKey]}-${i}`}>
+      <span className={`trace-node ${tone}`}><Check size={12} strokeWidth={3} /></span>
+      <span className="trace-tool">{labels[row[labelKey]] || row[labelKey]}</span>
+      <span className={`trace-status ${tone}`}>{status || '—'}</span>
+    </li>;
+  })}</ul>;
 }
 
 export default function ToolTrace({ trace = [], calls = [] }) {

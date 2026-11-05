@@ -1,7 +1,6 @@
 import { ArrowUpRight, Bot, CircleAlert, CircleX, Globe, UserRound } from 'lucide-react';
 import ChatBox from '../components/ChatBox.jsx';
 import CitationCard from '../components/CitationCard.jsx';
-import Mascot from '../components/Mascot.jsx';
 import ToolTrace from '../components/ToolTrace.jsx';
 
 // Icon, row class and label differ per status, so the state never depends on color alone.
@@ -12,28 +11,91 @@ const STATUS_STYLES = {
 };
 
 function inlineParts(text, cited) {
-  return text.split(/(\*\*[^*]+\*\*|\[C\d+\])/g).map((part, index) => {
+  return text.split(/(\*\*[^*]+\*\*|\[C\d+\]|\[[^\]]+\]\(https?:\/\/[^)\s]+\))/g).map((part, index) => {
     if (/^\*\*[^*]+\*\*$/.test(part)) return <strong key={index}>{part.slice(2, -2)}</strong>;
     if (cited && /^\[C\d+\]$/.test(part)) return <a key={index} href={`#citation-${part.slice(1, -1)}`}>{part}</a>;
+    const link = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)$/);
+    if (link) return <a key={index} href={link[2]} target="_blank" rel="noreferrer">{link[1]}</a>;
     return part;
   });
 }
 
+function tableCells(line) {
+  return line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((cell) => cell.trim());
+}
+
+function isTableDivider(line) {
+  const cells = tableCells(line);
+  return cells.length > 1 && cells.every((cell) => /^:?-{3,}:?$/.test(cell));
+}
+
 function AnswerBody({ answer, cited }) {
   const blocks = [];
-  for (const line of answer.split('\n')) {
-    const bullet = line.match(/^\s*[-•]\s+(.*)$/);
-    if (bullet) {
-      const last = blocks[blocks.length - 1];
-      if (last?.items) last.items.push(bullet[1]);
-      else blocks.push({ items: [bullet[1]] });
-    } else if (line.trim()) {
-      blocks.push({ text: line });
+  const lines = answer.replace(/\r/g, '').split('\n');
+  let paragraph = [];
+  const flushParagraph = () => {
+    if (paragraph.length) blocks.push({ type: 'paragraph', text: paragraph.join(' ') });
+    paragraph = [];
+  };
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index].trim();
+    const heading = line.match(/^(#{1,4})\s+(.+)$/);
+    const listItem = line.match(/^([-*•]|\d+[.)])\s+(.*)$/);
+
+    if (!line) {
+      flushParagraph();
+      continue;
     }
+    if (heading) {
+      flushParagraph();
+      blocks.push({ type: 'heading', level: heading[1].length, text: heading[2] });
+      continue;
+    }
+    if (line.includes('|') && index + 1 < lines.length && isTableDivider(lines[index + 1])) {
+      flushParagraph();
+      const headers = tableCells(line);
+      const rows = [];
+      index += 2;
+      while (index < lines.length && lines[index].includes('|') && lines[index].trim()) {
+        rows.push(tableCells(lines[index]));
+        index += 1;
+      }
+      index -= 1;
+      blocks.push({ type: 'table', headers, rows });
+      continue;
+    }
+    if (listItem) {
+      flushParagraph();
+      const ordered = /^\d/.test(listItem[1]);
+      const items = [listItem[2]];
+      while (index + 1 < lines.length) {
+        const nextItem = lines[index + 1].trim().match(/^([-*•]|\d+[.)])\s+(.*)$/);
+        if (!nextItem || /^\d/.test(nextItem[1]) !== ordered) break;
+        items.push(nextItem[2]);
+        index += 1;
+      }
+      blocks.push({ type: ordered ? 'ordered-list' : 'list', items });
+      continue;
+    }
+    paragraph.push(line);
   }
-  return blocks.map((block, index) => (block.items
-    ? <ul key={index}>{block.items.map((item, itemIndex) => <li key={itemIndex}>{inlineParts(item, cited)}</li>)}</ul>
-    : <p key={index}>{inlineParts(block.text, cited)}</p>));
+  flushParagraph();
+
+  return blocks.map((block, index) => {
+    if (block.type === 'heading') {
+      const Heading = `h${Math.min(block.level + 1, 5)}`;
+      return <Heading key={index}>{inlineParts(block.text, cited)}</Heading>;
+    }
+    if (block.type === 'list' || block.type === 'ordered-list') {
+      const List = block.type === 'ordered-list' ? 'ol' : 'ul';
+      return <List key={index}>{block.items.map((item, itemIndex) => <li key={itemIndex}>{inlineParts(item, cited)}</li>)}</List>;
+    }
+    if (block.type === 'table') {
+      return <div className="answer-table-wrap" key={index}><table className="answer-table"><thead><tr>{block.headers.map((cell, cellIndex) => <th scope="col" key={cellIndex}>{inlineParts(cell, cited)}</th>)}</tr></thead><tbody>{block.rows.map((row, rowIndex) => <tr key={rowIndex}>{block.headers.map((_, cellIndex) => <td key={cellIndex}>{inlineParts(row[cellIndex] || '', cited)}</td>)}</tr>)}</tbody></table></div>;
+    }
+    return <p key={index}>{inlineParts(block.text, cited)}</p>;
+  });
 }
 
 function Message({ message }) {
@@ -78,19 +140,10 @@ export default function ChatPage({ messages, busy, draft, setDraft, onSend, text
       : 'Nội dung trích từ nguồn và quy tắc của hệ thống.';
   const conversationStarted = messages.length > 1;
   return <div className="chat-page">
-    <div className={`page-intro ${conversationStarted ? 'compact' : ''}`}>
-      <Mascot />
-      <div className="page-intro-copy">
-        <div className="eyebrow"><span className="eyebrow-line" /> TRỢ LÝ SỨC KHỎE ĐÁI THÁO ĐƯỜNG</div>
-        <h1>Chào bạn, mình có thể <em>giúp gì?</em></h1>
-        <p>Hỏi về chỉ số, hồ sơ mô phỏng hoặc kiến thức có nguồn. Mình ưu tiên nguồn đã duyệt và sẽ nói rõ khi chưa đủ dữ liệu.</p>
-      </div>
-    </div>
-
     <section className="chat-card" aria-label="Hội thoại">
       <div className="chat-card-top">
-        <div className="conversation-label"><span className="assistant-avatar"><Bot size={24} /></span><div><strong>DiaCare Assistant</strong><small>Trợ lý sức khỏe đái tháo đường</small></div></div>
-        <span className="session-badge"><span /> Phiên mới</span>
+        <div className="conversation-label"><span className="assistant-avatar"><Bot size={19} /></span><div><strong>DiaCare Assistant</strong><small>Trợ lý sức khỏe đái tháo đường</small></div></div>
+        <span className="session-badge"><span /> {conversationStarted ? 'Đang trò chuyện' : 'Phiên mới'}</span>
       </div>
       <div className="message-list">
         {messages.map((message, index) => <Message key={index} message={message} />)}

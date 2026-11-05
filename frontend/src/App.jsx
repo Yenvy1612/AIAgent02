@@ -12,6 +12,8 @@ export default function App() {
   const [profiles, setProfiles] = useState([]);
   const [profileId, setProfileId] = useState('');
   const [activePage, setActivePage] = useState('chat');
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [systemPanelOpen, setSystemPanelOpen] = useState(false);
   const [messages, setMessages] = useState([INITIAL_MESSAGE]);
   const [draft, setDraft] = useState('');
   const [busy, setBusy] = useState(false);
@@ -27,6 +29,17 @@ export default function App() {
       setProfiles(list.items || []);
       setProfileId(list.items?.[0]?.id || '');
     }).catch((exception) => setError(exception.message));
+  }, []);
+
+  useEffect(() => {
+    function closePanels(event) {
+      if (event.key === 'Escape') {
+        setMobileNavOpen(false);
+        setSystemPanelOpen(false);
+      }
+    }
+    window.addEventListener('keydown', closePanels);
+    return () => window.removeEventListener('keydown', closePanels);
   }, []);
 
   // Scroll only the message list, so the safety banners above it stay in view.
@@ -80,6 +93,8 @@ export default function App() {
   function changePage(page) {
     setActivePage(page);
     setError('');
+    setMobileNavOpen(false);
+    setSystemPanelOpen(false);
   }
 
   function changeProfile(value) {
@@ -89,14 +104,30 @@ export default function App() {
     setError('');
   }
 
-  return <div className="app-shell">
-    <Sidebar activePage={activePage} onChangePage={changePage} />
+  return <>
+    <a className="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+    <div className="app-shell">
+    <Sidebar
+      activePage={activePage}
+      onChangePage={changePage}
+      profile={selectedProfile}
+      mobileOpen={mobileNavOpen}
+      onToggleMobile={() => { setMobileNavOpen((open) => !open); setSystemPanelOpen(false); }}
+    />
+    {mobileNavOpen && <button className="drawer-scrim nav-scrim" aria-label="Đóng điều hướng" onClick={() => setMobileNavOpen(false)} />}
 
     <div className="main-area">
-      <Topbar title={activePage === 'chat' ? 'Trò chuyện' : 'Lịch sử chỉ số'} profiles={profiles} profileId={profileId} onChangeProfile={changeProfile} />
+      <Topbar
+        title={activePage === 'chat' ? 'Trò chuyện' : 'Lịch sử chỉ số'}
+        profiles={profiles}
+        profileId={profileId}
+        onChangeProfile={changeProfile}
+        systemPanelOpen={systemPanelOpen}
+        onToggleSystem={() => { setSystemPanelOpen((open) => !open); setMobileNavOpen(false); }}
+      />
 
       <div className="workspace">
-        <main className="content-column">
+        <main id="main-content" className={`content-column ${activePage === 'history' ? 'history-active' : ''}`}>
           <div className="demo-warning"><Info size={24} /><span><strong>Bản demo giáo dục.</strong> Không dùng để chẩn đoán, điều trị hoặc thay thế nhân viên y tế. Việc trích dẫn WHO/NIDDK không hàm ý các cơ quan này chứng thực DiaCare AI; tài liệu CDC không hàm ý CDC, ATSDR, HHS hay Chính phủ Hoa Kỳ chứng thực DiaCare AI.</span><span className="warning-tag">SYNTHETIC ONLY</span></div>
           <div className="safety-note"><CircleAlert size={18} /><span>Nhận diện cấp cứu là thử nghiệm và có thể bỏ sót. Nếu có dấu hiệu nặng, hãy gọi 115 ngay.</span></div>
           {error && <div className="inline-error" role="alert"><CircleAlert size={16} />{error}<button onClick={() => setError('')}>Đóng</button></div>}
@@ -106,8 +137,10 @@ export default function App() {
           /> : <HistoryPage profile={selectedProfile} history={history} loading={historyLoading} />}
         </main>
 
-        <InsightRail health={health} />
+        <InsightRail health={health} open={systemPanelOpen} onClose={() => setSystemPanelOpen(false)} />
       </div>
     </div>
-  </div>;
+    {systemPanelOpen && <button className="drawer-scrim system-scrim" aria-label="Đóng trạng thái hệ thống" onClick={() => setSystemPanelOpen(false)} />}
+    </div>
+  </>;
 }
