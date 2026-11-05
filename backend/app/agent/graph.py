@@ -9,7 +9,7 @@ from app.agent.state import AgentState
 from app.agent.fusion import structured_fusion
 from app.agent.guidance import INSUFFICIENT_EVIDENCE_MESSAGE, classify_guidance, guidance_message
 from app.agent.tools import (
-    calculate_bmi, classify_lab, predict_risk, profile_features,
+    calculate_bmi, classify_lab, predict_risk, profile_features, screen_risk, should_screen_risk,
     search_kb, search_web, tool_get_history,
 )
 from app.rag.citations import validate_citations
@@ -88,6 +88,8 @@ def _parse_bmi(message: str) -> tuple[float | None, float | None]:
 def _route_message(message: str) -> tuple[str, list[str]]:
     text = normalize_vi(message)
     measurement = _parse_measurement(message)
+    if should_screen_risk(message):
+        return measurement, ["screen_risk"]
     weight, height = _parse_bmi(message)
     routes: list[str] = []
     if measurement["hba1c_pct"] is not None or measurement["hba1c_unit_unsupported"] or measurement["glucose_value"] is not None:
@@ -262,7 +264,10 @@ def _execute_tools_node(state: AgentState) -> dict[str, Any]:
         name = call["name"]
         args: dict[str, Any] = {}
         try:
-            if name == "classify_lab":
+            if name == "screen_risk":
+                args = {"message": message}
+                result = screen_risk(message)
+            elif name == "classify_lab":
                 args = dict(parsed)
                 if parsed.get("hba1c_unit_unsupported"):
                     result = {
@@ -383,6 +388,22 @@ def _best_fallback_excerpt(items: list[dict[str, Any]]) -> tuple[dict[str, Any] 
 
 def _compose_node(state: AgentState) -> dict[str, Any]:
     results = state.get("results", {})
+    if "screen_risk" in results:
+        screening = results["screen_risk"]
+        answer = screening.get("answer", INSUFFICIENT_EVIDENCE_MESSAGE)
+        evidence = screening.get("evidence", [])
+        status = screening.get("status", "OK")
+        return {
+            "answer": answer, "deterministic_answer": answer,
+            "fact_parts": [answer], "note_parts": [], "answer_mode": "deterministic",
+            "evidence": evidence, "citations": screening.get("citations", []),
+            "reference_only": [], "web_sources": [], "status": status,
+            "trace": state.get("trace", []) + [{"step": "fusion", "status": status}],
+            **structured_fusion(
+                evidence=evidence, safety_level=state.get("safety", {}).get("level", "UNKNOWN"),
+                profile_type="synthetic" if state.get("profile_id") else None,
+            ),
+        }
     parts: list[str] = []
     evidence: list[dict[str, Any]] = []
     reference_only: list[dict[str, Any]] = []
@@ -574,7 +595,9 @@ def _llm_composer_node(state: AgentState) -> dict[str, Any]:
     answer = state.get("deterministic_answer", state.get("answer", ""))
     composition: dict[str, Any] = {}
     citations = list(state.get("citations", []))
-    if config.errors:
+    if "screen_risk" in results:
+        reason = "SCREENING_RESULT"
+    elif config.errors:
         reason = config.errors[0]
     elif config.configured:
         if state.get("status") == "NEED_CLARIFICATION":
