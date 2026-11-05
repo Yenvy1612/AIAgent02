@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { ArrowUpRight, CircleAlert } from 'lucide-react';
+import { ArrowUpRight, CircleAlert, Plus } from 'lucide-react';
 
 export default function EmergencyButton() {
   const [open, setOpen] = useState(false);
   return <>
-    <button className="emergency-quick" onClick={() => setOpen(true)}><span className="emergency-pulse" />Tôi đang cấp cứu</button>
+    <button className="emergency-quick" onClick={() => setOpen(true)}><Plus size={18} strokeWidth={3.4} />Tôi đang cấp cứu</button>
     {open && <div className="dialog-scrim" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setOpen(false); }}>
       <section className="emergency-dialog" role="dialog" aria-modal="true" aria-labelledby="emergency-title">
         <button className="dialog-close" onClick={() => setOpen(false)} aria-label="Đóng">×</button>
