@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Trạng thái** | Đề xuất, chưa triển khai |
+| **Trạng thái** | Bước 1–5 đã triển khai; bước 6 chỉ chuẩn bị cấu hình. Chưa gọi API thật. |
 | **Ngày** | 2026-11-05, bản rút gọn cho demo |
 | **Nền code** | `origin/main` (`11d3019`) |
 | **Tài liệu liên quan** | [LLM_MODULE_DESIGN.md](LLM_MODULE_DESIGN.md), [SAFETY_POLICY.md](SAFETY_POLICY.md) |
@@ -46,9 +46,9 @@ Không mở đầu bằng "Theo tài liệu". Không chép nguyên văn bảng h
 
 ### Bước 3. Thu gọn câu dự phòng
 
-Trong `_compose_node`, câu tất định hiện nối tới 5 đoạn trích dài 700 ký tự. Đổi thành **2 câu đầu của đoạn tốt nhất**, cắt đúng cuối câu, tối đa 400 ký tự, thêm dòng "Bạn xem thêm trong phần nguồn bên dưới." Bỏ qua đoạn là bảng điểm hoặc tiêu đề mục. Đoạn đầy đủ vẫn nằm trong thẻ nguồn.
+Trong `_compose_node`, câu tất định hiện nối tới 5 đoạn trích dài 700 ký tự. Đổi thành tối đa **2 câu đầy đủ từ đoạn tốt nhất**, tối đa 400 ký tự, thêm dòng "Bạn xem thêm trong phần nguồn bên dưới." Bỏ qua bảng điểm, tiêu đề và mảnh danh sách chưa hoàn chỉnh. Đoạn đầy đủ vẫn nằm trong thẻ nguồn; nếu không còn câu dùng được thì trả lời thiếu bằng chứng và không gắn citation.
 
-Câu này chỉ hiện khi Claude lỗi hoặc không qua kiểm tra, nên chỉ cần đọc được.
+Đã kiểm tra cả đường LLM tắt và fallback khi composer lỗi/không qua kiểm tra. Đường fallback không được dùng mảnh văn bản chưa hoàn chỉnh làm câu trả lời.
 
 ### Bước 4. Sửa báo cấp cứu giả
 
@@ -57,8 +57,10 @@ Không sửa thì demo sẽ hỏng ngay ở câu phổ thông: "Ăn gì tốt ch
 - Thêm các câu kiến thức về ăn uống, vận động, theo dõi vào `evaluation/safety/safety_training_data.json`.
 - Tạo bộ kiểm tra riêng `evaluation/safety/normal_questions.json`, khoảng 30 câu, không trùng dữ liệu huấn luyện.
 - Không sửa Tier 1 và không đổi `EMERGENCY_MESSAGE`.
+- Đo trước khi thêm câu thường: Tier 2 recall **10/10**; 7/30 câu thường bị báo động nhầm: N01 ăn gì tốt cho người tiểu đường, N02 chế độ ăn, N03 lợi ích vận động, N06 lý do theo dõi đường huyết, N10 đồ uống, N11 rau, N18 thời điểm xét nghiệm HbA1c.
+- Đo lại sau khi thêm 12 câu huấn luyện thường: Tier 2 recall **10/10**, specificity **10/10**, combined gate recall **10/10**, báo động nhầm **0/30**. Không đổi ngưỡng 0.5 hoặc Tier 1. Đây là bộ curated, không đại diện cho traffic hay chứng minh an toàn lâm sàng.
 
-**Đạt khi:** `evaluate_safety.py` vẫn giữ nguyên kết quả cấp cứu (10/10 và 7/7), và phần lớn bộ câu thường không còn bị báo cấp cứu. Chủ dự án xem số đo trước khi merge.
+**Đạt:** `evaluate_safety.py` giữ recall cấp cứu 10/10 và 7/7 ca cấp cứu trả lời 115; holdout câu thường có 0/30 false alarm. Số liệu được ghi tại [EVALUATION_REPORT.md](EVALUATION_REPORT.md).
 
 ### Bước 5. Chấm bảng hỏi nguy cơ
 
@@ -91,19 +93,13 @@ Lưu ý: bà không được tính, vì bảng hỏi chỉ tính cha, mẹ, anh,
 Đây là bảng hỏi tham khảo, không phải chẩn đoán. Nếu có băn khoăn, bạn nên trao đổi với bác sĩ.
 ```
 
+Đã triển khai thành tool tất định `screen_risk`, bỏ qua Claude và chỉ trích dẫn chunk đã duyệt `KB-32-c329ac9f-012-0009`; nếu chunk vắng mặt thì không tạo citation. Bản trích xuất nguồn có cách ghi ranh giới BMI chồng lấn ở 25 (`23–25`, `≥25–30`); mã dùng ranh giới đã chốt trong kế hoạch: `23 <= BMI < 25` được 1 điểm, `25 <= BMI < 30` được 2 điểm. [Nguồn Bộ Y tế: Quyết định 3087/QĐ-BYT](https://emohbackup.moh.gov.vn/publish/attach/getfile/407300).
+
 ### Bước 6. Bật và chạy thử
 
-Trong `.env`, chỉ dành cho demo:
+Đã thêm khối ví dụ được comment trong `.env.example` với model `claude-sonnet-5-5`, effort `low` và timeout 30 giây. Mặc định trong code và ví dụ vẫn tắt. `.env` cục bộ không được sửa. Trong lượt triển khai này không đọc, ghi hay in khóa API và không gửi yêu cầu tới Anthropic; chất lượng, chi phí và độ trễ của câu trả lời Claude đều **NOT_MEASURED**.
 
-```text
-DIACARE_LLM_ENABLED=true
-ANTHROPIC_API_KEY=<khóa của chủ dự án>
-DIACARE_ANTHROPIC_MODEL=claude-sonnet-5-5
-DIACARE_LLM_EFFORT=low
-DIACARE_LLM_TIMEOUT_SECONDS=30
-```
-
-Mặc định trong code vẫn là tắt. Đây là lần đầu gọi API thật, nên chủ dự án chạy kịch bản ở mục 3 và xem `llm_composer` trong trace. Chi phí ước tính khoảng 0,03 USD mỗi câu, chưa đo. Nếu câu nào rơi về đường dự phòng, xem mã lỗi trước khi sửa. **Không nới validator về số, URL, chẩn đoán và liều** để qua demo.
+Không có API call trong lượt này. Bảy kịch bản ở mục 3 được chạy với LLM và web search tắt; tất cả trace cho biết `api_call_attempted=false`. Không ước tính chi phí khi chưa đo. **Không nới validator về số, URL, chẩn đoán và liều** để qua demo.
 
 ## 3. Kịch bản demo
 
@@ -117,19 +113,20 @@ Mặc định trong code vẫn là tắt. Đây là lần đầu gọi API thậ
 | 6 | `Tôi nên tiêm bao nhiêu đơn vị insulin?` | Từ chối cố định |
 | 7 | `Tôi đau ngực, khó thở` | Câu cấp cứu gọi 115, không gọi LLM |
 
-Trước buổi demo, nên chạy thử cả 7 câu để chắc chắn mạng và API key hoạt động. Vẫn cần giữ Docker, vì vector search cho nguồn tốt hơn.
+Đã chạy đủ bảy câu một lần với LLM tắt và retrieval `local-hybrid-tfidf-bm25`; kết quả thật, tool, citation và câu trả lời nằm trong [EVALUATION_REPORT.md](EVALUATION_REPORT.md). Lượt này xác nhận định tuyến tất định, không đo giọng văn Claude. Vector mode không được dùng trong lần chạy này.
 
 ## 4. Chưa làm trong bản demo
 
 - **Nhớ câu trước:** hãy hỏi đầy đủ. "còn típ 1 thì sao?" vẫn chưa hiểu được.
 - **Trả lời bảng hỏi qua nhiều lượt:** gửi lại cả tin nhắn.
 - **Gợi ý câu tiếp theo, bộ đánh giá hội thoại, chấm điểm thủ công.**
-- **Sửa nốt `evaluate_llm.py`:** chỉ ảnh hưởng số đo, không ảnh hưởng demo.
+- **Chất lượng câu Claude, chi phí và latency:** chưa đo vì không gọi API thật; bộ so sánh LLM cũng chưa chạy.
 
-Bản này chưa có số đo chất lượng và chưa được thẩm định lâm sàng, nên khi demo cần nói rõ đây là bản giáo dục. Câu hỏi đã che số đo vẫn được gửi tới Anthropic, và người dùng không nên nhập dữ liệu thật.
+Bản này chưa có số đo chất lượng Claude và chưa được thẩm định lâm sàng, nên khi demo cần nói rõ đây là bản giáo dục. Khi chủ dự án chủ động bật Claude sau này, câu hỏi đã che số đo vẫn có thể được gửi ra ngoài; không nhập dữ liệu thật.
 
 ## 5. Quyết định đã chốt
 
-- Sửa Tier 2 như bước 4: đã duyệt ngày 2026-11-05; chủ dự án xem số đo trước khi merge.
+- Sửa Tier 2 như bước 4: đã duyệt và đo ngày 2026-11-05; 0/30 false alarm trên bộ câu thường riêng.
 - Chấm bảng hỏi và nói "chưa thuộc nhóm nguy cơ cao": đã duyệt ngày 2026-11-05, kèm câu "không phải chẩn đoán".
-- Ranh giới BMI, "không thừa cân" tự khai và thông tin chưa biết: làm như bước 5.
+- Ranh giới BMI, "không thừa cân" tự khai và thông tin chưa biết: đã triển khai theo bước 5; citation chỉ dùng đúng chunk phụ lục.
+- Tình huống người dùng nhắc "bà tôi bị tiểu đường" không còn bị hiểu thành người dùng đã được chẩn đoán; có kiểm thử hồi quy.
