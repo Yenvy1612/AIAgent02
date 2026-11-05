@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 
 from app.agent.fusion import structured_fusion  # noqa: E402
-from app.agent.graph import _llm_composer_node, run_agent  # noqa: E402
+from app.agent.graph import _compose_node, _llm_composer_node, run_agent  # noqa: E402
 from app.api import routes as api_routes  # noqa: E402
 from app.llm.client import _system_prompt, create_message  # noqa: E402
 from app.llm.composer import compose_answer  # noqa: E402
@@ -81,7 +81,7 @@ def test_agent_response_keeps_lab_facts_and_disabled_composer_deterministic(monk
     assert response["profile_type"] is None
 
 
-def test_disabled_composer_keeps_legacy_kb_answer_exact(monkeypatch):
+def test_disabled_composer_uses_short_deterministic_kb_fallback(monkeypatch):
     monkeypatch.delenv("DIACARE_LLM_ENABLED", raising=False)
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     evidence = _evidence(excerpt="Approved excerpt.")
@@ -89,11 +89,80 @@ def test_disabled_composer_keeps_legacy_kb_answer_exact(monkeypatch):
          patch("app.agent.graph.compose_answer") as compose:
         response = run_agent("HbA1c là gì?", None, None)
     compose.assert_not_called()
-    assert response["answer"] == "Approved excerpt."
+    assert response["answer"] == "Approved excerpt.\n\nBạn xem thêm trong phần nguồn bên dưới."
     assert response["answer_mode"] == "deterministic"
 
 
-def test_insufficient_evidence_response_drops_unused_kb_citations(monkeypatch):
+def test_deterministic_kb_fallback_uses_two_complete_sentences_from_best_prose():
+    heading = _evidence(
+        citation_id="C-heading", chunk_id="heading", excerpt="3. Chế độ ăn cho người bệnh",
+    )
+    score_table = _evidence(
+        citation_id="C-table", chunk_id="score-table",
+        excerpt="Yếu tố | Điểm\nTuổi 40-49 | 1\nBMI 23-24.9 | 1",
+    )
+    selected = _evidence(
+        citation_id="C-selected", document_id="KB-selected", chunk_id="selected",
+        excerpt="Câu đầu tiên dễ hiểu. Câu thứ hai cũng có ích. Câu thứ ba cần bỏ.",
+    )
+    state = {
+        "message": "Hỏi về kiến thức.",
+        "safety": {"level": "NORMAL"},
+        "results": {"search_kb": {"status": "OK", "evidence": [heading, score_table, selected]}},
+    }
+
+    result = _compose_node(state)
+
+    assert result["deterministic_answer"] == (
+        "Câu đầu tiên dễ hiểu. Câu thứ hai cũng có ích.\n\n"
+        "Bạn xem thêm trong phần nguồn bên dưới."
+    )
+    assert result["citations"] == [{key: selected[key] for key in (
+        "citation_id", "document_id", "chunk_id", "title", "source_url", "page",
+    )}]
+    assert result["evidence"] == [heading, score_table, selected]
+    assert result["fact_parts"] == []
+    assert result["note_parts"] == []
+
+
+def test_deterministic_kb_fallback_stops_at_last_complete_sentence_under_400_chars():
+    first_sentence = f"{'a' * 380}."
+    evidence = _evidence(excerpt=f"{first_sentence} This second sentence does not fit.")
+    result = _compose_node({
+        "message": "Question", "safety": {"level": "NORMAL"},
+        "results": {"search_kb": {"status": "OK", "evidence": [evidence]}},
+    })
+
+    excerpt_used = result["deterministic_answer"].split("\n\n", 1)[0]
+    assert excerpt_used == first_sentence
+    assert len(excerpt_used) <= 400
+
+
+def test_deterministic_kb_fallback_reports_insufficient_when_only_headings_or_tables_remain():
+    evidence = _evidence(excerpt="| Yếu tố | Điểm |\n| Tuổi 40-49 | 1 |")
+    result = _compose_node({
+        "message": "Question", "safety": {"level": "NORMAL"},
+        "results": {"search_kb": {"status": "OK", "evidence": [evidence]}},
+    })
+
+    assert "Không đủ thông tin" in result["deterministic_answer"]
+    assert result["citations"] == []
+    assert result["status"] == "DEGRADED"
+
+
+def test_deterministic_kb_fallback_rejects_incomplete_list_heading():
+    evidence = _evidence(excerpt="Các phương pháp điều trị\n4.3.1.\nThay đổi lối sống: a.")
+    result = _compose_node({
+        "message": "Ăn gì tốt cho người tiểu đường?", "safety": {"level": "NORMAL"},
+        "results": {"search_kb": {"status": "OK", "evidence": [evidence]}},
+    })
+
+    assert "Không đủ thông tin" in result["deterministic_answer"]
+    assert result["citations"] == []
+    assert result["status"] == "DEGRADED"
+
+
+def test_model_insufficient_evidence_uses_deterministic_fallback_and_source_citation(monkeypatch):
     monkeypatch.setenv("DIACARE_LLM_ENABLED", "true")
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
     evidence = _evidence()
@@ -102,7 +171,8 @@ def test_insufficient_evidence_response_drops_unused_kb_citations(monkeypatch):
         "citations": [{key: evidence[key] for key in (
             "citation_id", "document_id", "chunk_id", "title", "source_url", "page",
         )}],
-        "status": "OK", "answer": "deterministic", "deterministic_answer": "deterministic",
+        "status": "OK", "answer": "fallback excerpt.\n\nBạn xem thêm trong phần nguồn bên dưới.",
+        "deterministic_answer": "fallback excerpt.\n\nBạn xem thêm trong phần nguồn bên dưới.",
         "fact_parts": [], "note_parts": [], "trace": [],
     }
     with patch("app.agent.graph.compose_answer", return_value={
@@ -110,8 +180,8 @@ def test_insufficient_evidence_response_drops_unused_kb_citations(monkeypatch):
     }):
         output = _llm_composer_node(state)
     assert output["status"] == "DEGRADED"
-    assert output["citations"] == []
-    assert "Không đủ thông tin" in output["answer"]
+    assert output["citations"] == state["citations"]
+    assert output["answer"] == state["deterministic_answer"]
 
 
 def test_safety_bypass_never_calls_composer(monkeypatch):

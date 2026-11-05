@@ -14,3 +14,10 @@ data/kb/approved/*
 data/kb/rejected/*
 evaluation/generated/
 tmp/
+
+.codex
+.claude
+.agents
+.codegraph
+.impeccable
+.pytest_cache

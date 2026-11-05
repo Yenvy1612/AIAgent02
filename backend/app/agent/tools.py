@@ -5,6 +5,7 @@ from typing import Any
 from sqlalchemy.orm import Session
 
 from app.clinical.rules import interpret_labs
+from app.clinical.screening import screen_risk as _screen_risk, should_screen_risk as _should_screen_risk
 from app.database.repository import get_history, get_profile, serialize_profile
 from app.ml.predict import risk_model
 from app.rag.retriever import knowledge_base
@@ -27,6 +28,14 @@ def predict_risk(features: dict[str, Any], include_explanation: bool = False) ->
 
 def classify_lab(data: dict[str, Any], evidence: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     return interpret_labs(data, evidence=evidence)
+
+
+def screen_risk(message: str) -> dict[str, Any]:
+    return _screen_risk(message)
+
+
+def should_screen_risk(message: str) -> bool:
+    return _should_screen_risk(message)
 
 
 def search_kb(query: str, topic: str | None = None, top_k: int = 5) -> dict[str, Any]:

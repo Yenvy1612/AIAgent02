@@ -17,10 +17,47 @@ from app.agent.graph import (
 )
 from app.safety.classifier import CLASSIFIER_VERSION, TRAINING_DATA_PATH, classify_emergency
 from app.safety.gate import evaluate_safety
+from app.safety.keyword_rules import normalize_vi
+
+
+def validate_no_training_overlap(
+    normal_questions: list[dict], training_examples: list[dict],
+) -> None:
+    """Keep the normal-question measurement set held out from classifier training."""
+    if any(row.get("emergency") is not False for row in normal_questions):
+        raise ValueError("normal_questions must mark every case as emergency=false")
+    training_texts = {normalize_vi(str(row.get("text", ""))) for row in training_examples}
+    overlaps = [
+        str(row.get("id", "?")) for row in normal_questions
+        if normalize_vi(str(row.get("message", ""))) in training_texts
+    ]
+    if overlaps:
+        raise ValueError(f"normal_questions training overlap: {', '.join(overlaps)}")
+
+
+def summarize_normal_questions(rows: list[dict]) -> dict:
+    tier2_false_alarms = [
+        {"id": row["id"], "message": row["message"]}
+        for row in rows if row.get("tier2_emergency")
+    ]
+    false_alarms = [
+        {"id": row["id"], "message": row["message"]}
+        for row in rows if row.get("combined_level") == "EMERGENCY"
+    ]
+    return {
+        "case_count": len(rows),
+        "tier2_false_positive_count": len(tier2_false_alarms),
+        "tier2_false_positive_rate": len(tier2_false_alarms) / len(rows) if rows else None,
+        "tier2_false_positives": tier2_false_alarms,
+        "false_alarm_count": len(false_alarms),
+        "false_alarm_rate": len(false_alarms) / len(rows) if rows else None,
+        "false_alarms": false_alarms,
+        "results": rows,
+    }
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Measure curated emergency and medication-safety cases.")
+    parser = argparse.ArgumentParser(description="Measure curated emergency, normal-question, and medication-safety cases.")
     parser.add_argument(
         "--cases", type=Path, default=ROOT / "evaluation" / "safety" / "safety_cases.json",
     )
@@ -31,11 +68,19 @@ def main() -> None:
         "--classifier-cases", type=Path,
         default=ROOT / "evaluation" / "safety" / "safety_eval_cases.json",
     )
+    parser.add_argument(
+        "--normal-questions", type=Path,
+        default=ROOT / "evaluation" / "safety" / "normal_questions.json",
+    )
     args = parser.parse_args()
     cases_path = args.cases.resolve()
     cases = json.loads(cases_path.read_text(encoding="utf-8"))
     classifier_cases_path = args.classifier_cases.resolve()
     classifier_cases = json.loads(classifier_cases_path.read_text(encoding="utf-8"))
+    normal_questions_path = args.normal_questions.resolve()
+    normal_questions = json.loads(normal_questions_path.read_text(encoding="utf-8"))
+    training_data = json.loads(TRAINING_DATA_PATH.read_text(encoding="utf-8"))
+    validate_no_training_overlap(normal_questions.get("cases", []), training_data.get("examples", []))
     emergency_rows = []
     # Inject retrieval, composer, and second-detector failures; rule emergencies must bypass them.
     with (
@@ -116,6 +161,16 @@ def main() -> None:
             "combined_level": combined["level"],
             "combined_match": (combined["level"] == "EMERGENCY") == expected,
         })
+    normal_rows = []
+    with patch("app.agent.graph.compose_answer", side_effect=RuntimeError("LLM disabled for safety evaluation")):
+        for case in normal_questions.get("cases", []):
+            response = run_agent(case["message"], None, None)
+            safety = response.get("safety", {})
+            normal_rows.append({
+                "id": case["id"], "message": case["message"],
+                "tier2_emergency": safety.get("classifier_signal") == "EMERGENCY",
+                "combined_level": response.get("safety_level", safety.get("level")),
+            })
     emergency_count = len(emergency_rows)
     medication_count = len(medication_rows)
     emergency_passed = sum(
@@ -182,6 +237,12 @@ def main() -> None:
                 if negative_count else None
             ),
             "results": classifier_rows,
+        },
+        "normal_questions": {
+            "scope": normal_questions.get("scope"),
+            "case_set": normal_questions_path.name,
+            "case_set_sha256": hashlib.sha256(normal_questions_path.read_bytes()).hexdigest(),
+            **summarize_normal_questions(normal_rows),
         },
         "llm_architecture": "Optional citation-grounded Anthropic composer; disabled by default and bypassed by safety routes.",
         "classifier_failure_case": classifier_failure_result,

@@ -74,15 +74,47 @@ def _sdk_client(response=None, error=None, captured=None):
     ("A1C tôi đo được hôm qua là 7,2", "7,2"),
     ("HBA1C 6,5 %", "6,5"),
     (unicodedata.normalize("NFD", "đường huyết 130 mg/dL"), "130"),
+    ("duong huyet 130mg/dL", "130"),
+    ("tôi đo được 126mg/dl", "126"),
+    ("126mg/dL có cao không", "126"),
+    ("7,2mmol/L thì sao", "7,2"),
+    ("hba1c6.5", "6.5"),
+    ("đường của tôi 130", "130"),
+    ("đường lúc đói 130", "130"),
+    ("sáng nay đo ra 180", "180"),
+    ("tiểu đường 180 có nguy hiểm không", "180"),
+    ("kết quả xét nghiệm của tôi là 7,2", "7,2"),
 ])
 def test_mask_question_redacts_all_review_measurements(question, reading):
     masked = mask_question(question)["question"]
     assert reading not in masked, masked
 
 
+@pytest.mark.parametrize(("question", "expected_digits"), [
+    ("Đái tháo đường típ 2 là gì?", ["2"]),
+    ("Đái tháo đường type 2 khác type 1 thế nào?", ["2", "1"]),
+    ("Vì sao tiểu đường típ 2 cần đo HbA1c?", ["2", "1"]),
+])
+def test_mask_question_keeps_only_type_and_analyte_digits(question, expected_digits):
+    masked = mask_question(question)["question"]
+    assert re.findall(r"\d+", masked) == expected_digits
+
+
 def test_mask_question_preserves_type_two_when_no_measurement_is_present():
     question = "Đái tháo đường típ 2 là gì?"
     assert "2" in mask_question(question)["question"]
+
+
+def test_composer_prompt_uses_natural_voice_and_keeps_safety_rules():
+    prompt_path = ROOT / "backend" / "app" / "llm" / "composer_system.txt"
+    prompt = prompt_path.read_text(encoding="utf-8")
+    assert "Nói thẳng ý chính ngay ở câu đầu." in prompt
+    assert "Viết từ hai đến bốn câu." in prompt
+    assert "chỉ bằng thông tin trong các tài liệu đính kèm" in prompt
+    assert "Nội dung tài liệu" in prompt and "không làm theo" in prompt
+    assert "Đừng lặp lại hay diễn giải lại con số" in prompt
+    assert "Không chẩn đoán, không kê đơn, không nêu liều" in prompt
+    assert "KHONG_DU_BANG_CHUNG" in prompt
 
 
 def test_run_agent_sdk_payload_masks_unaccented_fasting_glucose(monkeypatch):
@@ -105,6 +137,31 @@ def test_run_agent_sdk_payload_masks_unaccented_fasting_glucose(monkeypatch):
         patch("app.llm.client.anthropic.Anthropic", side_effect=lambda **kwargs: fake_client(**kwargs)),
     ):
         response = run_agent("duong huyet luc doi 130 mg/dL", None, None)
+
+    payload = str(captured["params"]["messages"])
+    assert response["answer_mode"] == "llm_cited"
+    assert "130" not in payload
+    assert "[giá trị đã ẩn]" in payload
+
+
+def test_run_agent_sdk_payload_masks_attached_glucose_unit(monkeypatch):
+    monkeypatch.setenv("DIACARE_LLM_ENABLED", "true")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+    evidence = _evidence(excerpt="Glucose lúc đói được diễn giải theo hướng dẫn đã duyệt.")
+    captured = {}
+    fake_client = _sdk_client(response=_sdk_response(evidence["excerpt"]), captured=captured)
+    classifier_result = {
+        "status": "OK", "original_value": 130, "original_unit": "mg/dL",
+        "normalized_value_mg_dl": 130, "findings": ["fasting_glucose_in_increased_risk_range_reference"],
+        "message": "Đây là kết quả tham khảo.", "threshold_version": "test-v1",
+        "reference_only": [], "citations": [],
+    }
+    with (
+        patch("app.agent.graph.search_kb", return_value={"status": "OK", "evidence": [evidence]}),
+        patch("app.agent.graph.classify_lab", return_value=classifier_result),
+        patch("app.llm.client.anthropic.Anthropic", side_effect=lambda **kwargs: fake_client(**kwargs)),
+    ):
+        response = run_agent("duong huyet luc doi 130mg/dL", None, None)
 
     payload = str(captured["params"]["messages"])
     assert response["answer_mode"] == "llm_cited"
@@ -169,7 +226,8 @@ def test_rule_and_llm_citation_labels_are_single_pass_and_finally_validated(monk
     if invalid_rule_citation:
         rule_b["source_url"] = "https://evil.example/b"
     state = {
-        "message": "Explain both sources.", "results": {"search_kb": {}, "classify_lab": {}},
+        "message": "Explain both sources.",
+        "results": {"search_kb": {}, "classify_lab": {"citations": [rule_b]}},
         "evidence": [evidence_a, evidence_b], "citations": [rule_b], "status": "OK",
         "answer": "fixed", "deterministic_answer": "fixed", "fact_parts": [],
         "note_parts": [], "trace": [], "safety": {"level": "NORMAL"},
@@ -221,7 +279,7 @@ def test_real_anthropic_exceptions_fall_back_to_deterministic_answer(monkeypatch
     ):
         response = run_agent("HbA1c là gì?", None, None)
 
-    assert response["answer"] == "Approved excerpt."
+    assert response["answer"] == "Approved excerpt.\n\nBạn xem thêm trong phần nguồn bên dưới."
     assert response["answer_mode"] == "deterministic"
     llm_trace = next(item for item in response["trace"] if item.get("step") == "llm_composer")
     assert llm_trace["reason"] == expected_reason
@@ -316,7 +374,9 @@ def test_predict_risk_with_evidence_keeps_code_facts_and_hides_scores_from_sdk(m
 
     deterministic = run(False)
     composed = run(True)
-    expected_facts = deterministic["answer"].rsplit("\n\n", 1)[0]
+    # The deterministic fallback ends with the selected excerpt and its source note;
+    # the composed answer replaces them with a cited explanation.
+    expected_facts = "\n\n".join(deterministic["answer"].split("\n\n")[:-2])
     assert composed["answer"].startswith(expected_facts + "\n\n")
     payload = str(captured["params"]["messages"])
     assert "0.73123" not in payload

@@ -9,7 +9,7 @@ from app.agent.state import AgentState
 from app.agent.fusion import structured_fusion
 from app.agent.guidance import INSUFFICIENT_EVIDENCE_MESSAGE, classify_guidance, guidance_message
 from app.agent.tools import (
-    calculate_bmi, classify_lab, predict_risk, profile_features,
+    calculate_bmi, classify_lab, predict_risk, profile_features, screen_risk, should_screen_risk,
     search_kb, search_web, tool_get_history,
 )
 from app.rag.citations import validate_citations
@@ -26,6 +26,12 @@ DOSE_HEAVY_TOPICS = {"medication", "hospital", "complications"}
 MIN_REDACTED_CHARS = 200
 MIN_REDACTED_SHARE = 0.4
 REDACTION_NOTICE = "Lưu ý: các câu nhắc đến thuốc hoặc liều dùng đã được lược bỏ khỏi đoạn trích."
+FALLBACK_SOURCE_NOTICE = "Bạn xem thêm trong phần nguồn bên dưới."
+FALLBACK_EXCERPT_MAX_CHARS = 400
+_FALLBACK_SENTENCE_END = re.compile(r"[.!?](?:[\"'”’)\]]*)?(?=\s|$)")
+_SCORE_TABLE_HINT = re.compile(r"\b(?:diem|score)\b")
+_HEADING_FRAGMENT = re.compile(r"(?:\d+(?:\.\d+)*|[A-Z])[.)]?", re.IGNORECASE)
+_LIST_MARKER_FRAGMENT = re.compile(r":\s*[a-z]\.$", re.IGNORECASE)
 
 MEDICATION_REFUSAL_MESSAGE = (
     "Mình không thể tư vấn tăng, giảm, ngừng hoặc thay liều insulin/thuốc. "
@@ -83,6 +89,8 @@ def _parse_bmi(message: str) -> tuple[float | None, float | None]:
 def _route_message(message: str) -> tuple[str, list[str]]:
     text = normalize_vi(message)
     measurement = _parse_measurement(message)
+    if should_screen_risk(message):
+        return measurement, ["screen_risk"]
     weight, height = _parse_bmi(message)
     routes: list[str] = []
     if measurement["hba1c_pct"] is not None or measurement["hba1c_unit_unsupported"] or measurement["glucose_value"] is not None:
@@ -257,7 +265,10 @@ def _execute_tools_node(state: AgentState) -> dict[str, Any]:
         name = call["name"]
         args: dict[str, Any] = {}
         try:
-            if name == "classify_lab":
+            if name == "screen_risk":
+                args = {"message": message}
+                result = screen_risk(message)
+            elif name == "classify_lab":
                 args = dict(parsed)
                 if parsed.get("hba1c_unit_unsupported"):
                     result = {
@@ -332,8 +343,73 @@ def _evidence_without_doses(items: list[dict[str, Any]]) -> list[dict[str, Any]]
     return kept
 
 
+def _is_score_table(excerpt: str) -> bool:
+    lines = [line.strip() for line in excerpt.splitlines() if line.strip()]
+    if len(lines) < 2:
+        return False
+    if sum("|" in line for line in lines) >= 2:
+        return True
+    return bool(_SCORE_TABLE_HINT.search(normalize_vi(excerpt))) and sum(
+        bool(re.search(r"\d", line)) for line in lines
+    ) >= 2
+
+
+def _best_fallback_excerpt(items: list[dict[str, Any]]) -> tuple[dict[str, Any] | None, str | None]:
+    """Choose up to two complete prose sentences, preserving their excerpt text verbatim."""
+    for item in items:
+        excerpt = str(item.get("excerpt", ""))
+        if not excerpt.strip() or _is_score_table(excerpt):
+            continue
+        sentence_count = 0
+        selected_start: int | None = None
+        selected_end: int | None = None
+        segment_start = 0
+        for boundary in _FALLBACK_SENTENCE_END.finditer(excerpt):
+            segment = excerpt[segment_start:boundary.end()]
+            leading_space = len(segment) - len(segment.lstrip())
+            sentence = segment.strip()
+            sentence_start = segment_start + leading_space
+            segment_start = boundary.end()
+            if (
+                not sentence
+                or _HEADING_FRAGMENT.fullmatch(sentence)
+                or any(_HEADING_FRAGMENT.fullmatch(line.strip()) for line in sentence.splitlines()[1:])
+                or _LIST_MARKER_FRAGMENT.search(sentence)
+            ):
+                continue
+            candidate_start = sentence_start if selected_start is None else selected_start
+            candidate = excerpt[candidate_start:boundary.end()].strip()
+            if len(candidate) > FALLBACK_EXCERPT_MAX_CHARS:
+                break
+            if selected_start is None:
+                selected_start = sentence_start
+            selected_end = boundary.end()
+            sentence_count += 1
+            if sentence_count == 2:
+                break
+        if selected_start is not None and selected_end is not None:
+            return item, excerpt[selected_start:selected_end].strip()
+    return None, None
+
+
 def _compose_node(state: AgentState) -> dict[str, Any]:
     results = state.get("results", {})
+    if "screen_risk" in results:
+        screening = results["screen_risk"]
+        answer = screening.get("answer", INSUFFICIENT_EVIDENCE_MESSAGE)
+        evidence = screening.get("evidence", [])
+        status = screening.get("status", "OK")
+        return {
+            "answer": answer, "deterministic_answer": answer,
+            "fact_parts": [answer], "note_parts": [], "answer_mode": "deterministic",
+            "evidence": evidence, "citations": screening.get("citations", []),
+            "reference_only": [], "web_sources": [], "status": status,
+            "trace": state.get("trace", []) + [{"step": "fusion", "status": status}],
+            **structured_fusion(
+                evidence=evidence, safety_level=state.get("safety", {}).get("level", "UNKNOWN"),
+                profile_type="synthetic" if state.get("profile_id") else None,
+            ),
+        }
     parts: list[str] = []
     evidence: list[dict[str, Any]] = []
     reference_only: list[dict[str, Any]] = []
@@ -484,8 +560,23 @@ def _compose_node(state: AgentState) -> dict[str, Any]:
         # The amendments and redaction notice already occur at the end of parts.
         if note_parts:
             fact_parts = parts[:len(parts) - len(note_parts) - extract_count]
+    fallback_item, fallback_excerpt = _best_fallback_excerpt(evidence) if evidence else (None, None)
+    if "search_kb" in results and evidence:
+        deterministic_parts = list(fact_parts)
+        if fallback_item is not None and fallback_excerpt is not None:
+            deterministic_parts.extend([fallback_excerpt, FALLBACK_SOURCE_NOTICE])
+            citations = [
+                {key: fallback_item[key] for key in ("citation_id", "document_id", "chunk_id", "title", "source_url", "page")}
+            ] if fallback_item.get("review_status") == "approved" and fallback_item.get("license_status") == "approved" else []
+        else:
+            deterministic_parts.append(INSUFFICIENT_EVIDENCE_MESSAGE)
+            citations = []
+            status = "DEGRADED"
+        deterministic_parts.extend(note_parts)
+    else:
+        deterministic_parts = parts
+    deterministic_answer = "\n\n".join(part for part in deterministic_parts if part)
     trace = state.get("trace", []) + [{"step": "fusion", "status": status}]
-    deterministic_answer = "\n\n".join(parts)
     return {
         "answer": deterministic_answer, "deterministic_answer": deterministic_answer,
         "fact_parts": fact_parts, "note_parts": note_parts, "answer_mode": "deterministic",
@@ -510,7 +601,9 @@ def _llm_composer_node(state: AgentState) -> dict[str, Any]:
     answer = state.get("deterministic_answer", state.get("answer", ""))
     composition: dict[str, Any] = {}
     citations = list(state.get("citations", []))
-    if config.errors:
+    if "screen_risk" in results:
+        reason = "SCREENING_RESULT"
+    elif config.errors:
         reason = config.errors[0]
     elif config.configured:
         if state.get("status") == "NEED_CLARIFICATION":
@@ -528,7 +621,7 @@ def _llm_composer_node(state: AgentState) -> dict[str, Any]:
             if composition.get("ok"):
                 fact_parts = state.get("fact_parts", [])
                 note_parts = state.get("note_parts", [])
-                rule_citations = state.get("citations", []) if "classify_lab" in results else []
+                rule_citations = results.get("classify_lab", {}).get("citations", []) if "classify_lab" in results else []
                 citations = []
                 seen: set[str] = set()
                 for citation in rule_citations:
@@ -598,11 +691,8 @@ def _llm_composer_node(state: AgentState) -> dict[str, Any]:
                         "trace": state.get("trace", []) + [llm_trace],
                     }
             if reason == "MODEL_INSUFFICIENT_EVIDENCE":
-                insufficient = INSUFFICIENT_EVIDENCE_MESSAGE
-                answer_parts = [*state.get("fact_parts", []), insufficient, *state.get("note_parts", [])]
                 status = "DEGRADED"
-                answer = "\n\n".join(part for part in answer_parts if part)
-                citations = list(state.get("citations", [])) if "classify_lab" in results else []
+                answer = state.get("deterministic_answer", state.get("answer", ""))
             else:
                 answer = state.get("deterministic_answer", state.get("answer", ""))
     else:

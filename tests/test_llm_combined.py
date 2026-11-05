@@ -50,7 +50,9 @@ def test_combined_lab_and_kb_uses_masked_question_and_preserves_fact_lines(monke
     with patch("app.agent.graph.search_kb", return_value={"status": "OK", "evidence": [evidence]}):
         monkeypatch.setenv("DIACARE_LLM_ENABLED", "false")
         deterministic = run_agent(question, None, None)
-        expected_fact_lines = deterministic["answer"].rsplit("\n\n", 1)[0]
+        # Deterministic fallback ends with the selected excerpt and a source note;
+        # the LLM path replaces those two pieces with its cited explanation.
+        expected_fact_lines = "\n\n".join(deterministic["answer"].split("\n\n")[:-2])
 
         monkeypatch.setenv("DIACARE_LLM_ENABLED", "true")
         monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
