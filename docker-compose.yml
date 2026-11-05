@@ -1,0 +1,64 @@
+services:
+  db:
+    image: pgvector/pgvector:0.8.1-pg16@sha256:33198da2828a14c30348d2ccb4750833d5ed9a44c88d840a0e523d7417120337
+    environment:
+      POSTGRES_DB: diacare
+      POSTGRES_USER: diacare
+      POSTGRES_PASSWORD: ${DIACARE_DB_PASSWORD:-local-demo-only}
+    volumes:
+      - diacare-pgvector-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U diacare -d diacare"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      args:
+        INSTALL_RAG_MODELS: ${DIACARE_INSTALL_RAG_MODELS:-0}
+        INSTALL_ML_MODELS: ${DIACARE_INSTALL_ML_MODELS:-0}
+        TORCH_INDEX_URL: ${DIACARE_TORCH_INDEX_URL:-https://download.pytorch.org/whl/cpu}
+    environment:
+      APP_ENV: local
+      DATABASE_URL: postgresql+psycopg://diacare:${DIACARE_DB_PASSWORD:-local-demo-only}@db:5432/diacare
+      DIACARE_DATA_DIR: /app/data
+      DIACARE_MODEL_PATH: /app/models/risk_no_labs.joblib
+      DIACARE_RAG_MODE: ${DIACARE_RAG_MODE:-auto}
+      DIACARE_RAG_MIN_DENSE_SCORE: ${DIACARE_RAG_MIN_DENSE_SCORE:-0.25}
+      DIACARE_BGE_M3_MODEL: ${DIACARE_BGE_M3_MODEL:-BAAI/bge-m3}
+      DIACARE_BGE_RERANKER_MODEL: ${DIACARE_BGE_RERANKER_MODEL:-BAAI/bge-reranker-v2-m3}
+      DIACARE_BGE_FP16: ${DIACARE_BGE_FP16:-false}
+      DIACARE_BGE_RERANK_FP16: ${DIACARE_BGE_RERANK_FP16:-false}
+      DIACARE_BGE_RERANK_BATCH_SIZE: ${DIACARE_BGE_RERANK_BATCH_SIZE:-4}
+      HF_HOME: /root/.cache/huggingface
+      DIACARE_VECTOR_TABLE: ${DIACARE_VECTOR_TABLE:-kb_chunks}
+      DIACARE_VECTOR_TIMEOUT_SECONDS: ${DIACARE_VECTOR_TIMEOUT_SECONDS:-2}
+      DIACARE_LLM_ENABLED: ${DIACARE_LLM_ENABLED:-false}
+      DIACARE_ANTHROPIC_MODEL: ${DIACARE_ANTHROPIC_MODEL:-claude-sonnet-5-5}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      DIACARE_WEB_SEARCH_ENABLED: ${DIACARE_WEB_SEARCH_ENABLED:-false}
+      DIACARE_WEB_TIMEOUT_SECONDS: ${DIACARE_WEB_TIMEOUT_SECONDS:-30}
+      DIACARE_RAG_MIN_RERANK_SCORE: ${DIACARE_RAG_MIN_RERANK_SCORE:--6}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=3).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+    volumes:
+      - ./data/kb:/app/data/kb
+      - ./models:/app/models
+      - diacare-model-cache:/root/.cache/huggingface
+    restart: unless-stopped
+
+volumes:
+  diacare-pgvector-db:
+  diacare-model-cache:

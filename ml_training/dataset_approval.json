@@ -1,0 +1,131 @@
+{
+  "schema_version": 2,
+  "status": "approved",
+  "dataset_file": "data/diabetes_dataset_with_notes.csv",
+  "dataset_sha256": "608a44d5619cd7ce7fdf97f6e8d3f754d1d0de72d7ff073122aa5654e1db7da8",
+  "source_url": "https://www.kaggle.com/datasets/ziya07/diabetes-clinical-dataset100k-rows",
+  "source_sha256_derivative": "608a44d5619cd7ce7fdf97f6e8d3f754d1d0de72d7ff073122aa5654e1db7da8",
+  "source_sha256_original": "f233fc470e904201f35310d061cb46ca0a6bc7ca5c3e428b769fb4f87f69929b",
+  "source_original_url": "https://www.kaggle.com/datasets/iammustafatz/diabetes-prediction-dataset",
+  "source_license_evidence": "Derivative listing says CC0; the underlying iammustafatz listing says Data files © Original Authors. Rights to the 100,000 copied rows are unresolved.",
+  "rights_status": "approved",
+  "rights_basis": "Explicit user authorization in the Codex conversation on 2026-11-03 for academic-research training of this local candidate. This project authorization does not independently relicense the underlying copied rows; the upstream license uncertainty is retained in known_limitations and review_note.",
+  "data_category": "public_research_dataset",
+  "contains_real_patient_data": "unknown",
+  "permitted_use": "academic_research_only",
+  "schema": [
+    "year",
+    "gender",
+    "age",
+    "location",
+    "race:AfricanAmerican",
+    "race:Asian",
+    "race:Caucasian",
+    "race:Hispanic",
+    "race:Other",
+    "hypertension",
+    "heart_disease",
+    "smoking_history",
+    "bmi",
+    "hbA1c_level",
+    "blood_glucose_level",
+    "diabetes",
+    "clinical_notes"
+  ],
+  "observed_shape": {
+    "rows": 100000,
+    "columns": 17,
+    "null_cells": 0,
+    "adult_rows_age_ge_18": 82781,
+    "adult_positive_labels": 8418,
+    "adult_positive_fraction": 0.10169,
+    "adult_full_row_duplicate_count_observed": 10,
+    "year_counts_and_positive_rates": {
+      "2015": {
+        "n": 7262,
+        "positive": 756,
+        "rate": 0.104104
+      },
+      "2016": {
+        "n": 7293,
+        "positive": 751,
+        "rate": 0.102975
+      },
+      "2018": {
+        "n": 2191,
+        "positive": 241,
+        "rate": 0.109995
+      },
+      "2019": {
+        "n": 65987,
+        "positive": 6664,
+        "rate": 0.10099
+      },
+      "2020": {
+        "n": 35,
+        "positive": 3,
+        "rate": 0.085714
+      },
+      "2021": {
+        "n": 7,
+        "positive": 1,
+        "rate": 0.142857
+      },
+      "2022": {
+        "n": 6,
+        "positive": 2,
+        "rate": 0.333333
+      }
+    },
+    "gender_counts": {
+      "Female": 58552,
+      "Male": 41430,
+      "Other": 18
+    },
+    "smoking_history_counts": {
+      "No Info": 35816,
+      "never": 35095,
+      "former": 9352,
+      "current": 9286,
+      "not current": 6447,
+      "ever": 4004
+    },
+    "adult_ranges": {
+      "bmi": [
+        10.01,
+        91.82
+      ],
+      "hbA1c_level": [
+        3.5,
+        9.0
+      ],
+      "blood_glucose_level": [
+        80,
+        300
+      ]
+    },
+    "distinct_adult_blood_glucose_values": 18,
+    "adult_feature_label_duplicate_rows_six_features_plus_label": 22687,
+    "adult_feature_lab_label_duplicate_rows_six_features_plus_two_labs_plus_label": 3323,
+    "no_person_identifier": true
+  },
+  "generation_method": "Underlying observation-generation method is not documented by the source. The derivative description says clinical_notes are summaries based on patient attributes.",
+  "label_column": "diabetes",
+  "label_definition": "Binary source column diabetes used as the supplied current-label target; the source does not specify the clinical diagnostic criteria used to define it.",
+  "label_generation_method": "Not documented by the source; use the provided 0/1 values as supplied and retain this limitation.",
+  "label_leakage_reviewed": false,
+  "label_leakage_review_notes": "Observed proxy rule HbA1c >= 6.5 OR blood_glucose_level >= 126 catches 100% of adult positive labels. This does not prove the target-generation method; the source does not document how diabetes labels were assigned. With-labs metrics must not be treated as predictive-value evidence.",
+  "known_limitations": [
+    "The derivative contains 100,000 rows that match the underlying iammustafatz dataset as a multiset, while the underlying listing states Data files © Original Authors; rights to copied rows are unresolved.",
+    "Whether observations include real patient data is unknown; the dataset description refers to data from patients and does not establish synthetic provenance.",
+    "The diabetes label definition and label-generation method are undocumented.",
+    "A simple HbA1c >= 6.5 OR glucose >= 126 proxy captures 100% of adult positive labels, indicating severe potential label leakage for with-labs models.",
+    "There is no person identifier; repeated feature and lab values cannot be verified as independent observations.",
+    "Adult records contain 18 gender=Other rows; subgroup metrics must be withheld below n=100.",
+    "Blood glucose has only 18 discrete values and no fasting/random/OGTT measurement type; units are implied as mg/dL.",
+    "clinical_notes, year, location, race indicators, HbA1c, and glucose are excluded from the six-feature no-labs model input."
+  ],
+  "reviewer": "User (explicit authorization in Codex conversation)",
+  "reviewed_at": "2026-11-03",
+  "review_note": "User instruction: \"dataset được dùng hãy triển khai\" (2026-11-03), recorded as project authorization for academic-research no-labs training. Upstream rights to the copied source rows remain unverified; real-patient-data status remains unknown; label definition and generation method remain undocumented. The measured HbA1c/glucose proxy captures 100% of adult positive labels. Model use remains research_only and clinical_validation=false. The separate label-leakage review flag remains false, so the with-labs comparison stays blocked."
+}

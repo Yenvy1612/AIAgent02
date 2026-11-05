@@ -1,0 +1,14 @@
+{
+  "version": "1",
+  "scope": "Curated routing benchmark for the five implemented tools; not a representative user study.",
+  "cases": [
+    {"id": "kb_general", "message": "What is type 2 diabetes?", "expected_tools": ["search_kb"]},
+    {"id": "bmi_calculation", "message": "Tính BMI: 68 kg, 170 cm", "expected_tools": ["calculate_bmi"]},
+    {"id": "lab_with_known_type", "message": "Glucose 110 mg/dL lúc đói", "expected_tools": ["search_kb", "classify_lab"]},
+    {"id": "lab_type_clarification", "message": "Glucose 5.5 mmol/L", "expected_tools": ["classify_lab"]},
+    {"id": "history", "message": "Lịch sử DEMO-01", "expected_tools": ["get_history"]},
+    {"id": "risk_with_history", "message": "Đánh giá hồ sơ DEMO-01 theo mô hình", "expected_tools": ["get_history", "predict_risk"]},
+    {"id": "feature_explanation", "message": "Feature importance DEMO-01", "expected_tools": ["get_history", "predict_risk", "search_kb"]},
+    {"id": "five_tool_cap", "message": "Glucose 115 mg/dL lúc đói; BMI 68 kg 170 cm; history; predict risk", "expected_tools": ["search_kb", "classify_lab", "get_history", "calculate_bmi", "predict_risk"]}
+  ]
+}

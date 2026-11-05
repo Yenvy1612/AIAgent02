@@ -1,0 +1,73 @@
+{
+  "status": "MEASURED",
+  "model_version": "risk-no-labs-v1-9e7fdde241ff",
+  "model_artifact_sha256": "9e7fdde241ffae5e96d44e272217e6e82bf30900cacc7912d319869a031ad089",
+  "dataset_sha256": "608a44d5619cd7ce7fdf97f6e8d3f754d1d0de72d7ff073122aa5654e1db7da8",
+  "split_fingerprint": {
+    "sha256": "aba010f0ae648f76ffbbdd61f455d39f872f15bb41ea2f13a6b961c8b0d00421",
+    "split_row_index_sha256": {
+      "train": "9388e8862c7bed9949e022966180e90ed315d4f79af23e063ef951ad18a449f2",
+      "validation": "3ab9420955c189e04a77ae03bd9d514b932ca593d5d1b231e39f87f40f68b3cc",
+      "test": "efc20cfa19153e5971ca76fb88035a53eae715570fe7e4e29d1c17b8c4b2a5ed"
+    },
+    "group_assignments_sha256": "bcc56b91a377349d8c7cda24a67d089c551ce0e4bd98c06093643526d25f2164",
+    "group_count": 79368
+  },
+  "test_rows": 16509,
+  "method": "global mean absolute SHAP value on held-out test split",
+  "global_importance": [
+    {
+      "feature": "numeric__age",
+      "mean_absolute_shap_value": 0.9776968359947205
+    },
+    {
+      "feature": "numeric__bmi",
+      "mean_absolute_shap_value": 0.5170990824699402
+    },
+    {
+      "feature": "numeric__hypertension",
+      "mean_absolute_shap_value": 0.17817732691764832
+    },
+    {
+      "feature": "categorical__smoking_history_No Info",
+      "mean_absolute_shap_value": 0.16635067760944366
+    },
+    {
+      "feature": "categorical__gender_Male",
+      "mean_absolute_shap_value": 0.1468193531036377
+    },
+    {
+      "feature": "numeric__heart_disease",
+      "mean_absolute_shap_value": 0.10335992276668549
+    },
+    {
+      "feature": "categorical__smoking_history_current",
+      "mean_absolute_shap_value": 0.061051174998283386
+    },
+    {
+      "feature": "categorical__gender_Female",
+      "mean_absolute_shap_value": 0.028562942519783974
+    },
+    {
+      "feature": "categorical__smoking_history_never",
+      "mean_absolute_shap_value": 0.025913149118423462
+    },
+    {
+      "feature": "categorical__smoking_history_not current",
+      "mean_absolute_shap_value": 0.018362900242209435
+    },
+    {
+      "feature": "categorical__smoking_history_former",
+      "mean_absolute_shap_value": 0.010976328514516354
+    },
+    {
+      "feature": "categorical__smoking_history_ever",
+      "mean_absolute_shap_value": 0.010015173815190792
+    },
+    {
+      "feature": "categorical__gender_Other",
+      "mean_absolute_shap_value": 7.03594705555588e-05
+    }
+  ],
+  "interpretation": "SHAP describes how model inputs contribute to this model's output. Kh\u00f4ng suy lu\u1eadn nh\u00e2n qu\u1ea3."
+}

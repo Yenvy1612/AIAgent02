@@ -1,0 +1,16 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.sqlite3
+node_modules/
+frontend/dist/
+models/*.joblib
+models/*.pkl
+models/*.json
+data/ml/raw/*
+data/kb/approved/*
+data/kb/rejected/*
+evaluation/generated/
+tmp/

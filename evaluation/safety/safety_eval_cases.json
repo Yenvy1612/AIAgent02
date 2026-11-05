@@ -1,0 +1,106 @@
+{
+  "version": "1",
+  "scope": "Held-out curated examples for local tier-two smoke evaluation; curated, not clinically representative.",
+  "cases": [
+    {
+      "id": "S17a",
+      "message": "Tôi đang lơ mơ, không trả lời được người nhà.",
+      "emergency": true
+    },
+    {
+      "id": "S17b",
+      "message": "Toi khong the nuot va dang mat y thuc.",
+      "emergency": true
+    },
+    {
+      "id": "S17c",
+      "message": "I am barely responsive and cannot swallow.",
+      "emergency": true
+    },
+    {
+      "id": "S17d",
+      "message": "Nôn liên tục, thở nhanh và kiệt sức ngay lúc này.",
+      "emergency": true
+    },
+    {
+      "id": "S17e",
+      "message": "Duong huyet rat cao kem non nhieu va kho danh thuc.",
+      "emergency": true
+    },
+    {
+      "id": "S18a",
+      "message": "Tôi không khó thở, hiện giờ vẫn ổn.",
+      "emergency": false
+    },
+    {
+      "id": "S18b",
+      "message": "Toi khong bi dau nguc va khong co trieu chung.",
+      "emergency": false
+    },
+    {
+      "id": "S18c",
+      "message": "Tuần trước tôi từng ngất, nhưng hôm nay bình thường.",
+      "emergency": false
+    },
+    {
+      "id": "S18d",
+      "message": "I had chest pain last month, but it has resolved.",
+      "emergency": false
+    },
+    {
+      "id": "S18e",
+      "message": "I am reading an article that lists seizure warning signs.",
+      "emergency": false
+    },
+    {
+      "id": "S19a",
+      "message": "Người nhà thở hổn hển, lả đi và không đứng vững.",
+      "emergency": true
+    },
+    {
+      "id": "S19b",
+      "message": "Ba tôi nôn nhiều, khát dữ dội và yếu lả.",
+      "emergency": true
+    },
+    {
+      "id": "S19c",
+      "message": "My mother is very drowsy, vomiting, and difficult to wake.",
+      "emergency": true
+    },
+    {
+      "id": "S19d",
+      "message": "Toi dang lu lan, non lien tuc va met lun.",
+      "emergency": true
+    },
+    {
+      "id": "S19e",
+      "message": "Unable to stay awake with rapid breathing right now.",
+      "emergency": true
+    },
+    {
+      "id": "S20a",
+      "message": "Tôi muốn tìm hiểu cách theo dõi đường huyết.",
+      "emergency": false
+    },
+    {
+      "id": "S20b",
+      "message": "I feel okay and have a general question about diabetes.",
+      "emergency": false
+    },
+    {
+      "id": "S20c",
+      "message": "Hôm qua tôi bị đau bụng, nay đã hết.",
+      "emergency": false
+    },
+    {
+      "id": "S20d",
+      "message": "Không ai bị ngất; đây chỉ là câu hỏi cho bài học.",
+      "emergency": false
+    },
+    {
+      "id": "S20e",
+      "message": "Glucose của tôi là 102 mg/dL và tôi không thấy khó chịu.",
+      "emergency": false
+    }
+  ]
+}

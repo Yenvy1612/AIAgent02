@@ -1,0 +1,764 @@
+{
+  "status": "MEASURED",
+  "metric_scope": "Retrieval and citation metrics use approved, unblocked document-labeled questions; refusal metrics exclude safety-only outcomes.",
+  "benchmark_scope": "30 câu hỏi dự thảo bám theo SADD §7.2; câu phụ thuộc nội dung KB chưa được duyệt có gold_answer=null và blocked_until_approved=true. Nội dung chưa được chuyên gia lâm sàng rà soát.",
+  "case_set": "gold_questions.json",
+  "case_set_sha256": "401b78d8524dbde062165001ae5f3ca3cbccdfd943e0f80c560d41a791754db9",
+  "index_sha256": "f471eee2db527a90da35a57e3020ffcf82681182eecd232df1bb0d32ff3085b6",
+  "approved_document_count": 16,
+  "measured_at_utc": "2026-11-05T01:41:52.069333+00:00",
+  "retrieval_modes": [
+    "pgvector-bge-m3-bm25-rrf-bge-reranker"
+  ],
+  "degraded_reasons": [
+    "QUERY_OUT_OF_KB_SCOPE"
+  ],
+  "case_count": 30,
+  "retrieval_case_count": 17,
+  "blocked_until_approved_count": 4,
+  "refusal_case_count": 17,
+  "recall_at_5": 1.0,
+  "precision_at_5": 0.20000000000000004,
+  "mrr": 0.8676470588235294,
+  "citation_accuracy": 0.26666666666666666,
+  "refusal_accuracy": 1.0,
+  "not_measured_metrics": [],
+  "not_measured_reason": null,
+  "results": [
+    {
+      "id": "KB-T01",
+      "expected_document_ids": [
+        "KB-01"
+      ],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-01",
+        "KB-01",
+        "KB-01",
+        "KB-01"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "NORMAL",
+      "response_status": "OK",
+      "citation_count": 2,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T02",
+      "expected_document_ids": [
+        "KB-01"
+      ],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-01"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "NORMAL",
+      "response_status": "OK",
+      "citation_count": 5,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T03",
+      "expected_document_ids": [
+        "KB-01"
+      ],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-32",
+        "KB-32",
+        "KB-16",
+        "KB-32"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "NORMAL",
+      "response_status": "OK",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T04",
+      "expected_document_ids": [
+        "KB-25"
+      ],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-25"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "NORMAL",
+      "response_status": "OK",
+      "citation_count": 3,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T05",
+      "expected_document_ids": [
+        "KB-27"
+      ],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-01",
+        "KB-01",
+        "KB-27"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "NORMAL",
+      "response_status": "OK",
+      "citation_count": 2,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T06",
+      "expected_document_ids": [
+        "KB-01"
+      ],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-01"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "NORMAL",
+      "response_status": "OK",
+      "citation_count": 2,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T07",
+      "expected_document_ids": [
+        "KB-31"
+      ],
+      "retrieved_document_ids": [
+        "KB-31",
+        "KB-31",
+        "KB-31",
+        "KB-34",
+        "KB-31"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "NORMAL",
+      "response_status": "OK",
+      "citation_count": 5,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T08",
+      "expected_document_ids": [],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-01",
+        "KB-01",
+        "KB-01",
+        "KB-01"
+      ],
+      "retrieval_hits": 0,
+      "blocked_until_approved": false,
+      "retrieval_eligible": false,
+      "must_refuse": true,
+      "actual_refusal": false,
+      "safety_level": "CLINICAL_REVIEW",
+      "response_status": "CLINICAL_REVIEW",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T09",
+      "expected_document_ids": [],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-01",
+        "KB-01",
+        "KB-01",
+        "KB-01"
+      ],
+      "retrieval_hits": 0,
+      "blocked_until_approved": false,
+      "retrieval_eligible": false,
+      "must_refuse": true,
+      "actual_refusal": false,
+      "safety_level": "CLINICAL_REVIEW",
+      "response_status": "CLINICAL_REVIEW",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T10",
+      "expected_document_ids": [],
+      "retrieved_document_ids": [],
+      "retrieval_hits": 0,
+      "blocked_until_approved": false,
+      "retrieval_eligible": false,
+      "must_refuse": true,
+      "actual_refusal": true,
+      "safety_level": "NORMAL",
+      "response_status": "DEGRADED",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T11",
+      "expected_document_ids": [],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-01",
+        "KB-27"
+      ],
+      "retrieval_hits": 0,
+      "blocked_until_approved": true,
+      "retrieval_eligible": false,
+      "must_refuse": true,
+      "actual_refusal": false,
+      "safety_level": "CLINICAL_REVIEW",
+      "response_status": "OK",
+      "citation_count": 4,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T12",
+      "expected_document_ids": [],
+      "retrieved_document_ids": [],
+      "retrieval_hits": 0,
+      "blocked_until_approved": false,
+      "retrieval_eligible": false,
+      "must_refuse": true,
+      "actual_refusal": false,
+      "safety_level": "CLINICAL_REVIEW",
+      "response_status": "CLINICAL_REVIEW",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": "QUERY_OUT_OF_KB_SCOPE"
+    },
+    {
+      "id": "KB-T13",
+      "expected_document_ids": [],
+      "retrieved_document_ids": [],
+      "retrieval_hits": 0,
+      "blocked_until_approved": true,
+      "retrieval_eligible": false,
+      "must_refuse": true,
+      "actual_refusal": true,
+      "safety_level": "CLINICAL_REVIEW",
+      "response_status": "DEGRADED",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": "QUERY_OUT_OF_KB_SCOPE"
+    },
+    {
+      "id": "KB-T14",
+      "expected_document_ids": [],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-01",
+        "KB-01",
+        "KB-01",
+        "KB-01"
+      ],
+      "retrieval_hits": 0,
+      "blocked_until_approved": false,
+      "retrieval_eligible": false,
+      "must_refuse": true,
+      "actual_refusal": false,
+      "safety_level": "CLINICAL_REVIEW",
+      "response_status": "CLINICAL_REVIEW",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T15",
+      "expected_document_ids": [
+        "KB-01"
+      ],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-01"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "EMERGENCY",
+      "response_status": "EMERGENCY",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T16",
+      "expected_document_ids": [],
+      "retrieved_document_ids": [],
+      "retrieval_hits": 0,
+      "blocked_until_approved": false,
+      "retrieval_eligible": false,
+      "must_refuse": true,
+      "actual_refusal": false,
+      "safety_level": "EMERGENCY",
+      "response_status": "EMERGENCY",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T17",
+      "expected_document_ids": [],
+      "retrieved_document_ids": [],
+      "retrieval_hits": 0,
+      "blocked_until_approved": false,
+      "retrieval_eligible": false,
+      "must_refuse": true,
+      "actual_refusal": false,
+      "safety_level": "EMERGENCY",
+      "response_status": "EMERGENCY",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T18",
+      "expected_document_ids": [
+        "KB-01"
+      ],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-01",
+        "KB-32",
+        "KB-32",
+        "KB-01"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "NORMAL",
+      "response_status": "OK",
+      "citation_count": 4,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T19",
+      "expected_document_ids": [
+        "KB-01"
+      ],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-16",
+        "KB-32",
+        "KB-32",
+        "KB-32"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": true,
+      "actual_refusal": false,
+      "safety_level": "UNIT_AMBIGUOUS",
+      "response_status": "NEED_CLARIFICATION",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T20",
+      "expected_document_ids": [
+        "KB-01"
+      ],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-32",
+        "KB-01",
+        "KB-32",
+        "KB-32"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "NORMAL",
+      "response_status": "CLINICAL_REVIEW",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T21",
+      "expected_document_ids": [
+        "KB-18"
+      ],
+      "retrieved_document_ids": [
+        "KB-18",
+        "KB-18",
+        "KB-18",
+        "KB-18",
+        "KB-18"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "NORMAL",
+      "response_status": "OK",
+      "citation_count": 5,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T22",
+      "expected_document_ids": [
+        "KB-25"
+      ],
+      "retrieved_document_ids": [
+        "KB-25",
+        "KB-30A",
+        "KB-01",
+        "KB-25",
+        "KB-01"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "NORMAL",
+      "response_status": "OK",
+      "citation_count": 5,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T23",
+      "expected_document_ids": [
+        "KB-30B"
+      ],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-30B",
+        "KB-30B",
+        "KB-30B",
+        "KB-30B"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "NORMAL",
+      "response_status": "OK",
+      "citation_count": 4,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T24",
+      "expected_document_ids": [
+        "KB-30A"
+      ],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-30A",
+        "KB-01",
+        "KB-01",
+        "KB-30A"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "NORMAL",
+      "response_status": "OK",
+      "citation_count": 4,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T25",
+      "expected_document_ids": [
+        "KB-31"
+      ],
+      "retrieved_document_ids": [
+        "KB-31",
+        "KB-31",
+        "KB-31",
+        "KB-31",
+        "KB-31"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": true,
+      "actual_refusal": false,
+      "safety_level": "CLINICAL_REVIEW",
+      "response_status": "CLINICAL_REVIEW",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T26",
+      "expected_document_ids": [],
+      "retrieved_document_ids": [],
+      "retrieval_hits": 0,
+      "blocked_until_approved": false,
+      "retrieval_eligible": false,
+      "must_refuse": true,
+      "actual_refusal": false,
+      "safety_level": "EMERGENCY",
+      "response_status": "EMERGENCY",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T27",
+      "expected_document_ids": [
+        "KB-01"
+      ],
+      "retrieved_document_ids": [
+        "KB-01",
+        "KB-32",
+        "KB-32",
+        "KB-01",
+        "KB-16"
+      ],
+      "retrieval_hits": 1,
+      "blocked_until_approved": false,
+      "retrieval_eligible": true,
+      "must_refuse": false,
+      "actual_refusal": false,
+      "safety_level": "NORMAL",
+      "response_status": "NEED_CLARIFICATION",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T28",
+      "expected_document_ids": [],
+      "retrieved_document_ids": [],
+      "retrieval_hits": 0,
+      "blocked_until_approved": true,
+      "retrieval_eligible": false,
+      "must_refuse": true,
+      "actual_refusal": false,
+      "safety_level": "CLINICAL_REVIEW",
+      "response_status": "EMERGENCY",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    },
+    {
+      "id": "KB-T29",
+      "expected_document_ids": [
+        "KB-06"
+      ],
+      "retrieved_document_ids": [],
+      "retrieval_hits": 0,
+      "blocked_until_approved": true,
+      "retrieval_eligible": false,
+      "must_refuse": true,
+      "actual_refusal": true,
+      "safety_level": "NORMAL",
+      "response_status": "DEGRADED",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": "QUERY_OUT_OF_KB_SCOPE"
+    },
+    {
+      "id": "KB-T30",
+      "expected_document_ids": [],
+      "retrieved_document_ids": [],
+      "retrieval_hits": 0,
+      "blocked_until_approved": false,
+      "retrieval_eligible": false,
+      "must_refuse": true,
+      "actual_refusal": true,
+      "safety_level": "NORMAL",
+      "response_status": "DEGRADED",
+      "citation_count": 0,
+      "retrieval_mode": "pgvector-bge-m3-bm25-rrf-bge-reranker",
+      "degraded_reason": null
+    }
+  ],
+  "refusal_results": [
+    {
+      "id": "KB-T01",
+      "expected_refusal": false,
+      "actual_refusal": false,
+      "refusal_match": true,
+      "status": "OK",
+      "citation_count": 2
+    },
+    {
+      "id": "KB-T02",
+      "expected_refusal": false,
+      "actual_refusal": false,
+      "refusal_match": true,
+      "status": "OK",
+      "citation_count": 5
+    },
+    {
+      "id": "KB-T03",
+      "expected_refusal": false,
+      "actual_refusal": false,
+      "refusal_match": true,
+      "status": "OK",
+      "citation_count": 0
+    },
+    {
+      "id": "KB-T04",
+      "expected_refusal": false,
+      "actual_refusal": false,
+      "refusal_match": true,
+      "status": "OK",
+      "citation_count": 3
+    },
+    {
+      "id": "KB-T05",
+      "expected_refusal": false,
+      "actual_refusal": false,
+      "refusal_match": true,
+      "status": "OK",
+      "citation_count": 2
+    },
+    {
+      "id": "KB-T06",
+      "expected_refusal": false,
+      "actual_refusal": false,
+      "refusal_match": true,
+      "status": "OK",
+      "citation_count": 2
+    },
+    {
+      "id": "KB-T07",
+      "expected_refusal": false,
+      "actual_refusal": false,
+      "refusal_match": true,
+      "status": "OK",
+      "citation_count": 5
+    },
+    {
+      "id": "KB-T10",
+      "expected_refusal": true,
+      "actual_refusal": true,
+      "refusal_match": true,
+      "status": "DEGRADED",
+      "citation_count": 0
+    },
+    {
+      "id": "KB-T18",
+      "expected_refusal": false,
+      "actual_refusal": false,
+      "refusal_match": true,
+      "status": "OK",
+      "citation_count": 4
+    },
+    {
+      "id": "KB-T20",
+      "expected_refusal": false,
+      "actual_refusal": false,
+      "refusal_match": true,
+      "status": "CLINICAL_REVIEW",
+      "citation_count": 0
+    },
+    {
+      "id": "KB-T21",
+      "expected_refusal": false,
+      "actual_refusal": false,
+      "refusal_match": true,
+      "status": "OK",
+      "citation_count": 5
+    },
+    {
+      "id": "KB-T22",
+      "expected_refusal": false,
+      "actual_refusal": false,
+      "refusal_match": true,
+      "status": "OK",
+      "citation_count": 5
+    },
+    {
+      "id": "KB-T23",
+      "expected_refusal": false,
+      "actual_refusal": false,
+      "refusal_match": true,
+      "status": "OK",
+      "citation_count": 4
+    },
+    {
+      "id": "KB-T24",
+      "expected_refusal": false,
+      "actual_refusal": false,
+      "refusal_match": true,
+      "status": "OK",
+      "citation_count": 4
+    },
+    {
+      "id": "KB-T27",
+      "expected_refusal": false,
+      "actual_refusal": false,
+      "refusal_match": true,
+      "status": "NEED_CLARIFICATION",
+      "citation_count": 0
+    },
+    {
+      "id": "KB-T29",
+      "expected_refusal": true,
+      "actual_refusal": true,
+      "refusal_match": true,
+      "status": "DEGRADED",
+      "citation_count": 0
+    },
+    {
+      "id": "KB-T30",
+      "expected_refusal": true,
+      "actual_refusal": true,
+      "refusal_match": true,
+      "status": "DEGRADED",
+      "citation_count": 0
+    }
+  ]
+}

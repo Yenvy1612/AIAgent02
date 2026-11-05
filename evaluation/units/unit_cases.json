@@ -1,0 +1,12 @@
+{
+  "version": "1",
+  "scope": "Curated unit and measurement-clarification regression cases; not a clinical validation set.",
+  "cases": [
+    {"id": "mgdl_preserved", "message": "Glucose 99 mg/dL lúc đói", "must_contain": ["99.0 mg/dL"]},
+    {"id": "mmoll_converted", "message": "Glucose 5.5 mmol/L lúc đói", "must_contain": ["5.5 mmol/L", "99.1 mg/dL"]},
+    {"id": "measurement_type_clarification", "message": "Glucose 5.5 mmol/L", "must_contain": ["99.1 mg/dL", "lúc đói, ngẫu nhiên hay sau nghiệm pháp 2 giờ"]},
+    {"id": "missing_unit_worst_case", "message": "Glucose 42", "must_contain": ["mg/dL hay mmol/L", "42 là mg/dL", "115"]},
+    {"id": "critical_mmoll_bypass", "message": "Glucose 2 mmol/L", "must_contain": ["115"]},
+    {"id": "ogtt_conversion", "message": "OGTT glucose 8 mmol/L sau 2 giờ", "must_contain": ["144.15 mg/dL"]}
+  ]
+}

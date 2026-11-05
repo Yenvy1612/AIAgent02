@@ -1,0 +1,13 @@
+{
+  "version": "1",
+  "scope": "Small curated refusal regression set for an empty approved corpus, with a deterministic BMI non-refusal control; not a representative user benchmark.",
+  "instructions": "After source approval and corpus review, add representative queries under cases. expected_chunk_ids must list relevant approved chunk IDs. Set expect_refusal=true only when the approved corpus should not support an answer. refusal_cases are an empty-corpus-only regression set; the evaluator skips them when approved documents are indexed, so replace them with current corpus-specific labels before measuring refusal accuracy against a reviewed corpus.",
+  "cases": [],
+  "refusal_cases": [
+    {"id": "empty_kb_general_diabetes", "query": "What is type 2 diabetes and what are common symptoms?", "expect_refusal": true},
+    {"id": "empty_kb_risk_factors", "query": "Các yếu tố nguy cơ nào làm tăng khả năng mắc đái tháo đường típ 2?", "expect_refusal": true},
+    {"id": "empty_kb_hba1c", "query": "HbA1c 6.8% có ý nghĩa gì?", "expect_refusal": true},
+    {"id": "empty_kb_fasting_glucose", "query": "Glucose 145 mg/dL lúc đói, kết quả này có ý nghĩa gì?", "expect_refusal": true},
+    {"id": "deterministic_bmi_no_kb_needed", "query": "Tính BMI: 68 kg, 170 cm.", "expect_refusal": false}
+  ]
+}

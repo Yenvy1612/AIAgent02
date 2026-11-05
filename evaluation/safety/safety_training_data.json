@@ -1,0 +1,563 @@
+{
+  "version": "1",
+  "method": "TF-IDF ký tự (2–5 gram) + Logistic Regression; examples curated by the project team.",
+  "scope": "Câu tổng hợp tiếng Việt có dấu/không dấu và tiếng Anh; có phủ định, tiền sử, câu hỏi kiến thức, nhiều ý và mô tả triệu chứng hiện tại. Curated, không đại diện lâm sàng.",
+  "examples": [
+    {
+      "text": "Toi dang bat tinh, goi cap cuu ngay.",
+      "emergency": true
+    },
+    {
+      "text": "Nguoi nha dang co giat va khong tinh tao.",
+      "emergency": true
+    },
+    {
+      "text": "Toi dang kho tho, khong noi duoc thanh cau.",
+      "emergency": true
+    },
+    {
+      "text": "Toi bi dau nguc nghiem trong ngay luc nay.",
+      "emergency": true
+    },
+    {
+      "text": "Duong huyet cua toi 42 mg/dL va toi run, lo mo.",
+      "emergency": true
+    },
+    {
+      "text": "Toi non lien tuc va tho nhanh.",
+      "emergency": true
+    },
+    {
+      "text": "Duong huyet rat cao, non nhieu va kho danh thuc.",
+      "emergency": true
+    },
+    {
+      "text": "Me toi dang ngat, hay goi 115.",
+      "emergency": true
+    },
+    {
+      "text": "Con toi dang co giat.",
+      "emergency": true
+    },
+    {
+      "text": "Toi khong the nuot va dang lu lan.",
+      "emergency": true
+    },
+    {
+      "text": "I am unconscious right now.",
+      "emergency": true
+    },
+    {
+      "text": "My father is having a seizure now.",
+      "emergency": true
+    },
+    {
+      "text": "I can't breathe and my lips are turning blue.",
+      "emergency": true
+    },
+    {
+      "text": "I have severe chest pain right now.",
+      "emergency": true
+    },
+    {
+      "text": "I am vomiting repeatedly and breathing rapidly.",
+      "emergency": true
+    },
+    {
+      "text": "Very high blood sugar with vomiting and hard to wake.",
+      "emergency": true
+    },
+    {
+      "text": "Someone has passed out and is not responding.",
+      "emergency": true
+    },
+    {
+      "text": "She is confused and cannot swallow.",
+      "emergency": true
+    },
+    {
+      "text": "Toi dang hon me va khong phan ung.",
+      "emergency": true
+    },
+    {
+      "text": "Toi dang tho gap va dau bung du doi.",
+      "emergency": true
+    },
+    {
+      "text": "Ba toi kho danh thuc, duong huyet rat cao.",
+      "emergency": true
+    },
+    {
+      "text": "Duong huyet 2 mmol/L va toi sap ngat.",
+      "emergency": true
+    },
+    {
+      "text": "Toi dang co giat lien tuc.",
+      "emergency": true
+    },
+    {
+      "text": "Nguoi ben canh mat y thuc va tho rat kho.",
+      "emergency": true
+    },
+    {
+      "text": "Patient is hard to wake and breathing rapidly.",
+      "emergency": true
+    },
+    {
+      "text": "Repeated vomiting with severe abdominal pain right now.",
+      "emergency": true
+    },
+    {
+      "text": "Toi dang non nhieu, met lun va kho tho.",
+      "emergency": true
+    },
+    {
+      "text": "Toi khong tinh tao, hay nho nguoi goi cap cuu.",
+      "emergency": true
+    },
+    {
+      "text": "She passed out and cannot be woken.",
+      "emergency": true
+    },
+    {
+      "text": "Glucose is 38 mg/dL and I am confused.",
+      "emergency": true
+    },
+    {
+      "text": "Toi dang dau nguc, kho tho va toat mo hoi.",
+      "emergency": true
+    },
+    {
+      "text": "Grandfather is having difficulty breathing now.",
+      "emergency": true
+    },
+    {
+      "text": "Toi khong bi kho tho va hien gio van binh thuong.",
+      "emergency": false
+    },
+    {
+      "text": "Toi khong co dau nguc, chi muon tim hieu chung.",
+      "emergency": false
+    },
+    {
+      "text": "Tuan truoc toi bi co giat, hom nay da on dinh.",
+      "emergency": false
+    },
+    {
+      "text": "Nam ngoai me toi tung ngat, hien tai khong co trieu chung.",
+      "emergency": false
+    },
+    {
+      "text": "Toi khong non nhieu va khong tho nhanh.",
+      "emergency": false
+    },
+    {
+      "text": "Toi khong bi lu lan, chi dang hoi ve dau hieu can cap cuu.",
+      "emergency": false
+    },
+    {
+      "text": "Khong ai dang bat tinh; day la cau hoi hoc tap.",
+      "emergency": false
+    },
+    {
+      "text": "I do not have chest pain or trouble breathing.",
+      "emergency": false
+    },
+    {
+      "text": "I had a seizure last year, but I feel normal today.",
+      "emergency": false
+    },
+    {
+      "text": "My father passed out yesterday and has recovered.",
+      "emergency": false
+    },
+    {
+      "text": "The article mentions vomiting and rapid breathing as warning signs.",
+      "emergency": false
+    },
+    {
+      "text": "I am reading about what to do if someone is unconscious.",
+      "emergency": false
+    },
+    {
+      "text": "Glucose 99 mg/dL lúc đói, tôi thấy bình thường.",
+      "emergency": false
+    },
+    {
+      "text": "Đường huyết 5.5 mmol/L lúc đói, không có triệu chứng.",
+      "emergency": false
+    },
+    {
+      "text": "Tôi không đau ngực và không khó thở.",
+      "emergency": false
+    },
+    {
+      "text": "Toi khong co dau nguc hay kho tho.",
+      "emergency": false
+    },
+    {
+      "text": "Toi tung ngat hom qua nhung bay gio tinh tao.",
+      "emergency": false
+    },
+    {
+      "text": "Truoc day toi bi non, hien gio khong con.",
+      "emergency": false
+    },
+    {
+      "text": "Khong co ai co trieu chung cap cuu trong gia dinh.",
+      "emergency": false
+    },
+    {
+      "text": "Please explain what 'shortness of breath' means; nobody has it now.",
+      "emergency": false
+    },
+    {
+      "text": "Last month I had vomiting but I am well now.",
+      "emergency": false
+    },
+    {
+      "text": "Sometimes people discuss seizures in health class.",
+      "emergency": false
+    },
+    {
+      "text": "I am asking generally about diabetes warning signs.",
+      "emergency": false
+    },
+    {
+      "text": "No one is having trouble breathing right now.",
+      "emergency": false
+    },
+    {
+      "text": "I feel fine and want to know how glucose is measured.",
+      "emergency": false
+    },
+    {
+      "text": "My doctor said my glucose was 110 mg/dL yesterday.",
+      "emergency": false
+    },
+    {
+      "text": "Toi khong bi te nga hay mat y thuc.",
+      "emergency": false
+    },
+    {
+      "text": "Khong co co giat, toi chi hoi kien thuc suc khoe.",
+      "emergency": false
+    },
+    {
+      "text": "Luc truoc co dau nguc, hien nay da het va toi da duoc kham.",
+      "emergency": false
+    },
+    {
+      "text": "I am not vomiting and I can breathe normally.",
+      "emergency": false
+    },
+    {
+      "text": "Yesterday she had chest pain, but it is gone now.",
+      "emergency": false
+    },
+    {
+      "text": "The patient denies confusion and denies shortness of breath.",
+      "emergency": false
+    },
+    {
+      "text": "Toi khong bi kho danh thuc; toi dang hoi ve ho so.",
+      "emergency": false
+    },
+    {
+      "text": "Please define emergency symptoms without giving personal advice.",
+      "emergency": false
+    },
+    {
+      "text": "Tôi lơ mơ, không trả lời được người nhà và không giữ được tỉnh táo.",
+      "emergency": true
+    },
+    {
+      "text": "Toi lo mo, khong tra loi duoc nguoi nha va khong giu duoc tinh tao.",
+      "emergency": true
+    },
+    {
+      "text": "Người bệnh lả đi, thở hổn hển và không đứng vững ngay lúc này.",
+      "emergency": true
+    },
+    {
+      "text": "Ba tôi nôn nhiều, khát dữ dội và yếu lả ngay bây giờ.",
+      "emergency": true
+    },
+    {
+      "text": "Tôi đang nôn liên tục, yếu lả và khó giữ tỉnh táo.",
+      "emergency": true
+    },
+    {
+      "text": "Toi dang non lien tuc, met lun va kho giu tinh tao.",
+      "emergency": true
+    },
+    {
+      "text": "Mẹ tôi rất buồn ngủ, nôn ói và khó đánh thức.",
+      "emergency": true
+    },
+    {
+      "text": "She is barely responsive, confused, and cannot stay awake.",
+      "emergency": true
+    },
+    {
+      "text": "I feel faint, confused, and cannot remain conscious.",
+      "emergency": true
+    },
+    {
+      "text": "The person is gasping and becoming less responsive.",
+      "emergency": true
+    },
+    {
+      "text": "My dad is vomiting repeatedly and is too weak to stand.",
+      "emergency": true
+    },
+    {
+      "text": "Severe dehydration with repeated vomiting and confusion right now.",
+      "emergency": true
+    },
+    {
+      "text": "Tôi thở hổn hển, lả đi và gần như không đáp ứng.",
+      "emergency": true
+    },
+    {
+      "text": "Toi dang tho hon hen va gan nhu khong phan ung.",
+      "emergency": true
+    },
+    {
+      "text": "Đường huyết rất cao, nôn liên tục và người lả đi.",
+      "emergency": true
+    },
+    {
+      "text": "Duong huyet rat cao, non lien tuc va nguoi la di.",
+      "emergency": true
+    },
+    {
+      "text": "Không thể đánh thức người nhà, họ đang thở nhanh.",
+      "emergency": true
+    },
+    {
+      "text": "Khong the danh thuc nguoi nha, ho dang tho nhanh.",
+      "emergency": true
+    },
+    {
+      "text": "My mother is hard to wake, breathing rapidly, and vomiting.",
+      "emergency": true
+    },
+    {
+      "text": "I cannot keep fluids down and I am breathing rapidly now.",
+      "emergency": true
+    },
+    {
+      "text": "Toi khong the uong nuoc, non lien tuc va tho nhanh.",
+      "emergency": true
+    },
+    {
+      "text": "Người bệnh đang lú lẫn, nôn nhiều và khó thở.",
+      "emergency": true
+    },
+    {
+      "text": "Nguoi benh dang lu lan, non nhieu va kho tho.",
+      "emergency": true
+    },
+    {
+      "text": "He passed out, is confused, and cannot swallow.",
+      "emergency": true
+    },
+    {
+      "text": "Current severe weakness with vomiting and rapid breathing.",
+      "emergency": true
+    },
+    {
+      "text": "unrelated spacecraft on mars",
+      "emergency": false
+    },
+    {
+      "text": "Tell me about astronomy and the planet Mars.",
+      "emergency": false
+    },
+    {
+      "text": "Can you explain how Python dictionaries work?",
+      "emergency": false
+    },
+    {
+      "text": "I want a recipe for vegetable soup.",
+      "emergency": false
+    },
+    {
+      "text": "What is the weather usually like in Hanoi in October?",
+      "emergency": false
+    },
+    {
+      "text": "Please summarize the history of ancient Rome.",
+      "emergency": false
+    },
+    {
+      "text": "I am planning a trip to Da Nang next month.",
+      "emergency": false
+    },
+    {
+      "text": "Help me compare two laptop models for school.",
+      "emergency": false
+    },
+    {
+      "text": "Explain how to calculate body mass index.",
+      "emergency": false
+    },
+    {
+      "text": "Tôi muốn tìm hiểu về cách tính chỉ số BMI.",
+      "emergency": false
+    },
+    {
+      "text": "Tôi đang hỏi thông tin chung về dinh dưỡng.",
+      "emergency": false
+    },
+    {
+      "text": "Tôi có câu hỏi về lịch sử đo glucose của hồ sơ mô phỏng.",
+      "emergency": false
+    },
+    {
+      "text": "Đây là câu hỏi kiến thức, không có ai đang gặp vấn đề sức khỏe.",
+      "emergency": false
+    },
+    {
+      "text": "Day la cau hoi kien thuc, khong co ai dang gap van de suc khoe.",
+      "emergency": false
+    },
+    {
+      "text": "Tôi không lơ mơ, không nôn và không khó thở.",
+      "emergency": false
+    },
+    {
+      "text": "Toi khong lo mo, khong non va khong kho tho.",
+      "emergency": false
+    },
+    {
+      "text": "I am not confused, not vomiting, and breathing normally.",
+      "emergency": false
+    },
+    {
+      "text": "My chest pain resolved two weeks ago and has not returned.",
+      "emergency": false
+    },
+    {
+      "text": "Tôi từng khó thở năm ngoái nhưng bây giờ đã khỏe.",
+      "emergency": false
+    },
+    {
+      "text": "Toi tung kho tho nam ngoai nhung bay gio da khoe.",
+      "emergency": false
+    },
+    {
+      "text": "A fictional character in a novel has a seizure.",
+      "emergency": false
+    },
+    {
+      "text": "The phrase rapid breathing appears in this article about biology.",
+      "emergency": false
+    },
+    {
+      "text": "No emergency is happening; I am asking what a warning label means.",
+      "emergency": false
+    },
+    {
+      "text": "How do I save a spreadsheet as a CSV file?",
+      "emergency": false
+    },
+    {
+      "text": "Please translate this paragraph into Vietnamese.",
+      "emergency": false
+    },
+    {
+      "text": "Tôi thấy bình thường và muốn hỏi cách đọc HbA1c.",
+      "emergency": false
+    },
+    {
+      "text": "My glucose is 115 mg/dL and I have no symptoms.",
+      "emergency": false
+    },
+    {
+      "text": "Tôi đang làm bài tập về chăm sóc bàn chân.",
+      "emergency": false
+    },
+    {
+      "text": "Tôi muốn biết metformin là thuốc gì, không hỏi liều dùng.",
+      "emergency": false
+    },
+    {
+      "text": "Can you explain what insulin resistance means?",
+      "emergency": false
+    },
+    {
+      "text": "Không ai bị bất tỉnh; tôi đang xem ví dụ trong sách.",
+      "emergency": false
+    },
+    {
+      "text": "Khong ai bi bat tinh; toi dang xem vi du trong sach.",
+      "emergency": false
+    },
+    {
+      "text": "Đường huyết của tôi là 7, tôi không biết đơn vị.",
+      "emergency": false
+    },
+    {
+      "text": "Đường huyết của tôi là 7, hãy hỏi lại đơn vị và loại phép đo.",
+      "emergency": false
+    },
+    {
+      "text": "Toi co chi so duong huyet la 7, don vi la gi?",
+      "emergency": false
+    },
+    {
+      "text": "My blood sugar reading is 7; what unit could that be?",
+      "emergency": false
+    },
+    {
+      "text": "Glucose 7, please ask whether this is mg/dL or mmol/L.",
+      "emergency": false
+    },
+    {
+      "text": "Đường huyết 7 mmol/L lúc đói, tôi muốn hiểu kết quả xét nghiệm.",
+      "emergency": false
+    },
+    {
+      "text": "Glucose 7 mg/dL is not what I meant; I forgot the unit.",
+      "emergency": false
+    },
+    {
+      "text": "I have a glucose value of 7 and no urgent symptoms.",
+      "emergency": false
+    },
+    {
+      "text": "Can you clarify the unit for my glucose reading of 7?",
+      "emergency": false
+    },
+    {
+      "text": "Tôi nhập glucose 7 nhưng chưa biết là lúc đói hay ngẫu nhiên.",
+      "emergency": false
+    },
+    {
+      "text": "Dựa trên mô hình, đánh giá hồ sơ và giải thích yếu tố liên quan",
+      "emergency": false
+    },
+    {
+      "text": "Hãy đánh giá hồ sơ tổng hợp bằng mô hình nghiên cứu.",
+      "emergency": false
+    },
+    {
+      "text": "Giải thích các yếu tố liên quan trong kết quả phân loại.",
+      "emergency": false
+    },
+    {
+      "text": "Cho xem kết quả mô hình phân loại từ hồ sơ demo.",
+      "emergency": false
+    },
+    {
+      "text": "Tôi muốn tìm hiểu cách mô hình nghiên cứu dùng dữ liệu tổng hợp.",
+      "emergency": false
+    },
+    {
+      "text": "Phân loại nghiên cứu hồ sơ DEMO-01 theo mô hình.",
+      "emergency": false
+    }
+  ]
+}

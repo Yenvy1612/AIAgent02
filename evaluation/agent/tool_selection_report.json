@@ -1,0 +1,152 @@
+{
+  "status": "MEASURED",
+  "metric_scope": "full agent-graph execution on curated routes; DB omitted so database-dependent tools may return degraded responses",
+  "case_set": "tool_selection_cases.json",
+  "case_set_sha256": "4177b9db520bb36755fd675570385b7be5260370732bc6d320e8f5f6595ab38d",
+  "measured_at_utc": "2026-11-03T11:46:55.186670+00:00",
+  "case_count": 8,
+  "tool_selection_accuracy": 1.0,
+  "exact_matches": 8,
+  "all_within_five_tool_cap": true,
+  "answers_with_trace": 8,
+  "answer_count": 8,
+  "all_answers_have_trace": true,
+  "results": [
+    {
+      "id": "kb_general",
+      "expected_tools": [
+        "search_kb"
+      ],
+      "actual_tools": [
+        "search_kb"
+      ],
+      "exact_match": true,
+      "call_count": 1,
+      "within_cap": true,
+      "answer_present": true,
+      "trace_step_count": 5,
+      "has_trace": true
+    },
+    {
+      "id": "bmi_calculation",
+      "expected_tools": [
+        "calculate_bmi"
+      ],
+      "actual_tools": [
+        "calculate_bmi"
+      ],
+      "exact_match": true,
+      "call_count": 1,
+      "within_cap": true,
+      "answer_present": true,
+      "trace_step_count": 5,
+      "has_trace": true
+    },
+    {
+      "id": "lab_with_known_type",
+      "expected_tools": [
+        "search_kb",
+        "classify_lab"
+      ],
+      "actual_tools": [
+        "search_kb",
+        "classify_lab"
+      ],
+      "exact_match": true,
+      "call_count": 2,
+      "within_cap": true,
+      "answer_present": true,
+      "trace_step_count": 6,
+      "has_trace": true
+    },
+    {
+      "id": "lab_type_clarification",
+      "expected_tools": [
+        "classify_lab"
+      ],
+      "actual_tools": [
+        "classify_lab"
+      ],
+      "exact_match": true,
+      "call_count": 1,
+      "within_cap": true,
+      "answer_present": true,
+      "trace_step_count": 5,
+      "has_trace": true
+    },
+    {
+      "id": "history",
+      "expected_tools": [
+        "get_history"
+      ],
+      "actual_tools": [
+        "get_history"
+      ],
+      "exact_match": true,
+      "call_count": 1,
+      "within_cap": true,
+      "answer_present": true,
+      "trace_step_count": 5,
+      "has_trace": true
+    },
+    {
+      "id": "risk_with_history",
+      "expected_tools": [
+        "get_history",
+        "predict_risk"
+      ],
+      "actual_tools": [
+        "get_history",
+        "predict_risk"
+      ],
+      "exact_match": true,
+      "call_count": 2,
+      "within_cap": true,
+      "answer_present": true,
+      "trace_step_count": 6,
+      "has_trace": true
+    },
+    {
+      "id": "feature_explanation",
+      "expected_tools": [
+        "get_history",
+        "predict_risk",
+        "search_kb"
+      ],
+      "actual_tools": [
+        "get_history",
+        "predict_risk",
+        "search_kb"
+      ],
+      "exact_match": true,
+      "call_count": 3,
+      "within_cap": true,
+      "answer_present": true,
+      "trace_step_count": 7,
+      "has_trace": true
+    },
+    {
+      "id": "five_tool_cap",
+      "expected_tools": [
+        "search_kb",
+        "classify_lab",
+        "get_history",
+        "calculate_bmi",
+        "predict_risk"
+      ],
+      "actual_tools": [
+        "search_kb",
+        "classify_lab",
+        "get_history",
+        "calculate_bmi",
+        "predict_risk"
+      ],
+      "exact_match": true,
+      "call_count": 5,
+      "within_cap": true,
+      "answer_present": true,
+      "trace_step_count": 9,
+      "has_trace": true
+    }
+  ]
+}

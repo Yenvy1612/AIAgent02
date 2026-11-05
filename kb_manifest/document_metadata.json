@@ -1,0 +1,495 @@
+{
+  "manifest_version": 3,
+  "policy": {
+    "requires_review_status": "approved",
+    "requires_license_status": "approved",
+    "citation_contract": "citation must point to an exact retrieved chunk and approved source",
+    "reference_only_sources_are_not_ingested": true
+  },
+  "documents": [
+    {
+      "source_code": "KB-01",
+      "title": "Quyết định 5481/QĐ-BYT — hướng dẫn chẩn đoán và điều trị đái tháo đường típ 2",
+      "organization": "Bộ Y tế Việt Nam",
+      "local_path": "data/kb/candidates/A_Bo_Y_Te_Viet_Nam/BYT_KB-01_QD5481_2020_Huong_dan_DTD_typ2.pdf",
+      "document_version": "2020-12-30",
+      "language": "vi",
+      "population": "adult_type2",
+      "supersedes": [
+        "QĐ 3319/QĐ-BYT"
+      ],
+      "amended_by": [
+        "KB-01A"
+      ],
+      "amended_sections": [
+        {
+          "pdf_page": 39,
+          "printed_page": 37,
+          "section": "Phần 5, mục 3, điểm b — chế độ insulin ở bệnh nhân nặng không nguy kịch",
+          "amended_by": "KB-01A"
+        }
+      ],
+      "source_sha256": "305fc9c51d54418f5798e7691d59f94d24545e0dd728945e2225794730694486",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "77-page local text PDF. Diagnostic thresholds appear on PDF page 11 (printed page 9). Current validity, indexing rights, intended-user scope, and the 1353 amendment text replacement need qualified review before approval.",
+      "exclude_pages": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        54,
+        55,
+        56,
+        57,
+        76,
+        77
+      ],
+      "exclude_pages_note": "Trang hành chính, ban biên soạn, mục lục, viết tắt, tài liệu tham khảo. Trang 54-57 là Phần 9 về thai kỳ, ngoài phạm vi. Người duyệt xác nhận.",
+      "topic_by_page": [
+        {
+          "from": 10,
+          "to": 15,
+          "topic": "diagnosis"
+        },
+        {
+          "from": 16,
+          "to": 18,
+          "topic": "management"
+        },
+        {
+          "from": 19,
+          "to": 19,
+          "topic": "monitoring"
+        },
+        {
+          "from": 20,
+          "to": 21,
+          "topic": "management"
+        },
+        {
+          "from": 22,
+          "to": 28,
+          "topic": "medication"
+        },
+        {
+          "from": 29,
+          "to": 29,
+          "topic": "activity"
+        },
+        {
+          "from": 30,
+          "to": 33,
+          "topic": "nutrition"
+        },
+        {
+          "from": 34,
+          "to": 37,
+          "topic": "management"
+        },
+        {
+          "from": 38,
+          "to": 41,
+          "topic": "hospital"
+        },
+        {
+          "from": 42,
+          "to": 43,
+          "topic": "hypoglycemia"
+        },
+        {
+          "from": 44,
+          "to": 51,
+          "topic": "complications"
+        },
+        {
+          "from": 52,
+          "to": 53,
+          "topic": "foot_care"
+        },
+        {
+          "from": 58,
+          "to": 59,
+          "topic": "monitoring"
+        },
+        {
+          "from": 60,
+          "to": 75,
+          "topic": "medication"
+        }
+      ],
+      "text_replacements": [
+        {
+          "pdf_page": 39,
+          "find": "Chế độ insulin nền – nhanh (tiêm dưới da) là lựa chọn để kiểm soát glucose máu ở bệnh nhân có tăng glucose máu kèm bệnh nặng không nguy kịch, insulin trộn không được khuyến cáo sử dụng thường quy do tăng nguy cơ hạ glucose huyết.",
+          "replace": "Chế độ insulin nền – nhanh, trộn hỗn hợp (tiêm dưới da) là các lựa chọn để kiểm soát glucose máu ở bệnh nhân có tăng glucose máu kèm bệnh nặng không nguy kịch.",
+          "authority": "KB-01A"
+        }
+      ]
+    },
+    {
+      "source_code": "KB-01A",
+      "title": "Quyết định 1353/QĐ-BYT — sửa đổi hướng dẫn 5481",
+      "organization": "Bộ Y tế Việt Nam",
+      "local_path": "data/kb/candidates/A_Bo_Y_Te_Viet_Nam/BYT_KB-01A_QD1353_2021_Sua_doi_QD5481.pdf",
+      "document_version": "2021-02-23",
+      "language": "vi",
+      "population": "adult_type2",
+      "supersedes": [],
+      "amends": "KB-01",
+      "amended_by": [],
+      "source_sha256": "404beba5811b8894b0164ef4a926989b26d84d2c4099dc82d688a8fcf70595ae",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "One-page amendment. Effective on signing per document text. Review together with KB-01; it modifies a treatment passage and does not replace the entire 5481 guide.",
+      "topic_by_page": [
+        {
+          "from": 1,
+          "to": 1,
+          "topic": "hospital"
+        }
+      ]
+    },
+    {
+      "source_code": "KB-16",
+      "title": "WHO Classification of Diabetes",
+      "organization": "World Health Organization",
+      "local_path": "data/kb/candidates/C_WHO/WHO_2019_Classification_of_Diabetes_Mellitus.pdf",
+      "document_version": "2019",
+      "language": "en",
+      "population": "general",
+      "supersedes": [],
+      "amended_by": [],
+      "source_sha256": "1aafed8dbb3b23411edbae4b2bd2c6b557630b98a6068997f71fc450582b3557",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "Trang 2 ghi CC BY-NC-SA 3.0 IGO. Chờ người duyệt xác nhận license_status.",
+      "exclude_pages": [
+        1,
+        2,
+        3,
+        4,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ]
+    },
+    {
+      "source_code": "KB-18",
+      "title": "WHO Package of Essential NCD Interventions (PEN)",
+      "organization": "World Health Organization",
+      "local_path": "data/kb/candidates/C_WHO/WHO_2020_PEN_Essential_NCD_Interventions_Primary_Health_Care.pdf",
+      "document_version": "2020",
+      "language": "en",
+      "population": "primary_care",
+      "supersedes": [],
+      "amended_by": [],
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "WHO-owned text in the non-commercial course-demo scope only; third-party content excluded. Clinical and population scope review is outstanding.",
+      "source_sha256": "a09cc0ea4b39fd6ebfceb4d73f20bee7c4a7baeb3ae60150160cad646d6ec7e6",
+      "exclude_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        84,
+        85
+      ]
+    },
+    {
+      "source_code": "KB-25",
+      "title": "Diabetes Meal Planning",
+      "organization": "Centers for Disease Control and Prevention",
+      "local_path": "data/kb/candidates/D_Dinh_duong_cho_nguoi_mac_dai_thao_duong/CDC_KB-25_Diabetes_Meal_Planning_2026-11-03.md",
+      "document_version": "2024-05-15",
+      "language": "en",
+      "population": "adult_diabetes",
+      "supersedes": [],
+      "amended_by": [],
+      "source_sha256": "b825c8f8c44546378e675f81caf1357ef0c455a37b5f6590b8aee2aa58aa398b",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "Bản chụp trang web; chỉ dùng phần chữ, ghi nguồn theo source_review.md."
+    },
+    {
+      "source_code": "KB-27",
+      "title": "Managing Blood Sugar",
+      "organization": "Centers for Disease Control and Prevention",
+      "local_path": "data/kb/candidates/D_Dinh_duong_cho_nguoi_mac_dai_thao_duong/CDC_KB-27_Diabetes_Treatment_and_Glucose_Management_2026-11-03.md",
+      "document_version": "2024-05-15",
+      "language": "en",
+      "population": "adult_diabetes",
+      "supersedes": [],
+      "amended_by": [],
+      "source_sha256": "5ee5c41843693c078d731f0ff2940dc46ab54a4b5c1b004814743ad2cf4a3086",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "Bản chụp trang web; chỉ dùng phần chữ, ghi nguồn theo source_review.md."
+    },
+    {
+      "source_code": "KB-30A",
+      "title": "Healthy Diet",
+      "organization": "World Health Organization",
+      "local_path": "data/kb/candidates/C_WHO/WHO_KB-30A_Healthy_Diet_2026-11-03.md",
+      "document_version": "2026-01-26",
+      "language": "en",
+      "population": "general",
+      "supersedes": [],
+      "amended_by": [],
+      "source_sha256": "ca9dbd467532740003f9f2254974ce71d97ffd725a552c0ff8e16755f5ff067d",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "Bản chụp trang web; chỉ dùng phần chữ, ghi nguồn theo source_review.md."
+    },
+    {
+      "source_code": "KB-30B",
+      "title": "Physical Activity",
+      "organization": "World Health Organization",
+      "local_path": "data/kb/candidates/C_WHO/WHO_KB-30B_Physical_Activity_2026-11-03.md",
+      "document_version": "2024-06-26",
+      "language": "en",
+      "population": "general",
+      "supersedes": [],
+      "amended_by": [],
+      "source_sha256": "4c5aa01835110050de048ac3a0cb873e4b6a6b7564edb5b14e00c03485485d89",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "Bản chụp trang web; chỉ dùng phần chữ, ghi nguồn theo source_review.md."
+    },
+    {
+      "source_code": "KB-31",
+      "title": "Quyết định 1530/QĐ-BYT — hướng dẫn chẩn đoán và điều trị loét bàn chân do đái tháo đường",
+      "organization": "Bộ Y tế Việt Nam",
+      "local_path": "data/kb/candidates/A_Bo_Y_Te_Viet_Nam/BYT_QD1530_2023_Huong_dan_loet_ban_chan_DTD.pdf",
+      "document_version": "2023-03-24",
+      "language": "vi",
+      "population": "adult_diabetes_foot",
+      "supersedes": [],
+      "amended_by": [],
+      "source_sha256": "f549ec39248733c73f2be99907213204f0ef096905c44d082963e9a6a5375e5a",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "Tài liệu cho nhân viên y tế. KB-T25 vẫn phải từ chối hướng dẫn xử trí tại nhà.",
+      "exclude_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        43
+      ]
+    },
+    {
+      "source_code": "KB-32",
+      "title": "Quyết định 3087/QĐ-BYT — hướng dẫn chẩn đoán và điều trị tiền đái tháo đường",
+      "organization": "Bộ Y tế Việt Nam",
+      "local_path": "data/kb/candidates/A_Bo_Y_Te_Viet_Nam/BYT_QD3087_2020_Huong_dan_tien_DTD.pdf",
+      "document_version": "2020-07-16",
+      "language": "vi",
+      "population": "prediabetes",
+      "supersedes": [],
+      "amended_by": [],
+      "source_sha256": "c329ac9fa2f0162a47cdeb8cfb7673a2e15c5aaced15c7f6f0e8fe13d560e338",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "Trang 15-16 chỉ có ảnh, không trích xuất được chữ.",
+      "exclude_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        18,
+        19
+      ],
+      "topic_by_page": [
+        {
+          "from": 13,
+          "to": 17,
+          "topic": "nutrition"
+        }
+      ]
+    },
+    {
+      "source_code": "KB-33",
+      "title": "Quyết định 2558/QĐ-BYT — hướng dẫn chẩn đoán, điều trị và quản lý bệnh võng mạc đái tháo đường",
+      "organization": "Bộ Y tế Việt Nam",
+      "local_path": "data/kb/candidates/A_Bo_Y_Te_Viet_Nam/BYT_QD2558_2022_Huong_dan_vong_mac_DTD_ban_ky_so.pdf",
+      "document_version": "2022-09-20",
+      "language": "vi",
+      "population": "adult_diabetes_retinopathy",
+      "supersedes": [],
+      "amended_by": [],
+      "source_sha256": "286e565fe03df6aa5fcd6c8c79dec959fefa7eeb37b382e7acae62b470defee2",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "Bản ký số. Trang 23-25 chỉ có chú thích hình.",
+      "exclude_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        21,
+        22,
+        23,
+        24,
+        25
+      ]
+    },
+    {
+      "source_code": "KB-34",
+      "title": "Diagnosis and Management of Type 2 Diabetes (HEARTS-D)",
+      "organization": "World Health Organization",
+      "local_path": "data/kb/candidates/C_WHO/WHO_Type_2_Diabetes_Diagnosis_and_Management.pdf",
+      "document_version": "2020",
+      "language": "en",
+      "population": "adult_type2",
+      "supersedes": [],
+      "amended_by": [],
+      "source_sha256": "71b216b19a227e73e0e624274974571a3530e30a0db37a3d10b6d179eefac008",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "WHO/UCN/NCD/20.1, trang 4 ghi CC BY-NC-SA 3.0 IGO. Loại nội dung của bên thứ ba.",
+      "exclude_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "topic_by_page": [
+        {
+          "from": 30,
+          "to": 35,
+          "topic": "foot_care"
+        }
+      ]
+    },
+    {
+      "source_code": "KB-35",
+      "title": "Quyết định 1470/QĐ-BYT — hướng dẫn quốc gia về sàng lọc và quản lý đái tháo đường thai kỳ",
+      "organization": "Bộ Y tế Việt Nam",
+      "local_path": "data/kb/candidates/A_Bo_Y_Te_Viet_Nam/BYT_QD1470_2024_Huong_dan_sang_loc_quan_ly_DTD_thai_ky.docx",
+      "document_version": "2024-05-29",
+      "language": "vi",
+      "population": "pregnancy",
+      "supersedes": [],
+      "amended_by": [],
+      "source_sha256": "ac57ea66b768bcd2cb109d6c20bf78a77e693a897aec4177de5ff5aaee106bcd",
+      "review_status": "candidate",
+      "license_status": "unknown",
+      "ingested": false,
+      "note": "Chưa đưa vào đợt 1."
+    },
+    {
+      "source_code": "KB-36",
+      "title": "Guidelines on second- and third-line medicines and type of insulin for the control of blood glucose levels",
+      "organization": "World Health Organization",
+      "local_path": "data/kb/candidates/C_WHO/WHO_Guidelines_Medicines_and_Insulin_for_Diabetes.pdf",
+      "document_version": "",
+      "language": "en",
+      "population": "adult_type2",
+      "supersedes": [],
+      "amended_by": [],
+      "source_sha256": "c7d0149060003fac7a54d7049cfb8ad9ffa1957bfa9096a1eb9d14df182cb921",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "Chưa đưa vào đợt 1."
+    },
+    {
+      "source_code": "KB-37",
+      "title": "Quyết định 2557/QĐ-BYT — hướng dẫn quy trình kỹ thuật chụp ảnh đáy mắt không huỳnh quang",
+      "organization": "Bộ Y tế Việt Nam",
+      "local_path": "data/kb/candidates/A_Bo_Y_Te_Viet_Nam/BYT_QD2557_2022_Quy_trinh_chup_anh_day_mat.pdf",
+      "document_version": "2022-09-20",
+      "language": "vi",
+      "population": "clinician_procedure",
+      "supersedes": [],
+      "amended_by": [],
+      "source_sha256": "519000906b81fec288220f75ad39d4c4b003ef7cfb13b8fbab6846be2b17f3d4",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "Chưa đưa vào đợt 1."
+    },
+    {
+      "source_code": "KB-38",
+      "title": "Diagnosis and management for patients with hypertension — NCD education manual",
+      "organization": "World Health Organization",
+      "local_path": "data/kb/candidates/C_WHO/WHO_Hypertension_Management_NCD_Education_Manual.pdf",
+      "document_version": "2017",
+      "language": "en",
+      "population": "primary_care",
+      "supersedes": [],
+      "amended_by": [],
+      "source_sha256": "300191cebda35e9096f039bbc91f1c3f4bf3253bbce67f6dabb274e9b2f9a13f",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "Chưa đưa vào đợt 1."
+    },
+    {
+      "source_code": "KB-39",
+      "title": "Guidance on global monitoring for diabetes prevention and control",
+      "organization": "World Health Organization",
+      "local_path": "data/kb/candidates/C_WHO/WHO_Diabetes_Prevention_Control_Global_Monitoring_Framework.pdf",
+      "document_version": "",
+      "language": "en",
+      "population": "public_health",
+      "supersedes": [],
+      "amended_by": [],
+      "source_sha256": "fc0497a3c5d84903b6d0c3d51e02d4fc89780e8ad6e8bb4953bf624aaab1c49b",
+      "review_status": "approved",
+      "license_status": "approved",
+      "ingested": false,
+      "note": "Chưa đưa vào đợt 1."
+    },
+    {
+      "source_code": "ALL-OTHER-SOURCES",
+      "title": "Remaining proposed sources",
+      "local_path": null,
+      "document_version": null,
+      "language": null,
+      "population": null,
+      "supersedes": [],
+      "amended_by": [],
+      "review_status": "candidate",
+      "license_status": "unknown_or_reference_only",
+      "ingested": false,
+      "note": "Source catalog entries are not evidence that a document was downloaded, reviewed, or approved."
+    }
+  ]
+}

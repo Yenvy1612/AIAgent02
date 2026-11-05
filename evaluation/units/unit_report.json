@@ -1,0 +1,82 @@
+{
+  "status": "MEASURED",
+  "scope": "Curated unit and measurement-clarification regression cases; not a clinical validation set.",
+  "case_set": "unit_cases.json",
+  "case_set_sha256": "a2f08065205346c5f0f365c5d7df5d6463cb230a9feb4bf7f0da524cd8c1cfac",
+  "measured_at_utc": "2026-11-03T11:46:55.175670+00:00",
+  "case_count": 6,
+  "passed_count": 6,
+  "unit_case_pass_rate": 1.0,
+  "results": [
+    {
+      "id": "mgdl_preserved",
+      "status": "OK",
+      "expected_fragments": [
+        "99.0 mg/dL"
+      ],
+      "missing_fragments": [],
+      "trace_present": true,
+      "tool_count": 2,
+      "passed": true
+    },
+    {
+      "id": "mmoll_converted",
+      "status": "OK",
+      "expected_fragments": [
+        "5.5 mmol/L",
+        "99.1 mg/dL"
+      ],
+      "missing_fragments": [],
+      "trace_present": true,
+      "tool_count": 2,
+      "passed": true
+    },
+    {
+      "id": "measurement_type_clarification",
+      "status": "NEED_CLARIFICATION",
+      "expected_fragments": [
+        "99.1 mg/dL",
+        "lúc đói, ngẫu nhiên hay sau nghiệm pháp 2 giờ"
+      ],
+      "missing_fragments": [],
+      "trace_present": true,
+      "tool_count": 1,
+      "passed": true
+    },
+    {
+      "id": "missing_unit_worst_case",
+      "status": "NEED_CLARIFICATION",
+      "expected_fragments": [
+        "mg/dL hay mmol/L",
+        "42 là mg/dL",
+        "115"
+      ],
+      "missing_fragments": [],
+      "trace_present": true,
+      "tool_count": 0,
+      "passed": true
+    },
+    {
+      "id": "critical_mmoll_bypass",
+      "status": "EMERGENCY",
+      "expected_fragments": [
+        "115"
+      ],
+      "missing_fragments": [],
+      "trace_present": true,
+      "tool_count": 0,
+      "passed": true
+    },
+    {
+      "id": "ogtt_conversion",
+      "status": "OK",
+      "expected_fragments": [
+        "144.15 mg/dL"
+      ],
+      "missing_fragments": [],
+      "trace_present": true,
+      "tool_count": 2,
+      "passed": true
+    }
+  ]
+}

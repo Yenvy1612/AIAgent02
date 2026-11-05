@@ -1,0 +1,4 @@
+{
+  "note": "Domains allowed for the unreviewed web fallback. Excludes ADA (text and data mining clause) and NIDDK (no specific medical advice clause). See kb_manifest/source_review.md.",
+  "domains": ["who.int", "cdc.gov", "moh.gov.vn", "kcb.vn"]
+}

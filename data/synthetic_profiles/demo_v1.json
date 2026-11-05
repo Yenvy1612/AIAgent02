@@ -1,0 +1,3065 @@
+{
+  "version": "demo-v1",
+  "seed": 42,
+  "anchor_date": "2026-11-03T00:00:00+00:00",
+  "source": "deterministic project-authored synthetic examples; no Kaggle rows",
+  "profiles": [
+    {
+      "id": "DEMO-01",
+      "profile_code": "DEMO-01",
+      "display_name": "Hồ sơ mô phỏng 01",
+      "age": 31,
+      "gender": "Female",
+      "height_cm": 164,
+      "weight_kg": 61,
+      "bmi": 22.68,
+      "hypertension": 0,
+      "heart_disease": 0,
+      "smoking_history": "never",
+      "known_type2_diabetes": false,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-02",
+      "profile_code": "DEMO-02",
+      "display_name": "Hồ sơ mô phỏng 02",
+      "age": 46,
+      "gender": "Male",
+      "height_cm": 172,
+      "weight_kg": 78,
+      "bmi": 26.37,
+      "hypertension": 1,
+      "heart_disease": 0,
+      "smoking_history": "former",
+      "known_type2_diabetes": false,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-03",
+      "profile_code": "DEMO-03",
+      "display_name": "Hồ sơ mô phỏng 03",
+      "age": 58,
+      "gender": "Female",
+      "height_cm": 158,
+      "weight_kg": 72,
+      "bmi": 28.84,
+      "hypertension": 1,
+      "heart_disease": 1,
+      "smoking_history": "never",
+      "known_type2_diabetes": true,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-04",
+      "profile_code": "DEMO-04",
+      "display_name": "Hồ sơ mô phỏng 04",
+      "age": 39,
+      "gender": "Other",
+      "height_cm": 169,
+      "weight_kg": 66,
+      "bmi": 23.11,
+      "hypertension": 0,
+      "heart_disease": 0,
+      "smoking_history": "No Info",
+      "known_type2_diabetes": false,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-05",
+      "profile_code": "DEMO-05",
+      "display_name": "Hồ sơ mô phỏng 05",
+      "age": 67,
+      "gender": "Male",
+      "height_cm": 175,
+      "weight_kg": 83,
+      "bmi": 27.1,
+      "hypertension": 1,
+      "heart_disease": 1,
+      "smoking_history": "current",
+      "known_type2_diabetes": true,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-06",
+      "profile_code": "DEMO-06",
+      "display_name": "Hồ sơ mô phỏng 06",
+      "age": 52,
+      "gender": "Female",
+      "height_cm": 160,
+      "weight_kg": 68,
+      "bmi": 26.56,
+      "hypertension": 0,
+      "heart_disease": 0,
+      "smoking_history": "not current",
+      "known_type2_diabetes": false,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-07",
+      "profile_code": "DEMO-07",
+      "display_name": "Hồ sơ mô phỏng 07",
+      "age": 44,
+      "gender": "Male",
+      "height_cm": 181,
+      "weight_kg": 91,
+      "bmi": 27.78,
+      "hypertension": 1,
+      "heart_disease": 0,
+      "smoking_history": "ever",
+      "known_type2_diabetes": false,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-08",
+      "profile_code": "DEMO-08",
+      "display_name": "Hồ sơ mô phỏng 08",
+      "age": 73,
+      "gender": "Female",
+      "height_cm": 155,
+      "weight_kg": 59,
+      "bmi": 24.56,
+      "hypertension": 1,
+      "heart_disease": 0,
+      "smoking_history": "never",
+      "known_type2_diabetes": true,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-09",
+      "profile_code": "DEMO-09",
+      "display_name": "Hồ sơ mô phỏng 09",
+      "age": 28,
+      "gender": "Male",
+      "height_cm": 177,
+      "weight_kg": 74,
+      "bmi": 23.62,
+      "hypertension": 0,
+      "heart_disease": 0,
+      "smoking_history": "never",
+      "known_type2_diabetes": false,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-10",
+      "profile_code": "DEMO-10",
+      "display_name": "Hồ sơ mô phỏng 10",
+      "age": 61,
+      "gender": "Female",
+      "height_cm": 163,
+      "weight_kg": 86,
+      "bmi": 32.37,
+      "hypertension": 1,
+      "heart_disease": 1,
+      "smoking_history": "former",
+      "known_type2_diabetes": true,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-11",
+      "profile_code": "DEMO-11",
+      "display_name": "Hồ sơ mô phỏng 11",
+      "age": 49,
+      "gender": "Other",
+      "height_cm": 170,
+      "weight_kg": 79,
+      "bmi": 27.34,
+      "hypertension": 0,
+      "heart_disease": 0,
+      "smoking_history": "No Info",
+      "known_type2_diabetes": false,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-12",
+      "profile_code": "DEMO-12",
+      "display_name": "Hồ sơ mô phỏng 12",
+      "age": 56,
+      "gender": "Male",
+      "height_cm": 168,
+      "weight_kg": 75,
+      "bmi": 26.57,
+      "hypertension": 1,
+      "heart_disease": 0,
+      "smoking_history": "current",
+      "known_type2_diabetes": true,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-13",
+      "profile_code": "DEMO-13",
+      "display_name": "Hồ sơ mô phỏng 13",
+      "age": 35,
+      "gender": "Female",
+      "height_cm": 166,
+      "weight_kg": 64,
+      "bmi": 23.23,
+      "hypertension": 0,
+      "heart_disease": 0,
+      "smoking_history": "never",
+      "known_type2_diabetes": false,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-14",
+      "profile_code": "DEMO-14",
+      "display_name": "Hồ sơ mô phỏng 14",
+      "age": 70,
+      "gender": "Male",
+      "height_cm": 174,
+      "weight_kg": 80,
+      "bmi": 26.42,
+      "hypertension": 1,
+      "heart_disease": 1,
+      "smoking_history": "former",
+      "known_type2_diabetes": true,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-15",
+      "profile_code": "DEMO-15",
+      "display_name": "Hồ sơ mô phỏng 15",
+      "age": 42,
+      "gender": "Female",
+      "height_cm": 157,
+      "weight_kg": 63,
+      "bmi": 25.56,
+      "hypertension": 0,
+      "heart_disease": 0,
+      "smoking_history": "not current",
+      "known_type2_diabetes": false,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-16",
+      "profile_code": "DEMO-16",
+      "display_name": "Hồ sơ mô phỏng 16",
+      "age": 64,
+      "gender": "Male",
+      "height_cm": 179,
+      "weight_kg": 96,
+      "bmi": 29.96,
+      "hypertension": 1,
+      "heart_disease": 0,
+      "smoking_history": "ever",
+      "known_type2_diabetes": true,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-17",
+      "profile_code": "DEMO-17",
+      "display_name": "Hồ sơ mô phỏng 17",
+      "age": 53,
+      "gender": "Female",
+      "height_cm": 162,
+      "weight_kg": 70,
+      "bmi": 26.67,
+      "hypertension": 1,
+      "heart_disease": 0,
+      "smoking_history": "never",
+      "known_type2_diabetes": false,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-18",
+      "profile_code": "DEMO-18",
+      "display_name": "Hồ sơ mô phỏng 18",
+      "age": 37,
+      "gender": "Male",
+      "height_cm": 173,
+      "weight_kg": 69,
+      "bmi": 23.05,
+      "hypertension": 0,
+      "heart_disease": 0,
+      "smoking_history": "No Info",
+      "known_type2_diabetes": false,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-19",
+      "profile_code": "DEMO-19",
+      "display_name": "Hồ sơ mô phỏng 19",
+      "age": 60,
+      "gender": "Other",
+      "height_cm": 167,
+      "weight_kg": 77,
+      "bmi": 27.61,
+      "hypertension": 1,
+      "heart_disease": 1,
+      "smoking_history": "former",
+      "known_type2_diabetes": true,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-20",
+      "profile_code": "DEMO-20",
+      "display_name": "Hồ sơ mô phỏng 20",
+      "age": 47,
+      "gender": "Female",
+      "height_cm": 159,
+      "weight_kg": 74,
+      "bmi": 29.27,
+      "hypertension": 0,
+      "heart_disease": 0,
+      "smoking_history": "current",
+      "known_type2_diabetes": false,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-21",
+      "profile_code": "DEMO-21",
+      "display_name": "Hồ sơ mô phỏng 21",
+      "age": 75,
+      "gender": "Male",
+      "height_cm": 171,
+      "weight_kg": 73,
+      "bmi": 24.96,
+      "hypertension": 1,
+      "heart_disease": 1,
+      "smoking_history": "never",
+      "known_type2_diabetes": true,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-22",
+      "profile_code": "DEMO-22",
+      "display_name": "Hồ sơ mô phỏng 22",
+      "age": 33,
+      "gender": "Female",
+      "height_cm": 168,
+      "weight_kg": 57,
+      "bmi": 20.2,
+      "hypertension": 0,
+      "heart_disease": 0,
+      "smoking_history": "never",
+      "known_type2_diabetes": false,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-23",
+      "profile_code": "DEMO-23",
+      "display_name": "Hồ sơ mô phỏng 23",
+      "age": 55,
+      "gender": "Male",
+      "height_cm": 176,
+      "weight_kg": 89,
+      "bmi": 28.73,
+      "hypertension": 1,
+      "heart_disease": 0,
+      "smoking_history": "not current",
+      "known_type2_diabetes": true,
+      "data_origin": "synthetic"
+    },
+    {
+      "id": "DEMO-24",
+      "profile_code": "DEMO-24",
+      "display_name": "Hồ sơ mô phỏng 24",
+      "age": 41,
+      "gender": "Other",
+      "height_cm": 165,
+      "weight_kg": 67,
+      "bmi": 24.61,
+      "hypertension": 0,
+      "heart_disease": 0,
+      "smoking_history": "ever",
+      "known_type2_diabetes": false,
+      "data_origin": "synthetic"
+    }
+  ],
+  "readings": [
+    {
+      "profile_id": "DEMO-01",
+      "measured_at": "2026-08-18T00:00:00+00:00",
+      "original_value": 98,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 98.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-01",
+      "measured_at": "2026-08-24T00:00:00+00:00",
+      "original_value": 6.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 109.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-01",
+      "measured_at": "2026-08-30T00:00:00+00:00",
+      "original_value": 122,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 122.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-01",
+      "measured_at": "2026-09-08T00:00:00+00:00",
+      "original_value": 6.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 109.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-01",
+      "measured_at": "2026-09-12T00:00:00+00:00",
+      "original_value": 118,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 118.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-01",
+      "measured_at": "2026-09-22T00:00:00+00:00",
+      "original_value": 6.2,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 112.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-01",
+      "measured_at": "2026-09-26T00:00:00+00:00",
+      "original_value": 116,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 116.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-01",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "original_value": 6.6,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 119.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-01",
+      "measured_at": "2026-10-10T00:00:00+00:00",
+      "original_value": 105,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 105.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-01",
+      "measured_at": "2026-10-19T00:00:00+00:00",
+      "original_value": 4.6,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 83.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-01",
+      "measured_at": "2026-10-27T00:00:00+00:00",
+      "original_value": 87,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 87.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-01",
+      "measured_at": "2026-10-31T00:00:00+00:00",
+      "original_value": 4.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 89.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-02",
+      "measured_at": "2026-08-15T00:00:00+00:00",
+      "original_value": 113,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 113.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-02",
+      "measured_at": "2026-08-25T00:00:00+00:00",
+      "original_value": 5.1,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 91.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-02",
+      "measured_at": "2026-08-29T00:00:00+00:00",
+      "original_value": 94,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 94.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-02",
+      "measured_at": "2026-09-06T00:00:00+00:00",
+      "original_value": 4.5,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 81.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-02",
+      "measured_at": "2026-09-14T00:00:00+00:00",
+      "original_value": 87,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 87.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-02",
+      "measured_at": "2026-09-22T00:00:00+00:00",
+      "original_value": 4.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 86.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-02",
+      "measured_at": "2026-09-28T00:00:00+00:00",
+      "original_value": 112,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 112.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-02",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "original_value": 6.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 124.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-02",
+      "measured_at": "2026-10-10T00:00:00+00:00",
+      "original_value": 117,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 117.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-02",
+      "measured_at": "2026-10-17T00:00:00+00:00",
+      "original_value": 6.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 124.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-02",
+      "measured_at": "2026-10-25T00:00:00+00:00",
+      "original_value": 102,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 102.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-02",
+      "measured_at": "2026-11-03T00:00:00+00:00",
+      "original_value": 5.6,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 101.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-03",
+      "measured_at": "2026-08-16T00:00:00+00:00",
+      "original_value": 126,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 126.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-03",
+      "measured_at": "2026-08-22T00:00:00+00:00",
+      "original_value": 6.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 116.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-03",
+      "measured_at": "2026-09-01T00:00:00+00:00",
+      "original_value": 119,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 119.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-03",
+      "measured_at": "2026-09-06T00:00:00+00:00",
+      "original_value": 5.6,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 101.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-03",
+      "measured_at": "2026-09-15T00:00:00+00:00",
+      "original_value": 130,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 130.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-03",
+      "measured_at": "2026-09-22T00:00:00+00:00",
+      "original_value": 5.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 107.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-03",
+      "measured_at": "2026-09-27T00:00:00+00:00",
+      "original_value": 107,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 107.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-03",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "original_value": 7.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 141.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-03",
+      "measured_at": "2026-10-13T00:00:00+00:00",
+      "original_value": 139,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 139.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-03",
+      "measured_at": "2026-10-20T00:00:00+00:00",
+      "original_value": 6.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 108.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-03",
+      "measured_at": "2026-10-25T00:00:00+00:00",
+      "original_value": 109,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 109.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-03",
+      "measured_at": "2026-11-02T00:00:00+00:00",
+      "original_value": 8.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 145.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-04",
+      "measured_at": "2026-08-18T00:00:00+00:00",
+      "original_value": 105,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 105.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-04",
+      "measured_at": "2026-08-25T00:00:00+00:00",
+      "original_value": 6.5,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 117.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-04",
+      "measured_at": "2026-08-31T00:00:00+00:00",
+      "original_value": 120,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 120.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-04",
+      "measured_at": "2026-09-07T00:00:00+00:00",
+      "original_value": 6.5,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 117.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-04",
+      "measured_at": "2026-09-15T00:00:00+00:00",
+      "original_value": 81,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 81.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-04",
+      "measured_at": "2026-09-22T00:00:00+00:00",
+      "original_value": 5.5,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 100.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-04",
+      "measured_at": "2026-09-29T00:00:00+00:00",
+      "original_value": 81,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 81.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-04",
+      "measured_at": "2026-10-05T00:00:00+00:00",
+      "original_value": 6.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 115.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-04",
+      "measured_at": "2026-10-11T00:00:00+00:00",
+      "original_value": 113,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 113.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-04",
+      "measured_at": "2026-10-18T00:00:00+00:00",
+      "original_value": 6.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 125.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-04",
+      "measured_at": "2026-10-27T00:00:00+00:00",
+      "original_value": 105,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 105.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-04",
+      "measured_at": "2026-10-31T00:00:00+00:00",
+      "original_value": 5.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 103.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-05",
+      "measured_at": "2026-08-16T00:00:00+00:00",
+      "original_value": 104,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 104.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-05",
+      "measured_at": "2026-08-22T00:00:00+00:00",
+      "original_value": 7.5,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 135.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-05",
+      "measured_at": "2026-08-29T00:00:00+00:00",
+      "original_value": 136,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 136.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-05",
+      "measured_at": "2026-09-06T00:00:00+00:00",
+      "original_value": 6.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 116.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-05",
+      "measured_at": "2026-09-12T00:00:00+00:00",
+      "original_value": 125,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 125.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-05",
+      "measured_at": "2026-09-22T00:00:00+00:00",
+      "original_value": 7.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 126.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-05",
+      "measured_at": "2026-09-29T00:00:00+00:00",
+      "original_value": 106,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 106.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-05",
+      "measured_at": "2026-10-06T00:00:00+00:00",
+      "original_value": 6.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 116.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-05",
+      "measured_at": "2026-10-10T00:00:00+00:00",
+      "original_value": 146,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 146.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-05",
+      "measured_at": "2026-10-20T00:00:00+00:00",
+      "original_value": 6.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 120.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-05",
+      "measured_at": "2026-10-24T00:00:00+00:00",
+      "original_value": 114,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 114.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-05",
+      "measured_at": "2026-11-02T00:00:00+00:00",
+      "original_value": 7.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 133.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-06",
+      "measured_at": "2026-08-16T00:00:00+00:00",
+      "original_value": 93,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 93.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-06",
+      "measured_at": "2026-08-23T00:00:00+00:00",
+      "original_value": 6.5,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 117.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-06",
+      "measured_at": "2026-08-31T00:00:00+00:00",
+      "original_value": 130,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 130.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-06",
+      "measured_at": "2026-09-05T00:00:00+00:00",
+      "original_value": 5.3,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 95.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-06",
+      "measured_at": "2026-09-14T00:00:00+00:00",
+      "original_value": 127,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 127.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-06",
+      "measured_at": "2026-09-22T00:00:00+00:00",
+      "original_value": 6.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 116.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-06",
+      "measured_at": "2026-09-28T00:00:00+00:00",
+      "original_value": 98,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 98.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-06",
+      "measured_at": "2026-10-05T00:00:00+00:00",
+      "original_value": 6.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 115.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-06",
+      "measured_at": "2026-10-12T00:00:00+00:00",
+      "original_value": 86,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 86.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-06",
+      "measured_at": "2026-10-20T00:00:00+00:00",
+      "original_value": 6.2,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 112.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-06",
+      "measured_at": "2026-10-27T00:00:00+00:00",
+      "original_value": 93,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 93.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-06",
+      "measured_at": "2026-10-31T00:00:00+00:00",
+      "original_value": 7.1,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 128.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-07",
+      "measured_at": "2026-08-18T00:00:00+00:00",
+      "original_value": 102,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 102.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-07",
+      "measured_at": "2026-08-22T00:00:00+00:00",
+      "original_value": 4.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 87.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-07",
+      "measured_at": "2026-08-30T00:00:00+00:00",
+      "original_value": 115,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 115.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-07",
+      "measured_at": "2026-09-08T00:00:00+00:00",
+      "original_value": 6.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 123.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-07",
+      "measured_at": "2026-09-15T00:00:00+00:00",
+      "original_value": 97,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 97.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-07",
+      "measured_at": "2026-09-21T00:00:00+00:00",
+      "original_value": 6.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 109.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-07",
+      "measured_at": "2026-09-29T00:00:00+00:00",
+      "original_value": 120,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 120.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-07",
+      "measured_at": "2026-10-05T00:00:00+00:00",
+      "original_value": 6.5,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 118.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-07",
+      "measured_at": "2026-10-11T00:00:00+00:00",
+      "original_value": 116,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 116.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-07",
+      "measured_at": "2026-10-18T00:00:00+00:00",
+      "original_value": 5.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 105.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-07",
+      "measured_at": "2026-10-27T00:00:00+00:00",
+      "original_value": 95,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 95.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-07",
+      "measured_at": "2026-11-02T00:00:00+00:00",
+      "original_value": 4.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 86.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-08",
+      "measured_at": "2026-08-15T00:00:00+00:00",
+      "original_value": 117,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 117.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-08",
+      "measured_at": "2026-08-23T00:00:00+00:00",
+      "original_value": 7.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 140.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-08",
+      "measured_at": "2026-08-31T00:00:00+00:00",
+      "original_value": 144,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 144.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-08",
+      "measured_at": "2026-09-05T00:00:00+00:00",
+      "original_value": 6.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 121.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-08",
+      "measured_at": "2026-09-15T00:00:00+00:00",
+      "original_value": 134,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 134.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-08",
+      "measured_at": "2026-09-20T00:00:00+00:00",
+      "original_value": 6.3,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 114.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-08",
+      "measured_at": "2026-09-29T00:00:00+00:00",
+      "original_value": 109,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 109.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-08",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "original_value": 5.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 106.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-08",
+      "measured_at": "2026-10-11T00:00:00+00:00",
+      "original_value": 120,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 120.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-08",
+      "measured_at": "2026-10-19T00:00:00+00:00",
+      "original_value": 6.2,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 112.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-08",
+      "measured_at": "2026-10-27T00:00:00+00:00",
+      "original_value": 121,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 121.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-08",
+      "measured_at": "2026-10-31T00:00:00+00:00",
+      "original_value": 7.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 140.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-09",
+      "measured_at": "2026-08-17T00:00:00+00:00",
+      "original_value": 112,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 112.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-09",
+      "measured_at": "2026-08-24T00:00:00+00:00",
+      "original_value": 5.3,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 95.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-09",
+      "measured_at": "2026-08-31T00:00:00+00:00",
+      "original_value": 115,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 115.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-09",
+      "measured_at": "2026-09-06T00:00:00+00:00",
+      "original_value": 5.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 105.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-09",
+      "measured_at": "2026-09-12T00:00:00+00:00",
+      "original_value": 126,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 126.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-09",
+      "measured_at": "2026-09-20T00:00:00+00:00",
+      "original_value": 6.5,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 117.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-09",
+      "measured_at": "2026-09-27T00:00:00+00:00",
+      "original_value": 104,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 104.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-09",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "original_value": 5.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 105.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-09",
+      "measured_at": "2026-10-13T00:00:00+00:00",
+      "original_value": 87,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 87.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-09",
+      "measured_at": "2026-10-20T00:00:00+00:00",
+      "original_value": 6.3,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 114.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-09",
+      "measured_at": "2026-10-25T00:00:00+00:00",
+      "original_value": 82,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 82.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-09",
+      "measured_at": "2026-10-31T00:00:00+00:00",
+      "original_value": 6.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 123.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-10",
+      "measured_at": "2026-08-16T00:00:00+00:00",
+      "original_value": 103,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 103.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-10",
+      "measured_at": "2026-08-22T00:00:00+00:00",
+      "original_value": 6.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 123.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-10",
+      "measured_at": "2026-08-29T00:00:00+00:00",
+      "original_value": 102,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 102.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-10",
+      "measured_at": "2026-09-07T00:00:00+00:00",
+      "original_value": 6.1,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 110.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-10",
+      "measured_at": "2026-09-12T00:00:00+00:00",
+      "original_value": 111,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 111.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-10",
+      "measured_at": "2026-09-20T00:00:00+00:00",
+      "original_value": 7.1,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 128.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-10",
+      "measured_at": "2026-09-29T00:00:00+00:00",
+      "original_value": 102,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 102.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-10",
+      "measured_at": "2026-10-03T00:00:00+00:00",
+      "original_value": 7.1,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 128.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-10",
+      "measured_at": "2026-10-13T00:00:00+00:00",
+      "original_value": 115,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 115.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-10",
+      "measured_at": "2026-10-20T00:00:00+00:00",
+      "original_value": 6.1,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 110.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-10",
+      "measured_at": "2026-10-26T00:00:00+00:00",
+      "original_value": 130,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 130.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-10",
+      "measured_at": "2026-11-02T00:00:00+00:00",
+      "original_value": 7.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 140.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-11",
+      "measured_at": "2026-08-17T00:00:00+00:00",
+      "original_value": 109,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 109.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-11",
+      "measured_at": "2026-08-22T00:00:00+00:00",
+      "original_value": 6.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 125.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-11",
+      "measured_at": "2026-08-30T00:00:00+00:00",
+      "original_value": 126,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 126.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-11",
+      "measured_at": "2026-09-05T00:00:00+00:00",
+      "original_value": 7.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 126.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-11",
+      "measured_at": "2026-09-15T00:00:00+00:00",
+      "original_value": 82,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 82.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-11",
+      "measured_at": "2026-09-21T00:00:00+00:00",
+      "original_value": 5.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 102.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-11",
+      "measured_at": "2026-09-28T00:00:00+00:00",
+      "original_value": 96,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 96.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-11",
+      "measured_at": "2026-10-06T00:00:00+00:00",
+      "original_value": 5.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 90.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-11",
+      "measured_at": "2026-10-13T00:00:00+00:00",
+      "original_value": 103,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 103.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-11",
+      "measured_at": "2026-10-19T00:00:00+00:00",
+      "original_value": 6.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 108.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-11",
+      "measured_at": "2026-10-26T00:00:00+00:00",
+      "original_value": 94,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 94.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-11",
+      "measured_at": "2026-11-02T00:00:00+00:00",
+      "original_value": 4.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 88.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-12",
+      "measured_at": "2026-08-17T00:00:00+00:00",
+      "original_value": 128,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 128.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-12",
+      "measured_at": "2026-08-23T00:00:00+00:00",
+      "original_value": 7.2,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 130.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-12",
+      "measured_at": "2026-08-29T00:00:00+00:00",
+      "original_value": 124,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 124.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-12",
+      "measured_at": "2026-09-07T00:00:00+00:00",
+      "original_value": 7.1,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 128.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-12",
+      "measured_at": "2026-09-13T00:00:00+00:00",
+      "original_value": 136,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 136.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-12",
+      "measured_at": "2026-09-19T00:00:00+00:00",
+      "original_value": 6.3,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 113.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-12",
+      "measured_at": "2026-09-28T00:00:00+00:00",
+      "original_value": 103,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 103.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-12",
+      "measured_at": "2026-10-03T00:00:00+00:00",
+      "original_value": 7.5,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 135.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-12",
+      "measured_at": "2026-10-10T00:00:00+00:00",
+      "original_value": 138,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 138.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-12",
+      "measured_at": "2026-10-20T00:00:00+00:00",
+      "original_value": 7.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 134.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-12",
+      "measured_at": "2026-10-25T00:00:00+00:00",
+      "original_value": 133,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 133.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-12",
+      "measured_at": "2026-11-01T00:00:00+00:00",
+      "original_value": 7.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 126.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-13",
+      "measured_at": "2026-08-18T00:00:00+00:00",
+      "original_value": 92,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 92.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-13",
+      "measured_at": "2026-08-24T00:00:00+00:00",
+      "original_value": 5.5,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 99.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-13",
+      "measured_at": "2026-09-01T00:00:00+00:00",
+      "original_value": 91,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 91.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-13",
+      "measured_at": "2026-09-06T00:00:00+00:00",
+      "original_value": 4.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 85.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-13",
+      "measured_at": "2026-09-13T00:00:00+00:00",
+      "original_value": 126,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 126.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-13",
+      "measured_at": "2026-09-19T00:00:00+00:00",
+      "original_value": 6.3,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 114.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-13",
+      "measured_at": "2026-09-26T00:00:00+00:00",
+      "original_value": 104,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 104.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-13",
+      "measured_at": "2026-10-03T00:00:00+00:00",
+      "original_value": 5.5,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 100.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-13",
+      "measured_at": "2026-10-10T00:00:00+00:00",
+      "original_value": 114,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 114.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-13",
+      "measured_at": "2026-10-20T00:00:00+00:00",
+      "original_value": 6.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 120.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-13",
+      "measured_at": "2026-10-25T00:00:00+00:00",
+      "original_value": 82,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 82.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-13",
+      "measured_at": "2026-11-02T00:00:00+00:00",
+      "original_value": 6.2,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 112.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-14",
+      "measured_at": "2026-08-18T00:00:00+00:00",
+      "original_value": 130,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 130.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-14",
+      "measured_at": "2026-08-23T00:00:00+00:00",
+      "original_value": 7.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 134.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-14",
+      "measured_at": "2026-08-29T00:00:00+00:00",
+      "original_value": 145,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 145.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-14",
+      "measured_at": "2026-09-07T00:00:00+00:00",
+      "original_value": 5.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 106.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-14",
+      "measured_at": "2026-09-13T00:00:00+00:00",
+      "original_value": 139,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 139.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-14",
+      "measured_at": "2026-09-22T00:00:00+00:00",
+      "original_value": 6.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 121.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-14",
+      "measured_at": "2026-09-27T00:00:00+00:00",
+      "original_value": 136,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 136.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-14",
+      "measured_at": "2026-10-05T00:00:00+00:00",
+      "original_value": 5.6,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 101.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-14",
+      "measured_at": "2026-10-12T00:00:00+00:00",
+      "original_value": 103,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 103.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-14",
+      "measured_at": "2026-10-19T00:00:00+00:00",
+      "original_value": 6.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 124.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-14",
+      "measured_at": "2026-10-27T00:00:00+00:00",
+      "original_value": 109,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 109.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-14",
+      "measured_at": "2026-10-31T00:00:00+00:00",
+      "original_value": 6.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 115.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-15",
+      "measured_at": "2026-08-18T00:00:00+00:00",
+      "original_value": 103,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 103.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-15",
+      "measured_at": "2026-08-25T00:00:00+00:00",
+      "original_value": 5.2,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 94.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-15",
+      "measured_at": "2026-08-30T00:00:00+00:00",
+      "original_value": 110,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 110.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-15",
+      "measured_at": "2026-09-06T00:00:00+00:00",
+      "original_value": 5.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 107.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-15",
+      "measured_at": "2026-09-12T00:00:00+00:00",
+      "original_value": 81,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 81.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-15",
+      "measured_at": "2026-09-21T00:00:00+00:00",
+      "original_value": 6.3,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 113.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-15",
+      "measured_at": "2026-09-27T00:00:00+00:00",
+      "original_value": 104,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 104.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-15",
+      "measured_at": "2026-10-03T00:00:00+00:00",
+      "original_value": 4.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 86.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-15",
+      "measured_at": "2026-10-10T00:00:00+00:00",
+      "original_value": 114,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 114.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-15",
+      "measured_at": "2026-10-18T00:00:00+00:00",
+      "original_value": 6.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 121.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-15",
+      "measured_at": "2026-10-26T00:00:00+00:00",
+      "original_value": 116,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 116.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-15",
+      "measured_at": "2026-11-02T00:00:00+00:00",
+      "original_value": 4.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 88.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-16",
+      "measured_at": "2026-08-17T00:00:00+00:00",
+      "original_value": 113,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 113.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-16",
+      "measured_at": "2026-08-24T00:00:00+00:00",
+      "original_value": 5.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 102.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-16",
+      "measured_at": "2026-08-31T00:00:00+00:00",
+      "original_value": 128,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 128.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-16",
+      "measured_at": "2026-09-05T00:00:00+00:00",
+      "original_value": 6.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 122.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-16",
+      "measured_at": "2026-09-13T00:00:00+00:00",
+      "original_value": 116,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 116.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-16",
+      "measured_at": "2026-09-19T00:00:00+00:00",
+      "original_value": 7.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 139.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-16",
+      "measured_at": "2026-09-26T00:00:00+00:00",
+      "original_value": 118,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 118.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-16",
+      "measured_at": "2026-10-06T00:00:00+00:00",
+      "original_value": 5.5,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 100.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-16",
+      "measured_at": "2026-10-10T00:00:00+00:00",
+      "original_value": 113,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 113.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-16",
+      "measured_at": "2026-10-17T00:00:00+00:00",
+      "original_value": 5.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 104.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-16",
+      "measured_at": "2026-10-24T00:00:00+00:00",
+      "original_value": 135,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 135.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-16",
+      "measured_at": "2026-10-31T00:00:00+00:00",
+      "original_value": 7.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 142.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-17",
+      "measured_at": "2026-08-17T00:00:00+00:00",
+      "original_value": 90,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 90.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-17",
+      "measured_at": "2026-08-22T00:00:00+00:00",
+      "original_value": 4.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 86.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-17",
+      "measured_at": "2026-08-31T00:00:00+00:00",
+      "original_value": 104,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 104.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-17",
+      "measured_at": "2026-09-08T00:00:00+00:00",
+      "original_value": 7.1,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 128.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-17",
+      "measured_at": "2026-09-15T00:00:00+00:00",
+      "original_value": 116,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 116.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-17",
+      "measured_at": "2026-09-19T00:00:00+00:00",
+      "original_value": 6.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 116.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-17",
+      "measured_at": "2026-09-27T00:00:00+00:00",
+      "original_value": 95,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 95.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-17",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "original_value": 7.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 127.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-17",
+      "measured_at": "2026-10-12T00:00:00+00:00",
+      "original_value": 118,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 118.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-17",
+      "measured_at": "2026-10-20T00:00:00+00:00",
+      "original_value": 5.1,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 91.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-17",
+      "measured_at": "2026-10-25T00:00:00+00:00",
+      "original_value": 126,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 126.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-17",
+      "measured_at": "2026-11-03T00:00:00+00:00",
+      "original_value": 5.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 105.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-18",
+      "measured_at": "2026-08-16T00:00:00+00:00",
+      "original_value": 98,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 98.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-18",
+      "measured_at": "2026-08-24T00:00:00+00:00",
+      "original_value": 5.3,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 96.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-18",
+      "measured_at": "2026-08-31T00:00:00+00:00",
+      "original_value": 110,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 110.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-18",
+      "measured_at": "2026-09-05T00:00:00+00:00",
+      "original_value": 5.6,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 101.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-18",
+      "measured_at": "2026-09-15T00:00:00+00:00",
+      "original_value": 85,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 85.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-18",
+      "measured_at": "2026-09-21T00:00:00+00:00",
+      "original_value": 4.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 89.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-18",
+      "measured_at": "2026-09-26T00:00:00+00:00",
+      "original_value": 82,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 82.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-18",
+      "measured_at": "2026-10-05T00:00:00+00:00",
+      "original_value": 6.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 120.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-18",
+      "measured_at": "2026-10-13T00:00:00+00:00",
+      "original_value": 106,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 106.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-18",
+      "measured_at": "2026-10-19T00:00:00+00:00",
+      "original_value": 4.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 88.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-18",
+      "measured_at": "2026-10-25T00:00:00+00:00",
+      "original_value": 119,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 119.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-18",
+      "measured_at": "2026-11-02T00:00:00+00:00",
+      "original_value": 6.2,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 112.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-19",
+      "measured_at": "2026-08-15T00:00:00+00:00",
+      "original_value": 111,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 111.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-19",
+      "measured_at": "2026-08-24T00:00:00+00:00",
+      "original_value": 6.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 120.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-19",
+      "measured_at": "2026-08-30T00:00:00+00:00",
+      "original_value": 120,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 120.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-19",
+      "measured_at": "2026-09-08T00:00:00+00:00",
+      "original_value": 7.3,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 131.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-19",
+      "measured_at": "2026-09-13T00:00:00+00:00",
+      "original_value": 122,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 122.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-19",
+      "measured_at": "2026-09-22T00:00:00+00:00",
+      "original_value": 6.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 125.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-19",
+      "measured_at": "2026-09-26T00:00:00+00:00",
+      "original_value": 121,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 121.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-19",
+      "measured_at": "2026-10-05T00:00:00+00:00",
+      "original_value": 6.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 121.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-19",
+      "measured_at": "2026-10-13T00:00:00+00:00",
+      "original_value": 132,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 132.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-19",
+      "measured_at": "2026-10-20T00:00:00+00:00",
+      "original_value": 7.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 140.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-19",
+      "measured_at": "2026-10-26T00:00:00+00:00",
+      "original_value": 121,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 121.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-19",
+      "measured_at": "2026-11-03T00:00:00+00:00",
+      "original_value": 7.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 127.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-20",
+      "measured_at": "2026-08-17T00:00:00+00:00",
+      "original_value": 84,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 84.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-20",
+      "measured_at": "2026-08-24T00:00:00+00:00",
+      "original_value": 6.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 109.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-20",
+      "measured_at": "2026-08-30T00:00:00+00:00",
+      "original_value": 122,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 122.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-20",
+      "measured_at": "2026-09-06T00:00:00+00:00",
+      "original_value": 5.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 90.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-20",
+      "measured_at": "2026-09-14T00:00:00+00:00",
+      "original_value": 90,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 90.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-20",
+      "measured_at": "2026-09-22T00:00:00+00:00",
+      "original_value": 5.3,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 96.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-20",
+      "measured_at": "2026-09-28T00:00:00+00:00",
+      "original_value": 87,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 87.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-20",
+      "measured_at": "2026-10-06T00:00:00+00:00",
+      "original_value": 6.1,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 110.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-20",
+      "measured_at": "2026-10-10T00:00:00+00:00",
+      "original_value": 113,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 113.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-20",
+      "measured_at": "2026-10-20T00:00:00+00:00",
+      "original_value": 5.6,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 101.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-20",
+      "measured_at": "2026-10-26T00:00:00+00:00",
+      "original_value": 124,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 124.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-20",
+      "measured_at": "2026-11-02T00:00:00+00:00",
+      "original_value": 6.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 125.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-21",
+      "measured_at": "2026-08-15T00:00:00+00:00",
+      "original_value": 128,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 128.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-21",
+      "measured_at": "2026-08-23T00:00:00+00:00",
+      "original_value": 6.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 116.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-21",
+      "measured_at": "2026-08-29T00:00:00+00:00",
+      "original_value": 142,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 142.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-21",
+      "measured_at": "2026-09-08T00:00:00+00:00",
+      "original_value": 6.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 124.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-21",
+      "measured_at": "2026-09-15T00:00:00+00:00",
+      "original_value": 104,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 104.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-21",
+      "measured_at": "2026-09-21T00:00:00+00:00",
+      "original_value": 6.5,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 118.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-21",
+      "measured_at": "2026-09-29T00:00:00+00:00",
+      "original_value": 140,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 140.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-21",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "original_value": 7.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 139.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-21",
+      "measured_at": "2026-10-13T00:00:00+00:00",
+      "original_value": 114,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 114.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-21",
+      "measured_at": "2026-10-19T00:00:00+00:00",
+      "original_value": 6.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 121.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-21",
+      "measured_at": "2026-10-26T00:00:00+00:00",
+      "original_value": 117,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 117.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-21",
+      "measured_at": "2026-11-03T00:00:00+00:00",
+      "original_value": 5.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 102.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-22",
+      "measured_at": "2026-08-15T00:00:00+00:00",
+      "original_value": 87,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 87.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-22",
+      "measured_at": "2026-08-22T00:00:00+00:00",
+      "original_value": 6.3,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 114.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-22",
+      "measured_at": "2026-09-01T00:00:00+00:00",
+      "original_value": 93,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 93.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-22",
+      "measured_at": "2026-09-06T00:00:00+00:00",
+      "original_value": 6.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 125.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-22",
+      "measured_at": "2026-09-14T00:00:00+00:00",
+      "original_value": 124,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 124.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-22",
+      "measured_at": "2026-09-21T00:00:00+00:00",
+      "original_value": 4.7,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 85.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-22",
+      "measured_at": "2026-09-26T00:00:00+00:00",
+      "original_value": 108,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 108.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-22",
+      "measured_at": "2026-10-05T00:00:00+00:00",
+      "original_value": 7.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 126.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-22",
+      "measured_at": "2026-10-13T00:00:00+00:00",
+      "original_value": 85,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 85.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-22",
+      "measured_at": "2026-10-17T00:00:00+00:00",
+      "original_value": 6.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 123.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-22",
+      "measured_at": "2026-10-27T00:00:00+00:00",
+      "original_value": 84,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 84.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-22",
+      "measured_at": "2026-11-02T00:00:00+00:00",
+      "original_value": 4.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 86.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-23",
+      "measured_at": "2026-08-15T00:00:00+00:00",
+      "original_value": 118,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 118.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-23",
+      "measured_at": "2026-08-23T00:00:00+00:00",
+      "original_value": 7.3,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 132.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-23",
+      "measured_at": "2026-08-31T00:00:00+00:00",
+      "original_value": 128,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 128.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-23",
+      "measured_at": "2026-09-05T00:00:00+00:00",
+      "original_value": 7.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 133.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-23",
+      "measured_at": "2026-09-12T00:00:00+00:00",
+      "original_value": 135,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 135.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-23",
+      "measured_at": "2026-09-20T00:00:00+00:00",
+      "original_value": 7.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 140.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-23",
+      "measured_at": "2026-09-26T00:00:00+00:00",
+      "original_value": 114,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 114.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-23",
+      "measured_at": "2026-10-06T00:00:00+00:00",
+      "original_value": 7.5,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 135.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-23",
+      "measured_at": "2026-10-10T00:00:00+00:00",
+      "original_value": 116,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 116.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-23",
+      "measured_at": "2026-10-19T00:00:00+00:00",
+      "original_value": 7.8,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 141.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-23",
+      "measured_at": "2026-10-24T00:00:00+00:00",
+      "original_value": 139,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 139.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-23",
+      "measured_at": "2026-11-03T00:00:00+00:00",
+      "original_value": 6.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 116.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-24",
+      "measured_at": "2026-08-18T00:00:00+00:00",
+      "original_value": 99,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 99.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-24",
+      "measured_at": "2026-08-22T00:00:00+00:00",
+      "original_value": 5.3,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 95.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-24",
+      "measured_at": "2026-08-29T00:00:00+00:00",
+      "original_value": 98,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 98.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-24",
+      "measured_at": "2026-09-06T00:00:00+00:00",
+      "original_value": 6.4,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 115.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-24",
+      "measured_at": "2026-09-15T00:00:00+00:00",
+      "original_value": 111,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 111.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-24",
+      "measured_at": "2026-09-21T00:00:00+00:00",
+      "original_value": 6.0,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 109.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-24",
+      "measured_at": "2026-09-28T00:00:00+00:00",
+      "original_value": 125,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 125.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-24",
+      "measured_at": "2026-10-06T00:00:00+00:00",
+      "original_value": 6.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 125.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-24",
+      "measured_at": "2026-10-11T00:00:00+00:00",
+      "original_value": 126,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 126.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-24",
+      "measured_at": "2026-10-19T00:00:00+00:00",
+      "original_value": 5.9,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 106.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-24",
+      "measured_at": "2026-10-24T00:00:00+00:00",
+      "original_value": 120,
+      "original_unit": "mg/dL",
+      "glucose_mg_dl": 120.0,
+      "measurement_type": "fasting",
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-24",
+      "measured_at": "2026-11-03T00:00:00+00:00",
+      "original_value": 6.3,
+      "original_unit": "mmol/L",
+      "glucose_mg_dl": 113.0,
+      "measurement_type": "random",
+      "source_type": "synthetic"
+    }
+  ],
+  "labs": [
+    {
+      "profile_id": "DEMO-03",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "test_type": "HbA1c",
+      "original_value": 7.2,
+      "original_unit": "%",
+      "normalized_value_mg_dl": null,
+      "fasting_confirmed": null,
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-05",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "test_type": "HbA1c",
+      "original_value": 7.3,
+      "original_unit": "%",
+      "normalized_value_mg_dl": null,
+      "fasting_confirmed": null,
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-08",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "test_type": "HbA1c",
+      "original_value": 6.7,
+      "original_unit": "%",
+      "normalized_value_mg_dl": null,
+      "fasting_confirmed": null,
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-10",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "test_type": "HbA1c",
+      "original_value": 7.0,
+      "original_unit": "%",
+      "normalized_value_mg_dl": null,
+      "fasting_confirmed": null,
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-12",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "test_type": "HbA1c",
+      "original_value": 7.0,
+      "original_unit": "%",
+      "normalized_value_mg_dl": null,
+      "fasting_confirmed": null,
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-14",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "test_type": "HbA1c",
+      "original_value": 6.9,
+      "original_unit": "%",
+      "normalized_value_mg_dl": null,
+      "fasting_confirmed": null,
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-16",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "test_type": "HbA1c",
+      "original_value": 7.1,
+      "original_unit": "%",
+      "normalized_value_mg_dl": null,
+      "fasting_confirmed": null,
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-19",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "test_type": "HbA1c",
+      "original_value": 7.7,
+      "original_unit": "%",
+      "normalized_value_mg_dl": null,
+      "fasting_confirmed": null,
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-21",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "test_type": "HbA1c",
+      "original_value": 7.9,
+      "original_unit": "%",
+      "normalized_value_mg_dl": null,
+      "fasting_confirmed": null,
+      "source_type": "synthetic"
+    },
+    {
+      "profile_id": "DEMO-23",
+      "measured_at": "2026-10-04T00:00:00+00:00",
+      "test_type": "HbA1c",
+      "original_value": 6.8,
+      "original_unit": "%",
+      "normalized_value_mg_dl": null,
+      "fasting_confirmed": null,
+      "source_type": "synthetic"
+    }
+  ],
+  "fingerprint_sha256": "911f866dd3544ea022f13233ba8743b83960447992791bb5857736b8dbea9188"
+}
