@@ -31,6 +31,7 @@ FALLBACK_EXCERPT_MAX_CHARS = 400
 _FALLBACK_SENTENCE_END = re.compile(r"[.!?](?:[\"'”’)\]]*)?(?=\s|$)")
 _SCORE_TABLE_HINT = re.compile(r"\b(?:diem|score)\b")
 _HEADING_FRAGMENT = re.compile(r"(?:\d+(?:\.\d+)*|[A-Z])[.)]?", re.IGNORECASE)
+_LIST_MARKER_FRAGMENT = re.compile(r":\s*[a-z]\.$", re.IGNORECASE)
 
 MEDICATION_REFUSAL_MESSAGE = (
     "Mình không thể tư vấn tăng, giảm, ngừng hoặc thay liều insulin/thuốc. "
@@ -369,7 +370,12 @@ def _best_fallback_excerpt(items: list[dict[str, Any]]) -> tuple[dict[str, Any] 
             sentence = segment.strip()
             sentence_start = segment_start + leading_space
             segment_start = boundary.end()
-            if not sentence or _HEADING_FRAGMENT.fullmatch(sentence):
+            if (
+                not sentence
+                or _HEADING_FRAGMENT.fullmatch(sentence)
+                or any(_HEADING_FRAGMENT.fullmatch(line.strip()) for line in sentence.splitlines()[1:])
+                or _LIST_MARKER_FRAGMENT.search(sentence)
+            ):
                 continue
             candidate_start = sentence_start if selected_start is None else selected_start
             candidate = excerpt[candidate_start:boundary.end()].strip()

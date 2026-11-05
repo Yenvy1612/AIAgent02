@@ -150,6 +150,18 @@ def test_deterministic_kb_fallback_reports_insufficient_when_only_headings_or_ta
     assert result["status"] == "DEGRADED"
 
 
+def test_deterministic_kb_fallback_rejects_incomplete_list_heading():
+    evidence = _evidence(excerpt="Các phương pháp điều trị\n4.3.1.\nThay đổi lối sống: a.")
+    result = _compose_node({
+        "message": "Ăn gì tốt cho người tiểu đường?", "safety": {"level": "NORMAL"},
+        "results": {"search_kb": {"status": "OK", "evidence": [evidence]}},
+    })
+
+    assert "Không đủ thông tin" in result["deterministic_answer"]
+    assert result["citations"] == []
+    assert result["status"] == "DEGRADED"
+
+
 def test_model_insufficient_evidence_uses_deterministic_fallback_and_source_citation(monkeypatch):
     monkeypatch.setenv("DIACARE_LLM_ENABLED", "true")
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
