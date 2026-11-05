@@ -7,6 +7,7 @@ from langgraph.graph import END, START, StateGraph
 
 from app.agent.state import AgentState
 from app.agent.fusion import structured_fusion
+from app.agent.guidance import INSUFFICIENT_EVIDENCE_MESSAGE, classify_guidance, guidance_message
 from app.agent.tools import (
     calculate_bmi, classify_lab, predict_risk, profile_features,
     search_kb, search_web, tool_get_history,
@@ -124,6 +125,8 @@ def _safety_route(state: AgentState) -> str:
         return "refusal"
     if state["safety"]["level"] == "UNIT_AMBIGUOUS":
         return "unit_clarification"
+    if classify_guidance(state["message"]):
+        return "guidance"
     return "continue"
 
 
@@ -134,6 +137,21 @@ def _emergency_node(state: AgentState) -> dict[str, Any]:
         "status": "EMERGENCY",
         "tool_calls": [], "evidence": [], "citations": [],
         "trace": state.get("trace", []) + [{"step": "agent_bypass", "status": "EMERGENCY_RESPONSE_SENT"}],
+    }
+
+
+def _guidance_node(state: AgentState) -> dict[str, Any]:
+    kind = classify_guidance(state["message"]) or "usage"
+    return {
+        **structured_fusion(
+            safety_level=state["safety"]["level"],
+            profile_type="synthetic" if state.get("profile_id") else None,
+        ),
+        "answer": guidance_message(kind, has_profile=bool(state.get("profile_id"))),
+        "status": "NEED_CLARIFICATION" if kind == "lab_input" else "OK",
+        "answer_mode": "deterministic",
+        "tool_calls": [], "evidence": [], "citations": [],
+        "trace": state.get("trace", []) + [{"step": "guidance", "status": kind.upper()}],
     }
 
 
@@ -401,6 +419,9 @@ def _compose_node(state: AgentState) -> dict[str, Any]:
                     parts.append(f"SHAP contributions (model output only): {summary}. Contributions do not show causation.")
                 else:
                     parts.append("SHAP giải thích hiện chưa sẵn sàng; cần cài SHAP cùng với artifact mô hình.")
+        elif risk.get("status") == "PROFILE_REQUIRED":
+            parts.append("Hãy chọn một hồ sơ mô phỏng để xem kết quả mô hình nghiên cứu.")
+            status = "DEGRADED"
         else:
             parts.append("Mô hình nghiên cứu hiện chưa sẵn sàng: chưa có dữ liệu CSV được rà soát và mô hình huấn luyện. Không tạo score thay thế.")
             status = "DEGRADED"
@@ -431,7 +452,7 @@ def _compose_node(state: AgentState) -> dict[str, Any]:
             status = "WEB_UNVERIFIED"
         else:
             if "classify_lab" not in results:
-                parts.append("Không đủ thông tin đáng tin cậy đã được duyệt trong Knowledge Base để trả lời câu hỏi này.")
+                parts.append(INSUFFICIENT_EVIDENCE_MESSAGE)
                 status = "DEGRADED"
     if not parts:
         parts.append("Chọn một hồ sơ mô phỏng hoặc đặt câu hỏi cụ thể về BMI, xét nghiệm, lịch sử đo hay kiến thức đã có nguồn.")
@@ -577,7 +598,7 @@ def _llm_composer_node(state: AgentState) -> dict[str, Any]:
                         "trace": state.get("trace", []) + [llm_trace],
                     }
             if reason == "MODEL_INSUFFICIENT_EVIDENCE":
-                insufficient = "Không đủ thông tin đáng tin cậy đã được duyệt trong Knowledge Base để trả lời câu hỏi này."
+                insufficient = INSUFFICIENT_EVIDENCE_MESSAGE
                 answer_parts = [*state.get("fact_parts", []), insufficient, *state.get("note_parts", [])]
                 status = "DEGRADED"
                 answer = "\n\n".join(part for part in answer_parts if part)
@@ -632,6 +653,7 @@ def _build_graph():
     workflow.add_node("safety_uncertain", _safety_uncertain_node)
     workflow.add_node("medication_refusal", _refusal_node)
     workflow.add_node("unit_clarification", _unit_clarification_node)
+    workflow.add_node("guidance", _guidance_node)
     workflow.add_node("intent_router", _route_node)
     workflow.add_node("tools", _execute_tools_node)
     workflow.add_node("fusion", _compose_node)
@@ -640,12 +662,13 @@ def _build_graph():
     workflow.add_edge(START, "safety_gate")
     workflow.add_conditional_edges("safety_gate", _safety_route, {
         "emergency": "emergency_response", "uncertain": "safety_uncertain", "refusal": "medication_refusal",
-        "unit_clarification": "unit_clarification", "continue": "intent_router",
+        "unit_clarification": "unit_clarification", "guidance": "guidance", "continue": "intent_router",
     })
     workflow.add_edge("emergency_response", END)
     workflow.add_edge("safety_uncertain", "output_validator")
     workflow.add_edge("medication_refusal", "output_validator")
     workflow.add_edge("unit_clarification", "output_validator")
+    workflow.add_edge("guidance", "output_validator")
     workflow.add_edge("intent_router", "tools")
     workflow.add_edge("tools", "fusion")
     workflow.add_edge("fusion", "llm_composer")

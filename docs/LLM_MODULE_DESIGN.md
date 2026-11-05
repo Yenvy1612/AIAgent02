@@ -97,6 +97,7 @@ Lưu ý: các câu nhắc đến thuốc hoặc liều dùng đã được lư�
 | Safety level `EMERGENCY`, `UNKNOWN`, `CLINICAL_REVIEW`, `UNIT_AMBIGUOUS` | Không | Graph đã rẽ nhánh trước `fusion` |
 | `medication_request(message)` đúng, kể cả câu hỏi về kháng sinh hoặc glucagon | Không | `_compose_node` đã trả từ chối |
 | Status `NEED_CLARIFICATION` | Không | Câu hỏi lại do code viết |
+| Chào hỏi, cảm ơn, hỏi cách dùng, hoặc xin diễn giải xét nghiệm mà chưa có số | Không | Node `guidance` trả câu cố định sau Safety Gate ([guidance.py](../backend/app/agent/guidance.py)) |
 | Không có evidence đã duyệt, hoặc `_evidence_without_doses` lọc hết evidence | Không | Trả thông báo không đủ thông tin |
 | Chỉ có BMI, lịch sử hoặc score, không có evidence | Không | Fact lines đã đủ |
 | Chỉ `search_kb` có evidence | **Có** | Trường hợp chính |
