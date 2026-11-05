@@ -29,9 +29,8 @@ def _citation(cited_text):
 
 
 def test_combined_lab_and_kb_uses_masked_question_and_preserves_fact_lines(monkeypatch):
-    monkeypatch.setenv("DIACARE_LLM_ENABLED", "true")
-    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
     evidence = _evidence()
+    question = "HbA1c 6.2% phản ánh điều gì? DEMO-03"
     cited_text = evidence["excerpt"]
     response_body = SimpleNamespace(
         stop_reason="end_turn",
@@ -48,12 +47,18 @@ def test_combined_lab_and_kb_uses_masked_question_and_preserves_fact_lines(monke
             "stop_reason": "end_turn",
         }
 
-    with patch("app.agent.graph.search_kb", return_value={"status": "OK", "evidence": [evidence]}), \
-         patch("app.llm.composer.create_message", side_effect=fake_create_message):
-        response = run_agent("HbA1c 6.2% phản ánh điều gì? DEMO-03", None, None)
+    with patch("app.agent.graph.search_kb", return_value={"status": "OK", "evidence": [evidence]}):
+        monkeypatch.setenv("DIACARE_LLM_ENABLED", "false")
+        deterministic = run_agent(question, None, None)
+        expected_fact_lines = deterministic["answer"].rsplit("\n\n", 1)[0]
+
+        monkeypatch.setenv("DIACARE_LLM_ENABLED", "true")
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+        with patch("app.llm.composer.create_message", side_effect=fake_create_message):
+            response = run_agent(question, None, None)
 
     assert response["answer_mode"] == "llm_cited"
-    assert response["answer"].startswith("HbA1c 6.2%:")
+    assert response["answer"].startswith(expected_fact_lines + "\n\n")
     assert "[C1]" in response["answer"]
     assert response["citations"]
     assert response["trace"][-2]["step"] == "llm_composer"

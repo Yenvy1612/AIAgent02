@@ -1,7 +1,7 @@
 # DiaCare AI evaluation report
 
 Status: **partially measured**. The baseline suite had 16 passing tests; the
-current suite has **165 passing tests, 2 skipped**. Frontend production build passed, and
+current suite has **166 passing tests, 2 skipped**. Frontend production build passed, and
 the rebuilt local Compose stack is healthy with the research model available.
 Curated regression sets do not establish clinical safety or represent real
 user traffic.
@@ -60,7 +60,7 @@ independently reviewed.
 | Ingest | `python scripts/verify_kb_sources.py` reports 41 sources in the manifest, 16 eligible and 25 blocked. `data/kb/index.json` holds 665 approved chunks. |
 | Agent | Exact tool-list accuracy **8/8 (1.00)**; all **8/8** nonempty graph answers included a trace; max five-tool cap passed. This curated evaluator is not representative of production traffic. See `evaluation/agent/tool_selection_report.json`. |
 | Safety | Curated set: tier-two recall **10/10**, specificity **10/10**, combined gate recall **10/10**. **7/7** emergency cases returned 115 with injected retrieval, composer, and classifier failures; retrieval/composer were not called. Tier two was not invoked in 4/7; in the remaining 3/7 it had started before tier one and its result was ignored after cancellation was requested. **6/6** medication cases used the fixed refusal; final answer dose/regimen guard passed **23/23**. Curated, not clinically representative. See `evaluation/safety/safety_report.json`. |
-| LLM composition | Module, citation validators, mocked SDK, prompt-injection, dose-guard, and privacy coverage implemented; full test suite **165 passed, 2 skipped**. The evaluator preview contains 7 eligible cases and 14 planned API calls across two models; expected cost **$0.567**, output-budget ceiling **$3.612**. Real model quality and manual review: **NOT_MEASURED**. No API calls were sent; local retrieval reports `VECTOR_STORE_NOT_CONFIGURED`. See `scripts/evaluate_llm.py` and `evaluation/llm/cases.json`. |
+| LLM composition | Module, citation validators, mocked SDK, prompt-injection, dose-guard, privacy, health, and deterministic-fallback coverage implemented; full test suite **166 passed, 2 skipped**. The evaluator preview contains 7 eligible cases and 14 planned API calls across two models; expected cost **$0.567**, output-budget ceiling **$3.612**. Real model quality and manual review: **NOT_MEASURED**. No API calls were sent; local retrieval reports `VECTOR_STORE_NOT_CONFIGURED`. See `scripts/evaluate_llm.py` and `evaluation/llm/cases.json`. |
 | Units | **6/6** curated conversion, missing-unit clarification, and routing cases passed. See `evaluation/units/unit_report.json`. |
 | Latency | Retrieval on a GTX 1650, 9 in-scope API queries after model load: median **4.6 s**, max **4.9 s**; the first call took 27.3 s. CPU, with the settings used before tuning: about 34 s. p95, ML, and full-agent latency: **NOT_MEASURED**. |
 | Clinical validation | **NOT_MEASURED**; model metadata sets `clinical_validation=false`. |

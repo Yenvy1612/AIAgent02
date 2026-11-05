@@ -10,6 +10,7 @@ sys.path.insert(0, str(ROOT / "backend"))
 
 from app.agent.fusion import structured_fusion  # noqa: E402
 from app.agent.graph import _llm_composer_node, run_agent  # noqa: E402
+from app.api import routes as api_routes  # noqa: E402
 from app.llm.client import _system_prompt, create_message  # noqa: E402
 from app.llm.composer import compose_answer  # noqa: E402
 from app.llm.config import LLMConfig, get_config  # noqa: E402
@@ -196,6 +197,21 @@ def test_invalid_llm_configuration_disables_composer(monkeypatch):
     assert config.configured is False
     assert "INVALID_DIACARE_ANTHROPIC_MODEL" in config.errors
 
+    with (
+        patch("app.api.routes.list_profiles", return_value=[]),
+        patch("app.api.routes.risk_model.health", return_value={}),
+        patch("app.api.routes.knowledge_base.health", return_value={}),
+        patch("app.api.routes.web_search_health", return_value={}),
+        patch("app.api.routes.synthetic_data_fingerprint", return_value="test-fingerprint"),
+    ):
+        health = api_routes.health(db=object())
+    composer_health = health["answer_composer"]
+    assert composer_health["configured"] is False
+    assert composer_health["enabled"] is False
+    assert composer_health["provider"] == "disabled"
+    assert "INVALID_DIACARE_ANTHROPIC_MODEL" in composer_health["config_errors"]
+    assert "test-key" not in str(composer_health)
+
 
 def test_validator_accepts_citation_and_normalizes_comma_decimal():
     evidence = _evidence(excerpt="HbA1c phản ánh mức glucose trung bình trong thời gian dài. Ví dụ 6.5%.")
@@ -258,6 +274,29 @@ def test_compose_answer_falls_back_on_client_failure(monkeypatch):
     assert result["ok"] is False
     assert result["reason"] == "UNAVAILABLE"
     assert "Câu hỏi" not in str(result)
+
+
+def test_llm_failure_falls_back_to_exact_deterministic_answer(monkeypatch):
+    evidence = _evidence(excerpt="Approved excerpt.")
+    question = "HbA1c là gì?"
+    with patch("app.agent.graph.search_kb", return_value={"status": "OK", "evidence": [evidence]}):
+        monkeypatch.setenv("DIACARE_LLM_ENABLED", "false")
+        monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+        deterministic = run_agent(question, None, None)
+
+        monkeypatch.setenv("DIACARE_LLM_ENABLED", "true")
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+        with patch("app.agent.graph.compose_answer", return_value={
+            "ok": False, "reason": "UNAVAILABLE", "answer": "",
+        }) as compose:
+            fallback = run_agent(question, None, None)
+
+    compose.assert_called_once()
+    assert fallback["answer"] == deterministic["answer"]
+    assert fallback["answer_mode"] == "deterministic"
+    llm_trace = next(step for step in fallback["trace"] if step.get("step") == "llm_composer")
+    assert llm_trace["reason"] == "UNAVAILABLE"
+    assert "test-key" not in str(fallback["trace"])
 
 
 def test_anthropic_sdk_payload_uses_citations_effort_and_server_fallback():
