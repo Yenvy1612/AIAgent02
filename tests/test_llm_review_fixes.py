@@ -74,10 +74,30 @@ def _sdk_client(response=None, error=None, captured=None):
     ("A1C tôi đo được hôm qua là 7,2", "7,2"),
     ("HBA1C 6,5 %", "6,5"),
     (unicodedata.normalize("NFD", "đường huyết 130 mg/dL"), "130"),
+    ("duong huyet 130mg/dL", "130"),
+    ("tôi đo được 126mg/dl", "126"),
+    ("126mg/dL có cao không", "126"),
+    ("7,2mmol/L thì sao", "7,2"),
+    ("hba1c6.5", "6.5"),
+    ("đường của tôi 130", "130"),
+    ("đường lúc đói 130", "130"),
+    ("sáng nay đo ra 180", "180"),
+    ("tiểu đường 180 có nguy hiểm không", "180"),
+    ("kết quả xét nghiệm của tôi là 7,2", "7,2"),
 ])
 def test_mask_question_redacts_all_review_measurements(question, reading):
     masked = mask_question(question)["question"]
     assert reading not in masked, masked
+
+
+@pytest.mark.parametrize(("question", "expected_digits"), [
+    ("Đái tháo đường típ 2 là gì?", ["2"]),
+    ("Đái tháo đường type 2 khác type 1 thế nào?", ["2", "1"]),
+    ("Vì sao tiểu đường típ 2 cần đo HbA1c?", ["2", "1"]),
+])
+def test_mask_question_keeps_only_type_and_analyte_digits(question, expected_digits):
+    masked = mask_question(question)["question"]
+    assert re.findall(r"\d+", masked) == expected_digits
 
 
 def test_mask_question_preserves_type_two_when_no_measurement_is_present():
@@ -105,6 +125,31 @@ def test_run_agent_sdk_payload_masks_unaccented_fasting_glucose(monkeypatch):
         patch("app.llm.client.anthropic.Anthropic", side_effect=lambda **kwargs: fake_client(**kwargs)),
     ):
         response = run_agent("duong huyet luc doi 130 mg/dL", None, None)
+
+    payload = str(captured["params"]["messages"])
+    assert response["answer_mode"] == "llm_cited"
+    assert "130" not in payload
+    assert "[giá trị đã ẩn]" in payload
+
+
+def test_run_agent_sdk_payload_masks_attached_glucose_unit(monkeypatch):
+    monkeypatch.setenv("DIACARE_LLM_ENABLED", "true")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+    evidence = _evidence(excerpt="Glucose lúc đói được diễn giải theo hướng dẫn đã duyệt.")
+    captured = {}
+    fake_client = _sdk_client(response=_sdk_response(evidence["excerpt"]), captured=captured)
+    classifier_result = {
+        "status": "OK", "original_value": 130, "original_unit": "mg/dL",
+        "normalized_value_mg_dl": 130, "findings": ["fasting_glucose_in_increased_risk_range_reference"],
+        "message": "Đây là kết quả tham khảo.", "threshold_version": "test-v1",
+        "reference_only": [], "citations": [],
+    }
+    with (
+        patch("app.agent.graph.search_kb", return_value={"status": "OK", "evidence": [evidence]}),
+        patch("app.agent.graph.classify_lab", return_value=classifier_result),
+        patch("app.llm.client.anthropic.Anthropic", side_effect=lambda **kwargs: fake_client(**kwargs)),
+    ):
+        response = run_agent("duong huyet luc doi 130mg/dL", None, None)
 
     payload = str(captured["params"]["messages"])
     assert response["answer_mode"] == "llm_cited"

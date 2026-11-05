@@ -160,8 +160,8 @@ workflow.add_edge("llm_composer", "output_validator")
 
 `privacy.py` xử lý theo thứ tự:
 
-1. Dùng `normalize_vi`, chung với `_parse_measurement`, để nhận diện ngữ cảnh HbA1c, glucose, đường huyết/đường máu, "chỉ số", đơn vị và cách nói "đo được". Trong ngữ cảnh đó, che các số đo để dự phòng cả cách viết không dấu, cách diễn đạt rộng và nhiều phép đo trong một câu; giữ số 2 trong "típ 2" và chữ số trong tên A1C/HbA1c.
-2. Thay số điện thoại, email, số CCCD/BHYT dạng chữ số và `DEMO-\d{2}` bằng token cố định.
+1. Sau khi che các giá trị đo và định danh dễ nhận diện, duyệt mọi chữ số trong toàn bộ câu hỏi. Che mọi số bất kể ngữ cảnh, kể cả số dính liền chữ, số thập phân, số kèm đơn vị và phần trăm. Chỉ giữ số ngay sau `type`, `typ` hoặc `típ`, và chữ số `1` trong tên `A1C`/`HbA1c`.
+2. Thay số điện thoại, email, số CCCD/BHYT dạng chữ số và `DEMO-\d{2}` bằng token cố định trước lượt che chung.
 3. Giới hạn độ dài, ghi cờ vào trace nếu có cắt.
 
 Bộ lọc này **không đảm bảo** loại hết định danh, chẳng hạn tên riêng hoặc mô tả bệnh sử. Do đó, giao diện phải tiếp tục nhắc không nhập dữ liệu bệnh nhân thật, và hệ thống vẫn chỉ dành cho demo.
