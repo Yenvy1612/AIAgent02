@@ -6,8 +6,8 @@ from typing import Any
 from langgraph.graph import END, START, StateGraph
 
 from app.agent.state import AgentState
-from app.agent.composer import compose_from_approved_evidence
 from app.agent.fusion import structured_fusion
+from app.agent.guidance import INSUFFICIENT_EVIDENCE_MESSAGE, classify_guidance, guidance_message
 from app.agent.tools import (
     calculate_bmi, classify_lab, predict_risk, profile_features,
     search_kb, search_web, tool_get_history,
@@ -15,6 +15,8 @@ from app.agent.tools import (
 from app.rag.citations import validate_citations
 from app.rag.scope import is_in_kb_scope
 from app.rag.web_search import WEB_UNVERIFIED_NOTICE, sanitize_web_query, web_search_enabled
+from app.llm.composer import compose_answer
+from app.llm.config import get_config
 from app.safety.gate import (
     EMERGENCY_MESSAGE, contains_medication_dose, evaluate_safety, medication_request, normalize_vi,
 )
@@ -123,6 +125,8 @@ def _safety_route(state: AgentState) -> str:
         return "refusal"
     if state["safety"]["level"] == "UNIT_AMBIGUOUS":
         return "unit_clarification"
+    if classify_guidance(state["message"]):
+        return "guidance"
     return "continue"
 
 
@@ -133,6 +137,21 @@ def _emergency_node(state: AgentState) -> dict[str, Any]:
         "status": "EMERGENCY",
         "tool_calls": [], "evidence": [], "citations": [],
         "trace": state.get("trace", []) + [{"step": "agent_bypass", "status": "EMERGENCY_RESPONSE_SENT"}],
+    }
+
+
+def _guidance_node(state: AgentState) -> dict[str, Any]:
+    kind = classify_guidance(state["message"]) or "usage"
+    return {
+        **structured_fusion(
+            safety_level=state["safety"]["level"],
+            profile_type="synthetic" if state.get("profile_id") else None,
+        ),
+        "answer": guidance_message(kind, has_profile=bool(state.get("profile_id"))),
+        "status": "NEED_CLARIFICATION" if kind == "lab_input" else "OK",
+        "answer_mode": "deterministic",
+        "tool_calls": [], "evidence": [], "citations": [],
+        "trace": state.get("trace", []) + [{"step": "guidance", "status": kind.upper()}],
     }
 
 
@@ -320,8 +339,6 @@ def _compose_node(state: AgentState) -> dict[str, Any]:
     reference_only: list[dict[str, Any]] = []
     rule_citations: list[dict[str, Any]] = []
     web_sources: list[dict[str, Any]] = []
-    composer_trace: dict[str, str] | None = None
-    composed_answer_added = False
     status = "OK"
     if medication_request(state["message"]):
         return _refusal_node(state)
@@ -402,6 +419,9 @@ def _compose_node(state: AgentState) -> dict[str, Any]:
                     parts.append(f"SHAP contributions (model output only): {summary}. Contributions do not show causation.")
                 else:
                     parts.append("SHAP giải thích hiện chưa sẵn sàng; cần cài SHAP cùng với artifact mô hình.")
+        elif risk.get("status") == "PROFILE_REQUIRED":
+            parts.append("Hãy chọn một hồ sơ mô phỏng để xem kết quả mô hình nghiên cứu.")
+            status = "DEGRADED"
         else:
             parts.append("Mô hình nghiên cứu hiện chưa sẵn sàng: chưa có dữ liệu CSV được rà soát và mô hình huấn luyện. Không tạo score thay thế.")
             status = "DEGRADED"
@@ -409,17 +429,8 @@ def _compose_node(state: AgentState) -> dict[str, Any]:
         search = results["search_kb"]
         evidence = _evidence_without_doses(search.get("evidence", []))
         if evidence:
-            # External composition receives approved public evidence only: never the
-            # user's message, measurements, tool results, or synthetic profile data.
-            if set(results) == {"search_kb"}:
-                composition = compose_from_approved_evidence(evidence)
-                composer_trace = {"step": "answer_composer", "status": composition["status"], "mode": composition["mode"]}
-                if composition["status"] == "OK":
-                    parts.append(composition["answer"])
-                    composed_answer_added = True
-            if not composed_answer_added:
-                for item in evidence:
-                    parts.append(item["excerpt"][:700])
+            for item in evidence[:5]:
+                parts.append(item["excerpt"][:700])
             for item in evidence:
                 amended_by = item.get("amended_by") or []
                 if item.get("amended") and amended_by:
@@ -441,7 +452,7 @@ def _compose_node(state: AgentState) -> dict[str, Any]:
             status = "WEB_UNVERIFIED"
         else:
             if "classify_lab" not in results:
-                parts.append("Không đủ thông tin đáng tin cậy đã được duyệt trong Knowledge Base để trả lời câu hỏi này.")
+                parts.append(INSUFFICIENT_EVIDENCE_MESSAGE)
                 status = "DEGRADED"
     if not parts:
         parts.append("Chọn một hồ sơ mô phỏng hoặc đặt câu hỏi cụ thể về BMI, xét nghiệm, lịch sử đo hay kiến thức đã có nguồn.")
@@ -451,9 +462,34 @@ def _compose_node(state: AgentState) -> dict[str, Any]:
         for item in evidence
         if item.get("review_status") == "approved" and item.get("license_status") == "approved"
     ]
-    trace = state.get("trace", []) + ([composer_trace] if composer_trace else []) + [{"step": "fusion", "status": status}]
+    fact_parts = parts[:]
+    note_parts: list[str] = []
+    # Keep KB extracts in the deterministic answer, while exposing facts and notes
+    # separately so the optional composer can add only a cited explanation.
+    if "search_kb" in results and evidence:
+        extract_count = min(5, len(evidence))
+        fact_parts = parts[:-extract_count]
+        for item in evidence:
+            if item.get("amended") and item.get("amended_by"):
+                names = ", ".join(
+                    "Quyết định 1353/QĐ-BYT" if code == "KB-01A" else str(code)
+                    for code in (item.get("amended_by") or [])
+                )
+                note_parts.append(
+                    f"Lưu ý: đoạn trích thuộc phần đã được sửa đổi bởi {names}; "
+                    "cần đối chiếu văn bản sửa đổi trước khi áp dụng."
+                )
+        if any(item.get("excerpt_redacted") for item in evidence):
+            note_parts.append(REDACTION_NOTICE)
+        # The amendments and redaction notice already occur at the end of parts.
+        if note_parts:
+            fact_parts = parts[:len(parts) - len(note_parts) - extract_count]
+    trace = state.get("trace", []) + [{"step": "fusion", "status": status}]
+    deterministic_answer = "\n\n".join(parts)
     return {
-        "answer": "\n\n".join(parts), "evidence": evidence, "citations": citations,
+        "answer": deterministic_answer, "deterministic_answer": deterministic_answer,
+        "fact_parts": fact_parts, "note_parts": note_parts, "answer_mode": "deterministic",
+        "evidence": evidence, "citations": citations,
         "reference_only": reference_only, "web_sources": web_sources, "status": status, "trace": trace,
         **structured_fusion(
             ml=results.get("predict_risk"),
@@ -462,6 +498,131 @@ def _compose_node(state: AgentState) -> dict[str, Any]:
             safety_level=state.get("safety", {}).get("level", "UNKNOWN"),
             profile_type="synthetic" if state.get("profile_id") else None,
         ),
+    }
+
+
+def _llm_composer_node(state: AgentState) -> dict[str, Any]:
+    results = state.get("results", {})
+    evidence = state.get("evidence", [])
+    config = get_config()
+    reason = "DISABLED"
+    status = state.get("status", "OK")
+    answer = state.get("deterministic_answer", state.get("answer", ""))
+    composition: dict[str, Any] = {}
+    citations = list(state.get("citations", []))
+    if config.errors:
+        reason = config.errors[0]
+    elif config.configured:
+        if state.get("status") == "NEED_CLARIFICATION":
+            reason = "NEED_CLARIFICATION"
+        elif medication_request(state.get("message", "")):
+            reason = "MEDICATION_REQUEST"
+        elif "search_kb" not in results or not evidence:
+            reason = "NO_APPROVED_EVIDENCE"
+        else:
+            try:
+                composition = compose_answer(state.get("message", ""), evidence, config=config)
+            except Exception:
+                composition = {"ok": False, "reason": "INTERNAL_ERROR"}
+            reason = str(composition.get("reason", "INTERNAL_ERROR"))
+            if composition.get("ok"):
+                fact_parts = state.get("fact_parts", [])
+                note_parts = state.get("note_parts", [])
+                rule_citations = state.get("citations", []) if "classify_lab" in results else []
+                citations = []
+                seen: set[str] = set()
+                for citation in rule_citations:
+                    valid_rule_citation = validate_citations(evidence, [citation])
+                    if valid_rule_citation and citation.get("chunk_id") not in seen:
+                        citations.append(valid_rule_citation[0])
+                        seen.add(citation.get("chunk_id"))
+
+                model_label_chunks: dict[int, str] = {}
+                for index, citation in enumerate(composition.get("citations", []), start=1):
+                    chunk_id = citation.get("chunk_id")
+                    valid_model_citation = validate_citations(evidence, [citation])
+                    if not valid_model_citation:
+                        continue
+                    if chunk_id not in seen:
+                        citations.append(valid_model_citation[0])
+                        seen.add(chunk_id)
+                    model_label_chunks[index] = str(chunk_id)
+
+                citations = validate_citations(evidence, citations)
+                citation_labels = {
+                    citation.get("chunk_id"): f"C{index}"
+                    for index, citation in enumerate(citations, start=1)
+                }
+                label_mapping = {
+                    model_label: citation_labels[chunk_id]
+                    for model_label, chunk_id in model_label_chunks.items()
+                    if chunk_id in citation_labels
+                }
+                explanation = composition["answer"]
+                unresolved_labels: set[int] = set()
+
+                def remap_label(match: re.Match[str]) -> str:
+                    label_index = int(match.group(1))
+                    label = label_mapping.get(label_index)
+                    if label is None:
+                        unresolved_labels.add(label_index)
+                        return match.group(0)
+                    return f"[{label}]"
+
+                explanation = re.sub(r"\[C(\d+)\]", remap_label, explanation)
+                if unresolved_labels:
+                    reason = "CITATION_INVALID"
+                    citations = list(state.get("citations", [])) if "classify_lab" in results else []
+                    answer = state.get("deterministic_answer", state.get("answer", ""))
+                else:
+                    citations = [
+                        {**citation, "display_label": citation_labels.get(citation.get("chunk_id"))}
+                        for citation in citations
+                    ]
+                    answer_parts = [*fact_parts, explanation, *note_parts]
+                    status = "OK"
+                    llm_trace = {
+                        "step": "llm_composer", "status": "OK", "mode": "llm_cited",
+                        "data_level": composition.get("data_level", config.data_level), "reason": "OK",
+                        "model": composition.get("model"), "latency_ms": composition.get("latency_ms"),
+                        "input_tokens": composition.get("input_tokens"), "output_tokens": composition.get("output_tokens"),
+                        "stop_reason": composition.get("stop_reason"),
+                        "question_masked": composition.get("question_masked"),
+                        "question_truncated": composition.get("question_truncated"),
+                        "api_call_attempted": bool(composition.get("request_attempted", False)),
+                    }
+                    return {
+                        "answer": "\n\n".join(part for part in answer_parts if part),
+                        "citations": citations, "answer_mode": "llm_cited",
+                        "llm": llm_trace,
+                        "trace": state.get("trace", []) + [llm_trace],
+                    }
+            if reason == "MODEL_INSUFFICIENT_EVIDENCE":
+                insufficient = INSUFFICIENT_EVIDENCE_MESSAGE
+                answer_parts = [*state.get("fact_parts", []), insufficient, *state.get("note_parts", [])]
+                status = "DEGRADED"
+                answer = "\n\n".join(part for part in answer_parts if part)
+                citations = list(state.get("citations", [])) if "classify_lab" in results else []
+            else:
+                answer = state.get("deterministic_answer", state.get("answer", ""))
+    else:
+        answer = state.get("deterministic_answer", state.get("answer", ""))
+
+    llm_trace = {
+        "step": "llm_composer",
+        "status": "DEGRADED" if reason == "MODEL_INSUFFICIENT_EVIDENCE" else "FALLBACK",
+        "mode": "deterministic",
+        "data_level": config.data_level, "reason": reason,
+        "model": composition.get("model"), "latency_ms": composition.get("latency_ms"),
+        "input_tokens": composition.get("input_tokens"), "output_tokens": composition.get("output_tokens"),
+        "stop_reason": composition.get("stop_reason"),
+        "question_masked": composition.get("question_masked"),
+        "question_truncated": composition.get("question_truncated"),
+        "api_call_attempted": bool(composition.get("request_attempted", False)),
+    }
+    return {
+        "answer": answer, "status": status, "answer_mode": "deterministic", "citations": citations,
+        "llm": llm_trace, "trace": state.get("trace", []) + [llm_trace],
     }
 
 
@@ -478,7 +639,7 @@ def _validate_output_node(state: AgentState) -> dict[str, Any]:
         safety = dict(state.get("safety", {}))
         safety.update({"level": "CLINICAL_REVIEW", "output_guard": "medication_advice_blocked"})
         return {
-            "answer": MEDICATION_REFUSAL_MESSAGE, "status": "CLINICAL_REVIEW", "safety": safety,
+            "answer": MEDICATION_REFUSAL_MESSAGE, "status": "CLINICAL_REVIEW", "answer_mode": "deterministic", "safety": safety,
             "tool_calls": [], "evidence": [], "citations": [], "web_sources": [],
             "trace": state.get("trace", []) + [{"step": "medication_advice_guard", "status": "BLOCKED"}],
         }
@@ -492,22 +653,26 @@ def _build_graph():
     workflow.add_node("safety_uncertain", _safety_uncertain_node)
     workflow.add_node("medication_refusal", _refusal_node)
     workflow.add_node("unit_clarification", _unit_clarification_node)
+    workflow.add_node("guidance", _guidance_node)
     workflow.add_node("intent_router", _route_node)
     workflow.add_node("tools", _execute_tools_node)
     workflow.add_node("fusion", _compose_node)
+    workflow.add_node("llm_composer", _llm_composer_node)
     workflow.add_node("output_validator", _validate_output_node)
     workflow.add_edge(START, "safety_gate")
     workflow.add_conditional_edges("safety_gate", _safety_route, {
         "emergency": "emergency_response", "uncertain": "safety_uncertain", "refusal": "medication_refusal",
-        "unit_clarification": "unit_clarification", "continue": "intent_router",
+        "unit_clarification": "unit_clarification", "guidance": "guidance", "continue": "intent_router",
     })
     workflow.add_edge("emergency_response", END)
     workflow.add_edge("safety_uncertain", "output_validator")
     workflow.add_edge("medication_refusal", "output_validator")
     workflow.add_edge("unit_clarification", "output_validator")
+    workflow.add_edge("guidance", "output_validator")
     workflow.add_edge("intent_router", "tools")
     workflow.add_edge("tools", "fusion")
-    workflow.add_edge("fusion", "output_validator")
+    workflow.add_edge("fusion", "llm_composer")
+    workflow.add_edge("llm_composer", "output_validator")
     workflow.add_edge("output_validator", END)
     return workflow.compile()
 
@@ -519,6 +684,7 @@ def run_agent(message: str, profile_id: str | None, db: Any) -> dict[str, Any]:
     output = agent_graph.invoke({"message": message, "profile_id": profile_id, "db": db})
     return {
         "status": output.get("status", "OK"), "answer": output.get("answer", ""),
+        "answer_mode": output.get("answer_mode", "deterministic"),
         "safety": output.get("safety", {"level": "UNKNOWN"}),
         "safety_level": output.get("safety_level", output.get("safety", {}).get("level", "UNKNOWN")),
         "trace": output.get("trace", []),

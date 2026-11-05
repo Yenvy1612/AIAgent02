@@ -3,12 +3,12 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.agent.composer import composer_health
 from app.api import chat, clinical, demo_profiles, knowledge, ml
 from app.api.dependencies import get_db
 from app.database.repository import list_profiles
 from app.database.session import SYNTHETIC_DATA_ANCHOR, SYNTHETIC_DATA_SEED, synthetic_data_fingerprint
 from app.ml.predict import risk_model
+from app.llm.config import health as composer_health
 from app.rag.retriever import knowledge_base
 from app.rag.web_search import web_search_health
 from app.safety.classifier import CLASSIFIER_VERSION

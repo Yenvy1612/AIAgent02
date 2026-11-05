@@ -13,9 +13,10 @@ flowchart LR
     Tools --> KB[Approved-only local index]
     KB --> Hybrid[pgvector + BGE-M3 + BM25 + RRF + reranker]
     KB --> Local[Local BM25 + character TF-IDF fallback]
-    Hybrid --> Fusion[Evidence-only optional Claude composer]
+    Hybrid --> Fusion[Fact lines + deterministic answer]
     Local --> Fusion
-    Fusion --> Validator[Citation validator]
+    Fusion --> LLM[Optional Claude composer with masked question]
+    LLM --> Validator[Answer and citation validators]
     Validator --> UI
 ```
 
@@ -32,11 +33,11 @@ flowchart LR
 - `ml_training`: reviewed-CSV baseline training and paired no-labs/with-labs experiment.
 - `scripts`: explicit KB approval checks, approved-only ingest/rebuild, source snapshots, evaluation entry points, and idempotent seed entry point.
 
-Chat content is not persisted. The UI only accepts a selected synthetic profile, and the API rejects unknown profile IDs. Optional Claude composition is limited to approved KB excerpts: it receives no user text, measurements, tool output, or profile data. BGE-M3 runs locally; embeddings are not sent to a remote embedding API.
+Chat content is not persisted. The UI only accepts a selected synthetic profile, and the API rejects unknown profile IDs. Optional Claude composition receives approved KB excerpts after medication and dose sentences are removed, plus the question after common measurements and identifiers are masked. It receives no profile data, tool output, lab findings, BMI, model scores, SHAP values, or history. Free text can still contain identifying health details, so the interface asks users to enter synthetic examples only. BGE-M3 runs locally; embeddings are not sent to a remote embedding API.
 
 ## Deliberate scope reductions
 
-Neural retrieval and Claude composition are implemented as optional integrations and remain disabled or inactive until configured. The approved corpus is empty, so retrieval quality is not established. Automatic source verification, clinician escalation, and deployment for real patient data remain outside this prototype.
+Neural retrieval and Claude composition are optional integrations and remain disabled or inactive until configured. The approved demo KB currently has 665 chunks from 16 sources; retrieval quality outside the recorded evaluation runs is not established. Automatic source verification, clinician escalation, and deployment for real patient data remain outside this prototype.
 
 The frontend retains the existing plain CSS in `frontend/src/styles.css` instead of adding Tailwind. The current UI already uses a cohesive stylesheet; introducing a utility-CSS framework would add a build dependency and require a broad class rewrite without improving the requested component split or changing the design contract.
 
