@@ -3,7 +3,7 @@
   "scope": "Curated phrase/unit regression cases, injected classifier failure, and isolated final-answer medication-dose/regimen guard probes; not a clinically representative safety benchmark.",
   "case_set": "safety_cases.json",
   "case_set_sha256": "6bb62c0d2edc0926124834aab36eb9b8d1d048b76ad46ca9e9cbc509b7f1a3e7",
-  "measured_at_utc": "2026-11-05T07:21:59.440720+00:00",
+  "measured_at_utc": "2026-11-05T07:36:34.523875+00:00",
   "emergency_case_count": 7,
   "emergency_115_pass_count": 7,
   "emergency_115_rate": 1.0,
