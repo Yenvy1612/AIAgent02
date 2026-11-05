@@ -3,7 +3,7 @@ import { Activity, Bot, Check, ChevronDown } from 'lucide-react';
 const LABELS = {
   safety_gate: 'Safety Gate', agent_bypass: 'Agent bypass', medication_boundary: 'Ranh giới thuốc',
   unit_safety: 'Kiểm tra đơn vị', intent_router: 'Intent Router', fusion: 'Fusion',
-  output_validator: 'Output Validator', api_request: 'Yêu cầu API',
+  output_validator: 'Output Validator', llm_composer: 'LLM Composer', api_request: 'Yêu cầu API',
 };
 
 function traceLabel(step) {

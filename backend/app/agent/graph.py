@@ -480,6 +480,97 @@ def _compose_node(state: AgentState) -> dict[str, Any]:
     }
 
 
+def _llm_composer_node(state: AgentState) -> dict[str, Any]:
+    results = state.get("results", {})
+    evidence = state.get("evidence", [])
+    config = get_config()
+    reason = "DISABLED"
+    status = state.get("status", "OK")
+    answer = state.get("deterministic_answer", state.get("answer", ""))
+    composition: dict[str, Any] = {}
+    citations = list(state.get("citations", []))
+    if config.errors:
+        reason = config.errors[0]
+    elif config.configured:
+        if state.get("status") == "NEED_CLARIFICATION":
+            reason = "NEED_CLARIFICATION"
+        elif medication_request(state.get("message", "")):
+            reason = "MEDICATION_REQUEST"
+        elif set(results) != {"search_kb"} or not evidence:
+            reason = "NO_APPROVED_EVIDENCE"
+        else:
+            try:
+                composition = compose_answer(state.get("message", ""), evidence, config=config)
+            except Exception:
+                composition = {"ok": False, "reason": "INTERNAL_ERROR"}
+            reason = str(composition.get("reason", "INTERNAL_ERROR"))
+            if composition.get("ok"):
+                fact_parts = state.get("fact_parts", [])
+                note_parts = state.get("note_parts", [])
+                citations = list(state.get("citations", [])) if "classify_lab" in results else []
+                seen = {item.get("chunk_id") for item in citations}
+                for citation in composition.get("citations", []):
+                    if citation.get("chunk_id") not in seen:
+                        citations.append(citation)
+                        seen.add(citation.get("chunk_id"))
+                citation_labels = {
+                    citation.get("chunk_id"): f"C{index}"
+                    for index, citation in enumerate(citations, start=1)
+                }
+                explanation = composition["answer"]
+                for index, citation in reversed(list(enumerate(composition.get("citations", []), start=1))):
+                    label = citation_labels.get(citation.get("chunk_id"))
+                    if label:
+                        explanation = explanation.replace(f"[C{index}]", f"[{label}]")
+                citations = [
+                    {**citation, "display_label": citation_labels.get(citation.get("chunk_id"))}
+                    for citation in citations
+                ]
+                answer_parts = [*fact_parts, explanation, *note_parts]
+                status = "OK"
+                llm_trace = {
+                    "step": "llm_composer", "status": "OK", "mode": "llm_cited",
+                    "data_level": composition.get("data_level", config.data_level), "reason": "OK",
+                    "model": composition.get("model"), "latency_ms": composition.get("latency_ms"),
+                    "input_tokens": composition.get("input_tokens"), "output_tokens": composition.get("output_tokens"),
+                    "stop_reason": composition.get("stop_reason"),
+                    "question_masked": composition.get("question_masked"),
+                    "question_truncated": composition.get("question_truncated"),
+                }
+                return {
+                    "answer": "\n\n".join(part for part in answer_parts if part),
+                    "citations": citations, "answer_mode": "llm_cited",
+                    "llm": llm_trace,
+                    "trace": state.get("trace", []) + [llm_trace],
+                }
+            if reason == "MODEL_INSUFFICIENT_EVIDENCE":
+                insufficient = "Không đủ thông tin đáng tin cậy đã được duyệt trong Knowledge Base để trả lời câu hỏi này."
+                answer_parts = [*state.get("fact_parts", []), insufficient, *state.get("note_parts", [])]
+                status = "DEGRADED"
+                answer = "\n\n".join(part for part in answer_parts if part)
+                citations = list(state.get("citations", [])) if "classify_lab" in results else []
+            else:
+                answer = state.get("deterministic_answer", state.get("answer", ""))
+    else:
+        answer = state.get("deterministic_answer", state.get("answer", ""))
+
+    llm_trace = {
+        "step": "llm_composer",
+        "status": "DEGRADED" if reason == "MODEL_INSUFFICIENT_EVIDENCE" else "FALLBACK",
+        "mode": "deterministic",
+        "data_level": config.data_level, "reason": reason,
+        "model": composition.get("model"), "latency_ms": composition.get("latency_ms"),
+        "input_tokens": composition.get("input_tokens"), "output_tokens": composition.get("output_tokens"),
+        "stop_reason": composition.get("stop_reason"),
+        "question_masked": composition.get("question_masked"),
+        "question_truncated": composition.get("question_truncated"),
+    }
+    return {
+        "answer": answer, "status": status, "answer_mode": "deterministic", "citations": citations,
+        "llm": llm_trace, "trace": state.get("trace", []) + [llm_trace],
+    }
+
+
 def _validate_output_node(state: AgentState) -> dict[str, Any]:
     citations = validate_citations(state.get("evidence", []), state.get("citations", []))
     if state.get("safety", {}).get("level") == "EMERGENCY":
@@ -510,6 +601,7 @@ def _build_graph():
     workflow.add_node("intent_router", _route_node)
     workflow.add_node("tools", _execute_tools_node)
     workflow.add_node("fusion", _compose_node)
+    workflow.add_node("llm_composer", _llm_composer_node)
     workflow.add_node("output_validator", _validate_output_node)
     workflow.add_edge(START, "safety_gate")
     workflow.add_conditional_edges("safety_gate", _safety_route, {
@@ -522,7 +614,8 @@ def _build_graph():
     workflow.add_edge("unit_clarification", "output_validator")
     workflow.add_edge("intent_router", "tools")
     workflow.add_edge("tools", "fusion")
-    workflow.add_edge("fusion", "output_validator")
+    workflow.add_edge("fusion", "llm_composer")
+    workflow.add_edge("llm_composer", "output_validator")
     workflow.add_edge("output_validator", END)
     return workflow.compile()
 
@@ -534,6 +627,7 @@ def run_agent(message: str, profile_id: str | None, db: Any) -> dict[str, Any]:
     output = agent_graph.invoke({"message": message, "profile_id": profile_id, "db": db})
     return {
         "status": output.get("status", "OK"), "answer": output.get("answer", ""),
+        "answer_mode": output.get("answer_mode", "deterministic"),
         "safety": output.get("safety", {"level": "UNKNOWN"}),
         "safety_level": output.get("safety_level", output.get("safety", {}).get("level", "UNKNOWN")),
         "trace": output.get("trace", []),

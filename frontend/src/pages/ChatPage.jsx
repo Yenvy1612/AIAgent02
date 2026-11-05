@@ -12,7 +12,11 @@ function Message({ message }) {
     {!user && <span className={`assistant-avatar ${emergency ? 'urgent-avatar' : ''}`}><Bot size={16} /></span>}
     <div className="message-content">
       <div className="message-meta"><strong>{user ? 'Bạn' : 'DiaCare'}</strong><span>{user ? '' : emergency ? 'CẢNH BÁO KHẨN' : unverified ? 'NGUỒN WEB, CHƯA DUYỆT' : 'TRỢ LÝ GIÁO DỤC'}</span></div>
-      <div className="message-bubble">{answer.split('\n').map((line, i) => <p key={i}>{line}</p>)}
+      <div className="message-bubble">{answer.split('\n').map((line, i) => <p key={i}>{message.answer_mode === 'llm_cited'
+        ? line.split(/(\[C\d+\])/g).map((part, partIndex) => /^\[C\d+\]$/.test(part)
+          ? <a key={partIndex} href={`#citation-${part.slice(1, -1)}`}>{part}</a>
+          : part)
+        : line}</p>)}
         {emergency && <a className="call-115" href="tel:115"><span>Gọi cấp cứu 115</span><ArrowUpRight size={15} /></a>}
       </div>
       {!user && <ResponseDetails message={message} />}
@@ -35,6 +39,12 @@ function ResponseDetails({ message }) {
 }
 
 export default function ChatPage({ messages, busy, draft, setDraft, onSend, textareaRef, bottomRef, profile }) {
+  const latestAssistant = [...messages].reverse().find((message) => message.role === 'assistant');
+  const composerNote = latestAssistant?.answer_mode === 'llm_cited'
+    ? 'Phần giải thích do Claude viết từ nguồn đã duyệt.'
+    : latestAssistant?.status === 'WEB_UNVERIFIED'
+      ? 'Thông tin tra cứu web chưa được kiểm duyệt.'
+      : 'Nội dung trích từ nguồn và quy tắc của hệ thống.';
   return <div className="chat-page">
     <div className="page-intro">
       <div className="eyebrow"><span className="eyebrow-line" /> TRỢ LÝ SỨC KHỎE GIÁO DỤC</div>
@@ -54,6 +64,6 @@ export default function ChatPage({ messages, busy, draft, setDraft, onSend, text
       </div>
       <ChatBox draft={draft} setDraft={setDraft} onSend={onSend} textareaRef={textareaRef} busy={busy} showSuggestions={messages.length === 1} />
     </div>
-    <div className="chat-footnote"><Sparkles size={14} /> {profile?.display_name || 'Hồ sơ tổng hợp'} · Nội dung do agent cục bộ điều phối, không gọi LLM bên ngoài.</div>
+    <div className="chat-footnote"><Sparkles size={14} /> {profile?.display_name || 'Hồ sơ tổng hợp'} · {composerNote}</div>
   </div>;
 }

@@ -40,7 +40,7 @@ def main() -> None:
     # Inject retrieval, composer, and second-detector failures; rule emergencies must bypass them.
     with (
         patch("app.agent.graph.search_kb", side_effect=RuntimeError("simulated retrieval outage")) as retrieval_mock,
-        patch("app.agent.graph.compose_from_approved_evidence", side_effect=RuntimeError("simulated LLM outage")) as llm_mock,
+        patch("app.agent.graph.compose_answer", side_effect=RuntimeError("simulated LLM outage")) as llm_mock,
         patch("app.safety.gate.secondary_safety_heuristic", side_effect=RuntimeError("simulated classifier outage")) as classifier_mock,
     ):
         for case in cases.get("emergency_cases", []):
@@ -183,7 +183,7 @@ def main() -> None:
             ),
             "results": classifier_rows,
         },
-        "llm_architecture": "Optional evidence-only Anthropic composer; disabled by default and separate from emergency routing.",
+        "llm_architecture": "Optional citation-grounded Anthropic composer; disabled by default and bypassed by safety routes.",
         "classifier_failure_case": classifier_failure_result,
         "classifier_failure_fail_closed": bool(
             classifier_failure_result

@@ -79,7 +79,7 @@ The default build uses CPU PyTorch, where one query took about 34 s on the test 
 - `POST /api/v1/chat` — Safety Gate → LangGraph routing → up to five tools → fusion and citation validation.
 - `POST /api/v1/safety/check` — internal demo endpoint for the experimental local safety heuristic.
 
-Claude composition is optional and disabled by default. To enable it, set `DIACARE_LLM_ENABLED=true` and `ANTHROPIC_API_KEY` in `.env`, then restart Compose. It receives only approved public KB excerpts. It never receives the user's message, measurements, tool results, or demo profile data. If Claude is unavailable or disabled, the answer falls back to deterministic evidence extracts. Safety, unit handling, rules, and emergency responses do not call Claude.
+Claude composition is optional and disabled by default. To enable it, set `DIACARE_LLM_ENABLED=true` and `ANTHROPIC_API_KEY` in `.env`, then restart Compose. It receives approved KB excerpts after medication and dose sentences are removed, plus the question after common measurements and identifiers are masked. It does not receive BMI, lab findings, risk scores, SHAP values, history, or demo profile data. Free text can still contain identifying health details, so use synthetic examples only. Each explanation must pass citation, number, URL, citation-coverage, and diagnostic-claim checks; otherwise the deterministic answer is returned. Safety, medication refusal, unit clarification, and emergency responses do not call Claude.
 
 The web fallback is also optional and disabled by default (`DIACARE_WEB_SEARCH_ENABLED=false`). When enabled, and only when the approved KB cannot answer a general diabetes question at the normal safety level, a **filtered copy of the user's question is sent to Anthropic and its search provider** ($10 per 1,000 searches plus tokens). Questions with measurements, a selected profile, contact details, or medication changes are never sent. Results are limited to `kb_manifest/web_allowlist.json`. **Web answers are not reviewed**: they carry the status `WEB_UNVERIFIED`, a fixed label, and separate `web_sources`, and never appear as approved citations.
 
@@ -113,7 +113,7 @@ The checked-in full training lock `ml_training/pylock.win-py311.toml` targets Wi
 
 ## Current implementation boundaries
 
-- Only synthetic demo profiles are seeded. There is no login, patient import, or patient editing. Claude is an optional evidence-only composer; it does not receive user text or profile data.
+- Only synthetic demo profiles are seeded. There is no login, patient import, or patient editing. Claude is an optional composer; when enabled, it receives a masked question and approved, redacted KB excerpts, not profile or tool data.
 - The risk model is a research-only artifact and is not clinically validated. Without the local artifact, the risk endpoint returns unavailable. No placeholder score is generated.
 - The KB index holds 16 sources approved by the project owner, who is not a healthcare professional. The content has not been clinically validated. G3 is not met: citation accuracy is 0.27 against a 0.95 target. See `kb_manifest/source_review.md` and `docs/EVALUATION_REPORT.md`.
 - The answer step removes medication and dose content from KB excerpts. In most topics it removes only the affected sentences and tells the user; in the medication, hospital, and complications topics it drops the whole excerpt. Answers can therefore be incomplete, so check the cited source. Questions about antibiotics or glucagon get the medication refusal.
