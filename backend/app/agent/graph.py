@@ -6,7 +6,6 @@ from typing import Any
 from langgraph.graph import END, START, StateGraph
 
 from app.agent.state import AgentState
-from app.agent.composer import compose_from_approved_evidence
 from app.agent.fusion import structured_fusion
 from app.agent.tools import (
     calculate_bmi, classify_lab, predict_risk, profile_features,
@@ -15,6 +14,8 @@ from app.agent.tools import (
 from app.rag.citations import validate_citations
 from app.rag.scope import is_in_kb_scope
 from app.rag.web_search import WEB_UNVERIFIED_NOTICE, sanitize_web_query, web_search_enabled
+from app.llm.composer import compose_answer
+from app.llm.config import get_config
 from app.safety.gate import (
     EMERGENCY_MESSAGE, contains_medication_dose, evaluate_safety, medication_request, normalize_vi,
 )
@@ -320,8 +321,6 @@ def _compose_node(state: AgentState) -> dict[str, Any]:
     reference_only: list[dict[str, Any]] = []
     rule_citations: list[dict[str, Any]] = []
     web_sources: list[dict[str, Any]] = []
-    composer_trace: dict[str, str] | None = None
-    composed_answer_added = False
     status = "OK"
     if medication_request(state["message"]):
         return _refusal_node(state)
@@ -409,17 +408,8 @@ def _compose_node(state: AgentState) -> dict[str, Any]:
         search = results["search_kb"]
         evidence = _evidence_without_doses(search.get("evidence", []))
         if evidence:
-            # External composition receives approved public evidence only: never the
-            # user's message, measurements, tool results, or synthetic profile data.
-            if set(results) == {"search_kb"}:
-                composition = compose_from_approved_evidence(evidence)
-                composer_trace = {"step": "answer_composer", "status": composition["status"], "mode": composition["mode"]}
-                if composition["status"] == "OK":
-                    parts.append(composition["answer"])
-                    composed_answer_added = True
-            if not composed_answer_added:
-                for item in evidence:
-                    parts.append(item["excerpt"][:700])
+            for item in evidence[:5]:
+                parts.append(item["excerpt"][:700])
             for item in evidence:
                 amended_by = item.get("amended_by") or []
                 if item.get("amended") and amended_by:
@@ -451,9 +441,34 @@ def _compose_node(state: AgentState) -> dict[str, Any]:
         for item in evidence
         if item.get("review_status") == "approved" and item.get("license_status") == "approved"
     ]
-    trace = state.get("trace", []) + ([composer_trace] if composer_trace else []) + [{"step": "fusion", "status": status}]
+    fact_parts = parts[:]
+    note_parts: list[str] = []
+    # Keep KB extracts in the deterministic answer, while exposing facts and notes
+    # separately so the optional composer can add only a cited explanation.
+    if "search_kb" in results and evidence:
+        extract_count = min(5, len(evidence))
+        fact_parts = parts[:-extract_count]
+        for item in evidence:
+            if item.get("amended") and item.get("amended_by"):
+                names = ", ".join(
+                    "Quyết định 1353/QĐ-BYT" if code == "KB-01A" else str(code)
+                    for code in (item.get("amended_by") or [])
+                )
+                note_parts.append(
+                    f"Lưu ý: đoạn trích thuộc phần đã được sửa đổi bởi {names}; "
+                    "cần đối chiếu văn bản sửa đổi trước khi áp dụng."
+                )
+        if any(item.get("excerpt_redacted") for item in evidence):
+            note_parts.append(REDACTION_NOTICE)
+        # The amendments and redaction notice already occur at the end of parts.
+        if note_parts:
+            fact_parts = parts[:len(parts) - len(note_parts) - extract_count]
+    trace = state.get("trace", []) + [{"step": "fusion", "status": status}]
+    deterministic_answer = "\n\n".join(parts)
     return {
-        "answer": "\n\n".join(parts), "evidence": evidence, "citations": citations,
+        "answer": deterministic_answer, "deterministic_answer": deterministic_answer,
+        "fact_parts": fact_parts, "note_parts": note_parts, "answer_mode": "deterministic",
+        "evidence": evidence, "citations": citations,
         "reference_only": reference_only, "web_sources": web_sources, "status": status, "trace": trace,
         **structured_fusion(
             ml=results.get("predict_risk"),

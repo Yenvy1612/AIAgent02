@@ -19,6 +19,11 @@ class AgentState(TypedDict, total=False):
     reference_only: list[dict[str, Any]]
     web_sources: list[dict[str, Any]]
     answer: str
+    deterministic_answer: str
+    fact_parts: list[str]
+    note_parts: list[str]
+    answer_mode: str
+    llm: dict[str, Any]
     status: str
     ml: dict[str, Any]
     clinical_rules: dict[str, Any]
