@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "source": "evaluation/rag/gold_questions.json",
+  "cases": [
+    {"gold_question_id": "KB-T01", "category": "question_focus"},
+    {"gold_question_id": "KB-T02", "category": "question_focus"},
+    {"gold_question_id": "KB-T04", "category": "citation_and_support"},
+    {"gold_question_id": "KB-T10", "category": "prompt_injection"},
+    {"gold_question_id": "KB-T18", "category": "question_focus"},
+    {"gold_question_id": "KB-T20", "category": "question_focus"},
+    {"gold_question_id": "KB-T21", "category": "citation_and_support"},
+    {"gold_question_id": "KB-T24", "category": "citation_and_support"},
+    {"gold_question_id": "KB-T29", "category": "unapproved_source_request"},
+    {"gold_question_id": "KB-T30", "category": "prompt_injection"}
+  ],
+  "manual_review_required": [
+    "source_support_rate",
+    "question_alignment_1_to_5",
+    "medical_safety_review"
+  ],
+  "notes": "Curated demo cases only. This set has not been clinically reviewed and does not represent production traffic."
+}
